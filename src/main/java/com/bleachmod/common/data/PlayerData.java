@@ -14,6 +14,9 @@ public class PlayerData {
     private final StatusData status = new StatusData();
     private final PlayerQuestData playerQuestData = new PlayerQuestData();
     private boolean dataLoaded;
+    private final AttributeData attributes = new AttributeData();
+    public AttributeData getAttributes() { return attributes; }
+    public void refreshDerivedResources() { resources.setMaxReiatsu(100 + 20 * attributes.level("reserve")); }
 
     public CharacterData getCharacter() {
         return character;
@@ -58,8 +61,15 @@ public class PlayerData {
         resources.setActionCharge(0);
     }
 
+    public void resetTransientState() {
+        resources.setActionCharge(0);
+        status.setActionCharging(false);
+    }
+
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
+        tag.putInt("schemaVersion", 2);
+        tag.put("attributes", attributes.save());
         tag.put("character", character.save());
         tag.put("resources", resources.save());
         tag.put("skills", skills.save());
@@ -84,7 +94,13 @@ public class PlayerData {
         if (tag.contains("playerQuestData")) {
             playerQuestData.load(tag.getCompound("playerQuestData"));
         }
+        if (tag.contains("attributes")) attributes.load(tag.getCompound("attributes"));
         updateTransformationSkillLimits(character.getRace());
+        if (tag.contains("character") && !tag.getCompound("character").contains("unlockedForms")) {
+            character.unlockForm("sealed");
+            if (skills.getLevel("zanpakuto") >= 1 || character.getMastery("zanpakuto", "shikai") > 0) character.unlockForm("shikai");
+            if (skills.getLevel("zanpakuto") >= 2 || character.getMastery("zanpakuto", "bankai") > 0) character.unlockForm("bankai");
+        }
         dataLoaded = true;
     }
 

@@ -8,6 +8,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CharacterData {
+    private final java.util.Set<String> unlockedForms = new java.util.HashSet<>();
+    public void unlockForm(String form) { unlockedForms.add(form); }
+    public boolean isFormDiscovered(String form) { return "sealed".equals(form) || unlockedForms.contains(form); }
     private String race = "";
     private String selectedFormGroup = "";
     private String selectedForm = "";
@@ -58,7 +61,7 @@ public class CharacterData {
     }
 
     public void setMastery(String group, String form, double value) {
-        formMasteries.put(masteryKey(group, form), Math.max(0.0D, value));
+        formMasteries.put(masteryKey(group, form), Double.isFinite(value) ? Math.max(0.0D, Math.min(100.0D, value)) : 0.0D);
     }
 
     public void addMastery(String group, String form, double amount, double max) {
@@ -67,9 +70,18 @@ public class CharacterData {
     }
 
     public void initializeShinigami() {
+        unlockForm("sealed");
         setRace(Reference.RACE_SHINIGAMI);
         setSelectedForm(Reference.GROUP_ZANPAKUTO, Reference.FORM_SEALED);
         setActiveForm(Reference.GROUP_ZANPAKUTO, Reference.FORM_SEALED);
+    }
+
+    public CompoundTag saveAppearance() {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("race", race);
+        tag.putString("activeFormGroup", activeFormGroup);
+        tag.putString("activeForm", activeForm);
+        return tag;
     }
 
     public CompoundTag save() {
@@ -82,10 +94,14 @@ public class CharacterData {
         CompoundTag masteries = new CompoundTag();
         formMasteries.forEach(masteries::putDouble);
         tag.put("formMasteries", masteries);
+        CompoundTag unlocks = new CompoundTag();
+        unlockedForms.forEach(form -> unlocks.putBoolean(form, true));
+        tag.put("unlockedForms", unlocks);
         return tag;
     }
 
     public void load(CompoundTag tag) {
+        if (tag.contains("unlockedForms")) { unlockedForms.clear(); unlockedForms.addAll(tag.getCompound("unlockedForms").getAllKeys()); }
         if (tag.contains("race")) {
             race = tag.getString("race");
         }

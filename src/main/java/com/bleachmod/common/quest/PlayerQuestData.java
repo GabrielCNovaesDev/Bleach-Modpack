@@ -14,6 +14,13 @@ public class PlayerQuestData {
     private final Map<String, Boolean> sagaUnlocks = new LinkedHashMap<>();
     private String trackedQuestId;
 
+    public void bindDefinitions() {
+        quests.forEach((key, progress) -> {
+            Quest quest = QuestRegistry.getQuest(key);
+            if (quest != null) progress.bindDefinition(quest);
+        });
+    }
+
     public QuestProgress getOrCreateProgress(String questId) {
         return quests.computeIfAbsent(questId, QuestProgress::new);
     }
@@ -116,6 +123,7 @@ public class PlayerQuestData {
                 sagaUnlocks.put(key, unlocks.getBoolean(key));
             }
         }
+        trackedQuestId = null;
         if (tag.contains("trackedQuestId")) {
             trackedQuestId = tag.getString("trackedQuestId");
             if (trackedQuestId.isBlank()) {

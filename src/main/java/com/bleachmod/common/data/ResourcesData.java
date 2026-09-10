@@ -23,7 +23,7 @@ public class ResourcesData {
     }
 
     public boolean consumeReiatsu(float amount) {
-        if (currentReiatsu < amount) {
+        if (!Float.isFinite(amount) || amount < 0 || currentReiatsu < amount) {
             return false;
         }
         setCurrentReiatsu(currentReiatsu - amount);
@@ -56,11 +56,12 @@ public class ResourcesData {
     }
 
     public void addTrainingPoints(float amount) {
-        this.trainingPoints = Math.max(0.0F, trainingPoints + amount);
+        if (!Float.isFinite(amount) || amount < 0) throw new IllegalArgumentException("Invalid points");
+        this.trainingPoints = Math.min(1_000_000F, trainingPoints + amount);
     }
 
     public boolean consumeTrainingPoints(float amount) {
-        if (trainingPoints < amount) {
+        if (!Float.isFinite(amount) || amount < 0 || trainingPoints < amount) {
             return false;
         }
         trainingPoints -= amount;
@@ -89,6 +90,10 @@ public class ResourcesData {
         if (tag.contains("trainingPoints")) {
             trainingPoints = tag.getFloat("trainingPoints");
         }
+        maxReiatsu = Float.isFinite(maxReiatsu) ? Math.max(1, maxReiatsu) : 100;
+        currentReiatsu = Float.isFinite(currentReiatsu) ? currentReiatsu : 0;
+        trainingPoints = Float.isFinite(trainingPoints) ? Mth.clamp(trainingPoints, 0, 1_000_000) : 0;
+        setActionCharge(actionCharge);
         setCurrentReiatsu(currentReiatsu);
     }
 }

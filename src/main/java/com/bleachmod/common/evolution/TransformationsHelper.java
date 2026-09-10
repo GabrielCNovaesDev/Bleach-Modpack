@@ -12,7 +12,7 @@ public final class TransformationsHelper {
     }
 
     public static boolean isUnlocked(PlayerData data, String group, String form) {
-        if (data.getCharacter().getRace().isEmpty()) {
+        if (data.getCharacter().getRace().isEmpty() || !data.getCharacter().isFormDiscovered(form)) {
             return false;
         }
         FormGroup formGroup = FormRegistry.getGroup(data.getCharacter().getRace(), group);
@@ -141,6 +141,6 @@ public final class TransformationsHelper {
             }
             anyMet |= met;
         }
-        return all || anyMet;
+        return anyMet;
     }
 }
