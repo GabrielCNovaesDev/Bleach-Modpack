@@ -14,8 +14,8 @@ public final class ModCreativeTabs {
     public static final RegistryObject<CreativeModeTab> MAIN = TABS.register("main", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .title(Component.translatable("itemGroup.bleachmod"))
-            .icon(() -> ModItems.ASUCHI.get().getDefaultInstance())
-            .displayItems((params, output) -> output.accept(ModItems.ASUCHI.get()))
+            .icon(() -> ModItems.ASAUCHI.get().getDefaultInstance())
+            .displayItems((params, output) -> output.accept(ModItems.ASAUCHI.get()))
             .build());
 
     private ModCreativeTabs() {

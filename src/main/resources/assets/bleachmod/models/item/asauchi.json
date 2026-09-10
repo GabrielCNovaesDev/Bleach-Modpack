@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "bleachmod:item/asauchi"
+  },
+  "overrides": [
+    { "predicate": { "bleachmod:form": 1 }, "model": "bleachmod:item/asauchi_shikai" },
+    { "predicate": { "bleachmod:form": 2 }, "model": "bleachmod:item/asauchi_bankai" }
+  ]
+}

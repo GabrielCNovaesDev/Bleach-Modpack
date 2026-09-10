@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Reference.MOD_ID);
 
-    public static final RegistryObject<Item> ASUCHI = ITEMS.register("asuchi",
+    public static final RegistryObject<Item> ASAUCHI = ITEMS.register("asauchi",
             () -> new SwordItem(Tiers.IRON, 3, -2.4F, new Item.Properties().stacksTo(1)));
 
     private ModItems() {

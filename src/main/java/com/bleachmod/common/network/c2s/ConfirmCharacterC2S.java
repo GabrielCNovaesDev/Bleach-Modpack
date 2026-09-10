@@ -34,10 +34,10 @@ public record ConfirmCharacterC2S(String race) {
                     return;
                 }
                 data.initializeShinigami();
-                ItemStack asuchi = new ItemStack(ModItems.ASUCHI.get());
-                if (!player.getInventory().contains(asuchi)) {
-                    if (!player.getInventory().add(asuchi)) {
-                        player.drop(asuchi, false);
+                ItemStack asauchi = new ItemStack(ModItems.ASAUCHI.get());
+                if (!player.getInventory().contains(asauchi)) {
+                    if (!player.getInventory().add(asauchi)) {
+                        player.drop(asauchi, false);
                     }
                 }
                 SyncHelper.full(player);
