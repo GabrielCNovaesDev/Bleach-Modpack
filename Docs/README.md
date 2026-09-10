@@ -12,6 +12,7 @@ Este projeto é um trabalho derivado do mod **Dragon Mine Z**, distribuído sob 
 
 | Pasta | Para quê | Comece por |
 |---|---|---|
+| [`desenvolvimento/`](desenvolvimento/manual-inicializacao.md) | Clone, Java 17, JAVA_HOME e `runClient` | [Manual de inicialização](desenvolvimento/manual-inicializacao.md) |
 | [`jogador/`](jogador/manual-do-jogador.md) | Jogar o MVP (controles, quests, progressão) | [Manual do jogador](jogador/manual-do-jogador.md) |
 | [`planejamento/`](planejamento/plano-implementacao-mvp.md) | Plano de entrega, revisão técnica e especificação da análise | [Plano do MVP](planejamento/plano-implementacao-mvp.md) |
 | [`arte/`](arte/prompts-arte-mvp.md) | Briefing e prompts de texturas/UI | [Prompts de arte](arte/prompts-arte-mvp.md) |
@@ -98,19 +99,20 @@ Alinhados à plataforma do original para que a doc de capability/packets/eventos
 
 ## Como rodar em ambiente de desenvolvimento
 
+Passo a passo do clone até o cliente: [`desenvolvimento/manual-inicializacao.md`](desenvolvimento/manual-inicializacao.md). Java 17 e `JAVA_HOME` são obrigatórios.
+
 ```bash
-./gradlew genIntellijRuns
 ./gradlew runClient
-./gradlew build
 ```
 
-Java 17 é obrigatório. Manual de jogo (controles, quests, progressão): [`jogador/manual-do-jogador.md`](jogador/manual-do-jogador.md). Admin: `/bleachreload quests`.
+Manual de jogo (controles, quests, progressão): [`jogador/manual-do-jogador.md`](jogador/manual-do-jogador.md). Admin: `/bleachreload quests`.
 
 ## Estrutura do repositório
 
 ```
 /Docs
   README.md                         → este arquivo (visão do projeto Bleach)
+  desenvolvimento/                  → clone, Java 17, JAVA_HOME e runClient
   jogador/                          → como jogar (controles, quests, levelling)
   planejamento/                     → planos, revisão técnica e especificação da análise
   arte/                             → briefing e prompts de assets do MVP
