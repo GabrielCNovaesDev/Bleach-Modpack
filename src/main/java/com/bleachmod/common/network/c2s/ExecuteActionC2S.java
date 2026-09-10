@@ -29,6 +29,7 @@ public record ExecuteActionC2S(ActionType action) {
                 return;
             }
             PlayerCapability.get(player).ifPresent(data -> {
+                if (!data.getStatus().hasCreatedCharacter() || !player.isAlive() || !data.getStatus().allowAction(player.level().getGameTime())) return;
                 if (msg.action == ActionType.INSTANT_TRANSFORM) {
                     FormModeHandler.instantTransform(player, data);
                 } else if (msg.action == ActionType.FORCE_DESCEND) {

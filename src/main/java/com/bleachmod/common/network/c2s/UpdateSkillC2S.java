@@ -32,7 +32,8 @@ public record UpdateSkillC2S(String skill, SkillAction action) {
                 return;
             }
             PlayerCapability.get(player).ifPresent(data -> {
-                if (msg.action == SkillAction.PURCHASE && data.getSkills().tryPurchase(msg.skill, data.getResources())) {
+                if (!data.getStatus().hasCreatedCharacter() || !player.isAlive() || !data.getStatus().allowAction(player.level().getGameTime())) return;
+                if (msg.action == SkillAction.PURCHASE && com.bleachmod.common.ProgressionService.purchaseSkill(data, msg.skill)) {
                     SyncHelper.full(player);
                 } else {
                     NetworkHandler.sendToPlayer(ActionFeedbackS2C.of(Component.translatable("message.bleachmod.skill.cannot_purchase")), player);

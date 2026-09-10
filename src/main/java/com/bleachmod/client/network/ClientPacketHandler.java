@@ -37,6 +37,7 @@ public final class ClientPacketHandler {
     }
 
     public static void handleQuestRegistry(SyncQuestRegistryS2C msg) {
+        com.bleachmod.common.evolution.FormRegistry.replaceFromNetwork(msg.formsJson());
         QuestRegistry.replaceFromNetwork(msg.sagasJson(), msg.questsJson());
     }
 

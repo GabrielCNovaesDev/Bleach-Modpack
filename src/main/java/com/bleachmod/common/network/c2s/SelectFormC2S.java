@@ -26,10 +26,13 @@ public record SelectFormC2S(String group, String form) {
                 return;
             }
             PlayerCapability.get(player).ifPresent(data -> {
+                if (!data.getStatus().hasCreatedCharacter() || !player.isAlive() || !data.getStatus().allowAction(player.level().getGameTime())) return;
                 if (!TransformationsHelper.isSelectable(data, msg.group, msg.form)) {
                     return;
                 }
+                data.resetTransientState();
                 data.getCharacter().setSelectedForm(msg.group, msg.form);
+                SyncHelper.full(player);
                 SyncHelper.appearance(player);
             });
         });

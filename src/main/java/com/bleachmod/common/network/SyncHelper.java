@@ -8,6 +8,8 @@ import com.bleachmod.common.network.s2c.ProgressionSyncS2C;
 import com.bleachmod.common.network.s2c.ResourceSyncS2C;
 import com.bleachmod.common.network.s2c.SyncQuestRegistryS2C;
 import com.bleachmod.common.quest.QuestRegistry;
+import com.bleachmod.common.evolution.FormRegistry;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -42,13 +44,21 @@ public final class SyncHelper {
     public static void appearance(ServerPlayer player) {
         PlayerCapability.get(player).ifPresent(data -> {
             CompoundTag tag = new CompoundTag();
-            tag.put("character", data.getCharacter().save());
-            NetworkHandler.sendToPlayer(new AppearanceSyncS2C(player.getId(), tag), player);
+            tag.put("character", data.getCharacter().saveAppearance());
+            NetworkHandler.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player), new AppearanceSyncS2C(player.getId(), tag));
         });
     }
 
     public static void questRegistry(ServerPlayer player) {
-        NetworkHandler.sendToPlayer(new SyncQuestRegistryS2C(QuestRegistry.serializeSagas(), QuestRegistry.serializeQuests()), player);
+        NetworkHandler.sendToPlayer(new SyncQuestRegistryS2C(QuestRegistry.serializeSagas(), QuestRegistry.serializeQuests(), FormRegistry.serialize()), player);
+    }
+
+    public static void appearanceTo(ServerPlayer subject, ServerPlayer observer) {
+        PlayerCapability.get(subject).ifPresent(data -> {
+            CompoundTag tag = new CompoundTag();
+            tag.put("character", data.getCharacter().saveAppearance());
+            NetworkHandler.sendToPlayer(new AppearanceSyncS2C(subject.getId(), tag), observer);
+        });
     }
 
     public static PlayerData require(ServerPlayer player) {

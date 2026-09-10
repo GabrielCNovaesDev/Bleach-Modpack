@@ -28,11 +28,12 @@ public record UpdateStatC2S(StatAction action, boolean value) {
                 return;
             }
             PlayerCapability.get(player).ifPresent(data -> {
-                if (msg.action == StatAction.ACTION_CHARGE) {
+                if (msg.action == StatAction.ACTION_CHARGE && data.getStatus().hasCreatedCharacter() && player.isAlive()) {
                     data.getStatus().setActionCharging(msg.value);
                     if (!msg.value) {
                         data.getResources().setActionCharge(0);
                     }
+                    com.bleachmod.common.network.SyncHelper.resources(player);
                 }
             });
         });
