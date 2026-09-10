@@ -14,7 +14,7 @@ Este projeto é um trabalho derivado do mod **Dragon Mine Z**, distribuído sob 
 
 Um mod de Minecraft que traz o universo de Bleach, com foco no sistema de progressão de poder (raça → estágio) e em missões data-driven. A arquitetura de quests e de evolução é reaproveitada do Dragon Mine Z; o conteúdo (Shinigami, Zanpakutō, Shikai/Bankai, reiatsu, arcos) é original deste projeto.
 
-A documentação de engenharia reversa que permite recriar esses dois sistemas sem reabrir o original está em `Docs/00-overview.md` … `Docs/12-licenciamento-e-creditos.md`. Trechos de lógica não trivial do original estão em `/reference-code`.
+A documentação de engenharia reversa está em `Docs/00-overview.md` … `Docs/12-licenciamento-e-creditos.md`. Trechos de lógica não trivial do original estão em `/reference-code` (não entram no compile). O código do mod Bleach vive em `/src`.
 
 ## Baseado em
 
@@ -39,24 +39,24 @@ A documentação de engenharia reversa que permite recriar esses dois sistemas s
 
 ### 🎯 Escopo inicial (MVP)
 
-- [ ] **Raça: Shinigami**
-  - [ ] Sistema de Zanpakutō (arma inicial genérica)
-  - [ ] Evolução para **Shikai** (requisito: [definir — ex: quest específica + energia acumulada])
-  - [ ] Evolução para **Bankai** (requisito: [definir])
-- [ ] **Sistema de energia (Reiatsu)**
-  - [ ] Barra de energia com regeneração
-  - [ ] Custo de energia ao usar habilidades
-- [ ] **Sistema de Quests (base)**
-  - [ ] Registro de quests via JSON no mundo (schema documentado em `03-sistema-quests.md`; defaults gerados em Java se a pasta não existir)
-  - [ ] Ao menos 2 tipos de objetivo (ex: derrotar mob específico, coletar item)
-  - [ ] Tela de acompanhamento de progresso de quests
-  - [ ] Recompensas: XP e/ou desbloqueio de habilidade
-- [ ] **HUD básico**
-  - [ ] Indicador de energia/reiatsu
-  - [ ] Indicador de estágio de evolução atual
-- [ ] **Persistência**
-  - [ ] Progresso de quest salvo corretamente entre sessões
-  - [ ] Estágio de evolução salvo corretamente entre sessões
+- [x] **Raça: Shinigami**
+  - [x] Sistema de Zanpakutō (Asauchi inicial)
+  - [x] Evolução para **Shikai** (quest Soul Society 2 + skill `zanpakuto` 1; hold R para ativar)
+  - [x] Evolução para **Bankai** (quest Soul Society 3 + skill `zanpakuto` 2)
+- [x] **Sistema de energia (Reiatsu)**
+  - [x] Barra de energia com regeneração
+  - [x] Custo de energia ao transformar e drain enquanto Shikai/Bankai estiver ativo
+- [x] **Sistema de Quests (base)**
+  - [x] Registro de quests via JSON no mundo (`{world}/bleachmod/`; defaults gerados em Java se a pasta não existir)
+  - [x] Objetivos KILL e ITEM
+  - [x] Tela de journal (tecla J)
+  - [x] Recompensas: pontos espirituais, skill e transformação
+- [x] **HUD básico**
+  - [x] Indicador de energia/reiatsu
+  - [x] Indicador de estágio de evolução atual
+- [x] **Persistência**
+  - [x] Progresso de quest salvo na capability NBT
+  - [x] Estágio de evolução salvo na capability NBT
 
 ### 🔜 Fases futuras (fora do MVP)
 
@@ -90,14 +90,12 @@ Alinhados à plataforma do original para que a doc de capability/packets/eventos
 ## Como rodar em ambiente de desenvolvimento
 
 ```bash
-# Clonar o repositório
-git clone [url-do-repositorio]
-
-# Rodar ambiente de desenvolvimento do Forge
+./gradlew genIntellijRuns
 ./gradlew runClient
+./gradlew build
 ```
 
-[Ajustar conforme configuração final do projeto]
+Java 17 é obrigatório. Teclas padrão: J (journal), R (carregar transformação), Shift+R (instantâneo se o mastery bastar), G (ciclar estágio), V (descer estágio). Admin: `/bleachreload quests`.
 
 ## Estrutura do repositório
 
@@ -107,16 +105,15 @@ git clone [url-do-repositorio]
   plano-analise-dragon-mine-z.md    → especificação da análise
   00-overview.md … 12-*.md          → referência de arquitetura para recriar quests + evolução
 /reference-code                     → fontes originais pontuais (GPL-3.0), ver README lá
-/dragonminez                        → clone do upstream (não é dependência de build do fork)
-/src                                → código-fonte do mod Bleach (ainda a criar)
+/src                                → código-fonte do mod Bleach (Forge 1.20.1)
 ```
 
 ## Roadmap
 
 | Fase | Descrição | Status |
 |---|---|---|
-| Fase 0 | Análise do repositório base + documentação | 🔄 Em andamento |
-| Fase 1 (MVP) | Raça Shinigami + Quests básicas | ⏳ Planejado |
+| Fase 0 | Análise do repositório base + documentação | Concluída |
+| Fase 1 (MVP) | Raça Shinigami + Quests básicas | Implementada |
 | Fase 2 | Raça Hollow | ⏳ Planejado |
 | Fase 3 | Raças Quincy e Fullbringer | ⏳ Planejado |
 | Fase 4 | Conteúdo expandido e balanceamento | ⏳ Planejado |
@@ -127,9 +124,11 @@ git clone [url-do-repositorio]
 
 ## Licença
 
-Este projeto é distribuído sob a licença **GPL-3.0** — veja o arquivo [`LICENSE`](./LICENSE) para o texto completo.
+Este projeto é distribuído sob a licença **GPL-3.0** — veja o arquivo [`LICENSE`](../LICENSE) para o texto completo.
 
-Este projeto incorpora conceitos de arquitetura do **Dragon Mine Z**, também sob GPL-3.0. Algumas dependências de terceiros estão sob licença MIT — avisos de copyright preservados em [`THIRD_PARTY_LICENSES`](./THIRD_PARTY_LICENSES).
+Este projeto é um trabalho derivado de Dragon Mine Z (https://github.com/DragonMineZ/dragonminez), Copyright © DragonMine Z 2025, distribuído sob GNU GPL-3.0. Autores originais: Yuseix, ezShokkoh, Bruno e contribuidores listados no repositório original.
+
+O conteúdo temático de Dragon Ball pertence aos respectivos detentores. Este fork reaproveita a arquitetura dos sistemas de quest e de progressão/evolução; todo o conteúdo temático de Bleach é original deste projeto e não é afiliado a Tite Kubo, Shueisha ou Studio Pierrot.
 
 ## Créditos
 

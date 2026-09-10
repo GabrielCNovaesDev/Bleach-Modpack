@@ -1,0 +1,26 @@
+package com.bleachmod.common.network.s2c;
+
+import com.bleachmod.client.network.ClientPacketHandler;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
+
+public record ResourceSyncS2C(int playerId, CompoundTag nbt) {
+    public static void encode(ResourceSyncS2C msg, FriendlyByteBuf buf) {
+        buf.writeVarInt(msg.playerId);
+        buf.writeNbt(msg.nbt);
+    }
+
+    public static ResourceSyncS2C decode(FriendlyByteBuf buf) {
+        return new ResourceSyncS2C(buf.readVarInt(), buf.readNbt());
+    }
+
+    public static void handle(ResourceSyncS2C msg, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandler.handleResourceSync(msg)));
+        ctx.get().setPacketHandled(true);
+    }
+}
