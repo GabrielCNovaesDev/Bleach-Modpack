@@ -13,7 +13,10 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeCommonEvents {
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
-        QuestRegistry.loadAll(event.getServer());
-        FormRegistry.loadAll(event.getServer());
+        try {
+            com.bleachmod.common.RegistryReload.reload(event.getServer());
+        } catch (Exception e) {
+            throw new IllegalStateException("Bleach definitions could not be loaded", e);
+        }
     }
 }
