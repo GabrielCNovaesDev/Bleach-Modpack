@@ -2,7 +2,7 @@
 
 ## Nota de revisão após teste em jogo
 
-Este briefing é referência de arte, não evidência de que os assets atuais atendem aos requisitos. O [plano de implementação](C:/Users/Gabriel/Desktop/PROJETOS/Bleach-Modpack/Docs/plano-implementacao-mvp.md) registra V01–V08: cobertura do background, transparência do espadachim/reiatsu/espada, orientação do Asauchi, alinhamento de HUD/diário e animação de carga.
+Este briefing é referência de arte, não evidência de que os assets atuais atendem aos requisitos. O [plano de implementação](../planejamento/plano-implementacao-mvp.md) registra V01–V08: cobertura do background, transparência do espadachim/reiatsu/espada, orientação do Asauchi, alinhamento de HUD/diário e animação de carga.
 
 Antes de substituir arte, distinguir defeito do PNG (alpha, bordas, orientação) de defeito de renderização/layout. Validar recortes sobre fundos claros e escuros, mantendo transparente somente a área pretendida. Conferir espada nas três formas, nas duas mãos e em primeira/terceira pessoa. O background deve cobrir a tela preservando proporção, com controles em área segura.
 

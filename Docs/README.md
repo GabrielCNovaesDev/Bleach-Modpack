@@ -8,18 +8,27 @@ Este é um projeto **fã-feito (fan-made), não-oficial e não-comercial**, insp
 
 Este projeto é um trabalho derivado do mod **Dragon Mine Z**, distribuído sob licença **GPL-3.0**. Em conformidade com os termos da licença, este projeto também é distribuído sob **GPL-3.0** — o código-fonte completo está disponível publicamente neste repositório.
 
+## Índice da documentação
+
+| Pasta | Para quê | Comece por |
+|---|---|---|
+| [`jogador/`](jogador/manual-do-jogador.md) | Jogar o MVP (controles, quests, progressão) | [Manual do jogador](jogador/manual-do-jogador.md) |
+| [`planejamento/`](planejamento/plano-implementacao-mvp.md) | Plano de entrega, revisão técnica e especificação da análise | [Plano do MVP](planejamento/plano-implementacao-mvp.md) |
+| [`arte/`](arte/prompts-arte-mvp.md) | Briefing e prompts de texturas/UI | [Prompts de arte](arte/prompts-arte-mvp.md) |
+| [`arquitetura/`](arquitetura/00-overview.md) | Engenharia reversa do Dragon Mine Z (série 00–12) | [Overview](arquitetura/00-overview.md) |
+
 ---
 
 ## Sobre o projeto
 
 Um mod de Minecraft que traz o universo de Bleach, com foco no sistema de progressão de poder (raça → estágio) e em missões data-driven. A arquitetura de quests e de evolução é reaproveitada do Dragon Mine Z; o conteúdo (Shinigami, Zanpakutō, Shikai/Bankai, reiatsu, arcos) é original deste projeto.
 
-A documentação de engenharia reversa está em `Docs/00-overview.md` … `Docs/12-licenciamento-e-creditos.md`. Trechos de lógica não trivial do original estão em `/reference-code` (não entram no compile). O código do mod Bleach vive em `/src`.
+A documentação de engenharia reversa está em [`arquitetura/`](arquitetura/00-overview.md). Trechos de lógica não trivial do original estão em `/reference-code` (não entram no compile). O código do mod Bleach vive em `/src`.
 
 ## Baseado em
 
 - **Projeto original:** [Dragon Mine Z](https://github.com/DragonMineZ/dragonminez)
-- **Licença original:** GPL-3.0 (+ GeckoLib sob MIT; ver `12-licenciamento-e-creditos.md`)
+- **Licença original:** GPL-3.0 (+ GeckoLib sob MIT; ver [`arquitetura/12-licenciamento-e-creditos.md`](arquitetura/12-licenciamento-e-creditos.md))
 - **O que foi reaproveitado:** arquitetura do sistema de quests (JSON no mundo, objetivos, rewards, persistência) e do sistema de evolução/progressão (raça → grupo → estágio + mastery)
 - **O que é original deste projeto:** todo o conteúdo temático de Bleach, raças, habilidades, balanceamento e conteúdo visual
 
@@ -79,7 +88,7 @@ A documentação de engenharia reversa está em `Docs/00-overview.md` … `Docs/
 
 ## Requisitos técnicos
 
-Alinhados à plataforma do original para que a doc de capability/packets/eventos continue válida (ver `10-build-dependencias.md`):
+Alinhados à plataforma do original para que a doc de capability/packets/eventos continue válida (ver [`arquitetura/10-build-dependencias.md`](arquitetura/10-build-dependencias.md)):
 
 - **Minecraft:** 1.20.1
 - **Forge:** 47.4.x (original usa 47.4.10)
@@ -95,23 +104,24 @@ Alinhados à plataforma do original para que a doc de capability/packets/eventos
 ./gradlew build
 ```
 
-Java 17 é obrigatório. Manual de jogo (controles, quests, progressão): [`manual-do-jogador.md`](manual-do-jogador.md). Admin: `/bleachreload quests`.
+Java 17 é obrigatório. Manual de jogo (controles, quests, progressão): [`jogador/manual-do-jogador.md`](jogador/manual-do-jogador.md). Admin: `/bleachreload quests`.
 
 ## Estrutura do repositório
 
 ```
 /Docs
   README.md                         → este arquivo (visão do projeto Bleach)
-  manual-do-jogador.md              → como jogar (controles, quests, levelling) — atualizar a cada mecânica nova
-  plano-analise-dragon-mine-z.md    → especificação da análise
-  00-overview.md … 12-*.md          → referência de arquitetura para recriar quests + evolução
+  jogador/                          → como jogar (controles, quests, levelling)
+  planejamento/                     → planos, revisão técnica e especificação da análise
+  arte/                             → briefing e prompts de assets do MVP
+  arquitetura/                      → referência 00–12 (quests, evolução, rede, persistência)
 /reference-code                     → fontes originais pontuais (GPL-3.0), ver README lá
 /src                                → código-fonte do mod Bleach (Forge 1.20.1)
 ```
 
 ## Plano de implementação e manutenção da documentação
 
-O plano ativo de estabilização do MVP e das próximas entregas está em [plano-implementacao-mvp.md](C:/Users/Gabriel/Desktop/PROJETOS/Bleach-Modpack/Docs/plano-implementacao-mvp.md). Ele consolida a [revisão técnica](C:/Users/Gabriel/Desktop/PROJETOS/Bleach-Modpack/Docs/revisao-tecnica-mvp-2026-09-10.md), os bugs visuais relatados em jogo e as novas telas e ferramentas solicitadas.
+O plano ativo de estabilização do MVP e das próximas entregas está em [`planejamento/plano-implementacao-mvp.md`](planejamento/plano-implementacao-mvp.md). Ele consolida a [revisão técnica](planejamento/revisao-tecnica-mvp-2026-09-10.md), os bugs visuais relatados em jogo e as novas telas e ferramentas solicitadas.
 
 Prioridades planejadas: corrigir rede, persistência e UI; corrigir transparência/orientação do Asauchi e dimensionamento dos assets; adicionar comandos de desenvolvimento, tela de status com compra de skills e categorias de pontos, e seleção radial de formas/habilidades disponíveis. Essas entregas ainda não estão implementadas.
 

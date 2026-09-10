@@ -2,7 +2,7 @@
 
 Atualizado em 10/09/2026. Minecraft 1.20.1 / Forge 47.4.10 / Java 17.
 
-Este manual descreve o código atual. A verificação visual em jogo e com dois clientes ainda está pendente; consulte o plano para o estado de cada entrega. Toda mudança de lógica exige atualizar este manual e os demais .md afetados em Docs.
+Este manual descreve o código atual. A verificação visual em jogo e com dois clientes ainda está pendente; consulte o [plano de implementação](../planejamento/plano-implementacao-mvp.md) para o estado de cada entrega. Toda mudança de lógica exige atualizar este manual e os demais `.md` afetados em `Docs`.
 
 ## 1. Começar
 

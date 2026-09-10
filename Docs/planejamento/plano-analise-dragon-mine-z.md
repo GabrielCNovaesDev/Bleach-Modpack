@@ -3,10 +3,10 @@
 
 ## 0. Objetivo geral
 
-Analisar o repositório completo do Dragon Mine Z (mod Forge) e produzir uma pasta `/docs` tão completa que **um segundo modelo (ou um humano) consiga recriar um mod equivalente — com o sistema de Quests e Evolução — sem precisar reabrir o repositório original**, exceto pelos arquivos de lógica explicitamente preservados como referência (ver seção 6).
+Analisar o repositório completo do Dragon Mine Z (mod Forge) e produzir uma pasta `/Docs/arquitetura` tão completa que **um segundo modelo (ou um humano) consiga recriar um mod equivalente — com o sistema de Quests e Evolução — sem precisar reabrir o repositório original**, exceto pelos arquivos de lógica explicitamente preservados como referência (ver seção 6).
 
 A saída final deve ter dois componentes:
-1. `/docs/*` — documentação estruturada, em texto, sem código copiado literalmente (isso é importante pela licença GPL-3.0 — documentar o *comportamento e a arquitetura*, não colar blocos inteiros do código original)
+1. `/Docs/arquitetura/*` — documentação estruturada, em texto, sem código copiado literalmente (isso é importante pela licença GPL-3.0 — documentar o *comportamento e a arquitetura*, não colar blocos inteiros do código original)
 2. `/reference-code/*` — um subconjunto pequeno e deliberado de arquivos-fonte originais, preservados como referência técnica direta (permitido sob GPL-3.0, já que o fork mantém a mesma licença)
 
 ---
@@ -35,8 +35,10 @@ A saída final deve ter dois componentes:
 
 ## 2. Estrutura de pastas de saída
 
+Os documentos gerados por esta especificação ficam em `/Docs/arquitetura/` após a reorganização da pasta `Docs`. A listagem abaixo é a nomenclatura original.
+
 ```
-/docs
+/Docs/arquitetura
   00-overview.md
   01-arquitetura-geral.md
   02-capability-system.md

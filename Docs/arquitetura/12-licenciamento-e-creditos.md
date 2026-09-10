@@ -75,7 +75,7 @@ projeto e não é afiliado a Tite Kubo, Shueisha ou Studio Pierrot.
 
 | Artefato | Política |
 |---|---|
-| `/Docs/00`–`12` | Documentação de comportamento e arquitetura. **Sem** blocos de código copiados do original. |
+| `/Docs/arquitetura/00`–`12` | Documentação de comportamento e arquitetura. **Sem** blocos de código copiados do original. |
 | `/reference-code/*` | Subconjunto deliberado de fontes originais, cada um com justificativa + GPL-3.0 no topo. Ver `reference-code/README.md`. |
 | Assets, modelos, sons, JSON de sagas DB | **Não** copiar. Só a mecânica interessa. |
 | `QuestDefaults` / nomes de Raditz, Roshi, etc. | Não copiar conteúdo temático. Recriar quests Bleach do zero usando o schema. |

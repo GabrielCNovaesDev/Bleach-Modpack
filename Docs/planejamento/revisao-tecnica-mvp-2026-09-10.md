@@ -1,6 +1,6 @@
 # Revisão técnica do MVP Shinigami — 10/09/2026
 
-> **Atualização de planejamento:** todos os achados e recomendações desta revisão foram incorporados ao [plano de implementação do MVP](C:/Users/Gabriel/Desktop/PROJETOS/Bleach-Modpack/Docs/plano-implementacao-mvp.md), juntamente com os bugs visuais relatados pelo usuário, tela de status, categorias de pontos, radial e comandos de desenvolvimento. O plano passa a orientar a execução. A proposta de economia abaixo deve ser lida junto à nova solicitação de categorias; números e papéis serão fechados antes da implementação. O mob Hollow permanece adiado, mantendo zumbis como substitutos. Este documento conserva os achados originais e não indica que foram corrigidos.
+> **Atualização de planejamento:** todos os achados e recomendações desta revisão foram incorporados ao [plano de implementação do MVP](plano-implementacao-mvp.md), juntamente com os bugs visuais relatados pelo usuário, tela de status, categorias de pontos, radial e comandos de desenvolvimento. O plano passa a orientar a execução. A proposta de economia abaixo deve ser lida junto à nova solicitação de categorias; números e papéis serão fechados antes da implementação. O mob Hollow permanece adiado, mantendo zumbis como substitutos. Este documento conserva os achados originais e não indica que foram corrigidos.
 
 ## Conclusão e escopo
 

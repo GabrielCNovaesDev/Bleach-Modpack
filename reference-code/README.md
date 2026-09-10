@@ -4,7 +4,7 @@ Subconjunto deliberado de fontes do [Dragon Mine Z](https://github.com/DragonMin
 
 Critério (plano §5): só entra arquivo cuja lógica de cálculo/algoritmo é complexa o bastante para que reescrever só com a documentação em texto tenha alto risco de erro sutil.
 
-**Não** estão aqui: registries, boilerplate Forge, getters/setters, UI visual, defaults temáticos de Dragon Ball, `StatsData` inteiro (fórmulas de form/drain foram parafraseadas em `Docs/04` e `Docs/07`).
+**Não** estão aqui: registries, boilerplate Forge, getters/setters, UI visual, defaults temáticos de Dragon Ball, `StatsData` inteiro (fórmulas de form/drain foram parafraseadas em `Docs/arquitetura/04` e `Docs/arquitetura/07`).
 
 Cada `.java` tem no topo: origem, licença, e por que foi preservado.
 

@@ -6,7 +6,7 @@ Plano consolidado a partir da revisão técnica de 10/09/2026 e do teste de jogo
 
 Estado: **planejado; funcionalidades e correções ainda não implementadas**. A aprovação da direção de trabalho não significa que todos os números, nomes de atributos e atalhos estejam definidos. Esta entrega organiza a implementação; não altera o comportamento do jogo.
 
-A revisão detalhada continua em [revisao-tecnica-mvp-2026-09-10.md](C:/Users/Gabriel/Desktop/PROJETOS/Bleach-Modpack/Docs/revisao-tecnica-mvp-2026-09-10.md). Este plano passa a ser a referência de execução e ordem de entregas; a revisão conserva a evidência e os achados R01–R18.
+A revisão detalhada continua em [revisao-tecnica-mvp-2026-09-10.md](revisao-tecnica-mvp-2026-09-10.md). Este plano passa a ser a referência de execução e ordem de entregas; a revisão conserva a evidência e os achados R01–R18.
 
 ## 2. Contexto e problemas
 
@@ -272,15 +272,15 @@ F03 foi antecipado porque acelera teste de Shikai/Bankai, custos e regressões. 
 
 | Mudança | Documentos a revisar no mesmo trabalho |
 |---|---|
-| Qualquer gameplay | manual-do-jogador.md, README.md e status deste plano |
-| Quests/rewards/defaults | 03-sistema-quests.md, manual, README e exemplos pertinentes |
-| Formas/mastery/custos/atributos | 04-sistema-evolucao.md, 05-sistema-habilidades.md, manual |
-| Estado/NBT/migração | 02-capability-system.md, 07-persistencia-nbt.md |
-| Rede e autoridade | 06-rede-sincronizacao.md, 01-arquitetura-geral.md quando aplicável |
-| UI/atalhos/radial/status | 08-ui-hud.md, manual, prompts-arte-mvp.md quando assets mudarem |
-| Eventos/ciclo do jogador | 09-eventos-forge.md e documentos dos sistemas afetados |
-| Build/testes/toolchain | 10-build-dependencias.md, README |
-| Termos/créditos/assets | 11-glossario.md e 12-licenciamento-e-creditos.md quando houver mudança real |
+| Qualquer gameplay | `jogador/manual-do-jogador.md`, `Docs/README.md` e status deste plano |
+| Quests/rewards/defaults | `arquitetura/03-sistema-quests.md`, manual, README e exemplos pertinentes |
+| Formas/mastery/custos/atributos | `arquitetura/04-sistema-evolucao.md`, `arquitetura/05-sistema-habilidades.md`, manual |
+| Estado/NBT/migração | `arquitetura/02-capability-system.md`, `arquitetura/07-persistencia-nbt.md` |
+| Rede e autoridade | `arquitetura/06-rede-sincronizacao.md`, `arquitetura/01-arquitetura-geral.md` quando aplicável |
+| UI/atalhos/radial/status | `arquitetura/08-ui-hud.md`, manual, `arte/prompts-arte-mvp.md` quando assets mudarem |
+| Eventos/ciclo do jogador | `arquitetura/09-eventos-forge.md` e documentos dos sistemas afetados |
+| Build/testes/toolchain | `arquitetura/10-build-dependencias.md`, README |
+| Termos/créditos/assets | `arquitetura/11-glossario.md` e `arquitetura/12-licenciamento-e-creditos.md` quando houver mudança real |
 
 A matriz é ponto de partida, não lista exaustiva: pesquisar referências antigas em todos os .md de Docs e corrigir contradições relacionadas. Não reescrever arquivos sem relação com a mudança. Documentar explicitamente limites ainda não implementados.
 

@@ -4,7 +4,7 @@
 
 Dragon Mine Z (Forge 1.20.1, v2.1.3) é um mod de progressão inspirado em Dragon Ball. O jogador cria um personagem de uma das seis raças, distribui stats com Training Points, transforma-se em forms com custo de ki e mastery, e atravessa sagas/sidequests definidas em JSON no mundo. Por cima disso há combate, dimensões, dragon balls, técnicas editáveis e worldgen — conteúdo temático que **não** entra no fork.
 
-O que torna o original útil para um Bleach é a espinha: **uma capability de jogador**, **quests data-driven com progresso persistido**, e **evolução em estágios data-driven** (raça → grupo → form) ligada a skills e a rewards de quest. Esse trio é o suficiente para um segundo time recriar o MVP Shinigami sem reabrir o clone, desde que consulte `/Docs` e, nos poucos algoritmos sutis, `/reference-code`.
+O que torna o original útil para um Bleach é a espinha: **uma capability de jogador**, **quests data-driven com progresso persistido**, e **evolução em estágios data-driven** (raça → grupo → form) ligada a skills e a rewards de quest. Esse trio é o suficiente para um segundo time recriar o MVP Shinigami sem reabrir o clone, desde que consulte `/Docs/arquitetura` e, nos poucos algoritmos sutis, `/reference-code`.
 
 ## O que será reaproveitado vs. o que não será
 
