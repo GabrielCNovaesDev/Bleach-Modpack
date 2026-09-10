@@ -95,13 +95,14 @@ Alinhados à plataforma do original para que a doc de capability/packets/eventos
 ./gradlew build
 ```
 
-Java 17 é obrigatório. Teclas padrão: J (journal), R (carregar transformação), Shift+R (instantâneo se o mastery bastar), G (ciclar estágio), V (descer estágio). Admin: `/bleachreload quests`.
+Java 17 é obrigatório. Manual de jogo (controles, quests, progressão): [`manual-do-jogador.md`](manual-do-jogador.md). Admin: `/bleachreload quests`.
 
 ## Estrutura do repositório
 
 ```
 /Docs
   README.md                         → este arquivo (visão do projeto Bleach)
+  manual-do-jogador.md              → como jogar (controles, quests, levelling) — atualizar a cada mecânica nova
   plano-analise-dragon-mine-z.md    → especificação da análise
   00-overview.md … 12-*.md          → referência de arquitetura para recriar quests + evolução
 /reference-code                     → fontes originais pontuais (GPL-3.0), ver README lá
