@@ -1,5 +1,7 @@
 package com.bleachmod.client.gui;
 
+import com.bleachmod.Reference;
+import com.bleachmod.client.BleachTextures;
 import com.bleachmod.common.data.PlayerCapability;
 import com.bleachmod.common.data.PlayerData;
 import com.bleachmod.common.network.NetworkHandler;
@@ -7,7 +9,6 @@ import com.bleachmod.common.network.c2s.ClaimQuestRewardC2S;
 import com.bleachmod.common.network.c2s.QuestActionC2S;
 import com.bleachmod.common.network.c2s.SetTrackedQuestC2S;
 import com.bleachmod.common.network.c2s.UpdateSkillC2S;
-import com.bleachmod.Reference;
 import com.bleachmod.common.quest.Quest;
 import com.bleachmod.common.quest.QuestAvailabilityChecker;
 import com.bleachmod.common.quest.QuestProgress;
@@ -19,6 +20,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,8 @@ public class JournalScreen extends Screen {
     private Button startButton;
     private Button claimButton;
     private Button trackButton;
+    private int bookX;
+    private int bookY;
 
     public JournalScreen() {
         super(Component.translatable("screen.bleachmod.journal"));
@@ -38,36 +42,34 @@ public class JournalScreen extends Screen {
     protected void init() {
         quests.clear();
         quests.addAll(QuestRegistry.allQuests());
-        int listX = 20;
-        int y = 40;
-        int i = 0;
-        for (Quest quest : quests) {
+        bookX = (this.width - BleachTextures.JOURNAL_W) / 2;
+        bookY = (this.height - BleachTextures.JOURNAL_H) / 2 + 6;
+
+        int max = Math.min(quests.size(), BleachTextures.JOURNAL_SLOT_COUNT);
+        for (int i = 0; i < max; i++) {
             int index = i;
-            addRenderableWidget(Button.builder(buttonLabel(quest), b -> {
-                selectedIndex = index;
-                refreshActionButtons();
-            }).bounds(listX, y, 160, 18).build());
-            y += 20;
-            i++;
-            if (y > this.height - 40) {
-                break;
-            }
+            addRenderableWidget(new SlotButton(
+                    bookX + BleachTextures.JOURNAL_SLOT_X,
+                    bookY + BleachTextures.JOURNAL_SLOT_Y + i * BleachTextures.JOURNAL_SLOT_STRIDE,
+                    BleachTextures.JOURNAL_SLOT_W,
+                    BleachTextures.JOURNAL_SLOT_H,
+                    () -> {
+                        selectedIndex = index;
+                        refreshActionButtons();
+                    }, () -> selectedIndex == index));
         }
+
+        int by = bookY + BleachTextures.JOURNAL_H + 8;
         startButton = addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.start"),
-                b -> sendStart()).bounds(this.width - 180, this.height - 70, 70, 20).build());
+                b -> sendStart()).bounds(bookX, by, 74, 20).build());
         claimButton = addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.claim"),
-                b -> sendClaim()).bounds(this.width - 105, this.height - 70, 85, 20).build());
+                b -> sendClaim()).bounds(bookX + 82, by, 74, 20).build());
         trackButton = addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.track"),
-                b -> sendTrack()).bounds(this.width - 180, this.height - 46, 78, 20).build());
+                b -> sendTrack()).bounds(bookX + 164, by, 74, 20).build());
         addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.upgrade"),
                 b -> NetworkHandler.sendToServer(new UpdateSkillC2S(Reference.SKILL_ZANPAKUTO, UpdateSkillC2S.SkillAction.PURCHASE)))
-                .bounds(this.width - 98, this.height - 46, 78, 20).build());
+                .bounds(bookX + 246, by, 74, 20).build());
         refreshActionButtons();
-    }
-
-    private Component buttonLabel(Quest quest) {
-        QuestStatus status = currentData() == null ? QuestStatus.NOT_STARTED : currentData().getPlayerQuestData().getStatus(quest.getQuestKey());
-        return Component.literal("[" + status.name().charAt(0) + "] ").append(Component.translatable(quest.getTitle()));
     }
 
     private void refreshActionButtons() {
@@ -141,38 +143,59 @@ public class JournalScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(graphics);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 12, 0xFFE8C547);
-        Quest quest = selectedQuest();
+        BleachTextures.blitNative(graphics, BleachTextures.JOURNAL_BG, bookX, bookY,
+                BleachTextures.JOURNAL_W, BleachTextures.JOURNAL_H);
+        int headerX = bookX + (BleachTextures.JOURNAL_W - BleachTextures.HEADER_W) / 2;
+        int headerY = bookY - BleachTextures.HEADER_H - 2;
+        BleachTextures.blitNative(graphics, BleachTextures.JOURNAL_HEADER, headerX, headerY,
+                BleachTextures.HEADER_W, BleachTextures.HEADER_H);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, headerY + 10, 0xF2E9C8);
+
         PlayerData data = currentData();
+        int visible = Math.min(quests.size(), BleachTextures.JOURNAL_SLOT_COUNT);
+        for (int i = 0; i < visible; i++) {
+            Quest quest = quests.get(i);
+            QuestStatus status = data == null ? QuestStatus.NOT_STARTED : data.getPlayerQuestData().getStatus(quest.getQuestKey());
+            ResourceLocation icon = BleachTextures.statusIcon(status.name());
+            int slotY = bookY + BleachTextures.JOURNAL_SLOT_Y + i * BleachTextures.JOURNAL_SLOT_STRIDE;
+            BleachTextures.blit(graphics, icon, bookX + 22, slotY + 4, 12, 12, 16, 16);
+            int color = i == selectedIndex ? 0xE8C547 : 0xF2E9C8;
+            graphics.drawString(this.font, Component.translatable(quest.getTitle()), bookX + 40, slotY + 5, color, false);
+        }
+
+        Quest quest = selectedQuest();
         if (quest != null) {
-            int x = 200;
-            int y = 40;
-            graphics.drawString(this.font, Component.translatable(quest.getTitle()), x, y, 0xFFFFFFFF, false);
-            y += 14;
-            graphics.drawWordWrap(this.font, Component.translatable(quest.getDescription()), x, y, this.width - x - 20, 0xFFCCCCCC);
+            int x = bookX + BleachTextures.JOURNAL_RIGHT_X;
+            int y = bookY + 24;
+            int wrap = BleachTextures.JOURNAL_RIGHT_WRAP;
+            graphics.drawString(this.font, Component.translatable(quest.getTitle()), x, y, 0x3A2A1C, false);
+            y += 12;
+            graphics.drawWordWrap(this.font, Component.translatable(quest.getDescription()), x, y, wrap, 0x5A4A3A);
             y += 36;
-            graphics.drawString(this.font, Component.translatable("screen.bleachmod.journal.objectives"), x, y, 0xFFE8C547, false);
+            graphics.drawString(this.font, Component.translatable("screen.bleachmod.journal.objectives"), x, y, 0x7B5CFF, false);
             y += 12;
             QuestProgress progress = data == null ? null : data.getPlayerQuestData().getProgress(quest.getQuestKey());
             for (int i = 0; i < quest.getObjectives().size(); i++) {
                 QuestObjective objective = quest.getObjectives().get(i);
                 int current = progress == null ? 0 : progress.getObjectiveProgress(i);
                 int required = progress == null ? objective.getRequired() : progress.getRequired(i, objective.getRequired());
-                graphics.drawString(this.font, Component.literal(current + "/" + required + " ").append(objective.describe()), x, y, 0xFFFFFFFF, false);
+                boolean kill = objective.getType() == QuestObjective.ObjectiveType.KILL;
+                ResourceLocation objIcon = kill ? BleachTextures.ICON_OBJECTIVE_KILL : BleachTextures.ICON_OBJECTIVE_ITEM;
+                int src = BleachTextures.objectiveSrc(kill);
+                BleachTextures.blit(graphics, objIcon, x, y, 10, 10, src, src);
+                graphics.drawString(this.font, Component.literal(current + "/" + required), x + 12, y + 1, 0x3A2A1C, false);
                 y += 12;
             }
-            y += 8;
-            graphics.drawString(this.font, Component.translatable("screen.bleachmod.journal.rewards"), x, y, 0xFFE8C547, false);
+            y += 6;
+            graphics.drawString(this.font, Component.translatable("screen.bleachmod.journal.rewards"), x, y, 0x7B5CFF, false);
             y += 12;
             int ri = 0;
             for (QuestReward reward : quest.getRewards()) {
                 boolean claimed = progress != null && progress.isRewardClaimed(ri);
-                graphics.drawString(this.font, reward.describe().copy().append(claimed ? " ✓" : ""), x, y, claimed ? 0xFF88FF88 : 0xFFFFFFFF, false);
-                y += 12;
+                graphics.drawString(this.font, reward.describe().copy().append(claimed ? " *" : ""), x, y,
+                        claimed ? 0x5FA86A : 0x3A2A1C, false);
+                y += 10;
                 ri++;
-            }
-            if (data != null) {
-                graphics.drawString(this.font, Component.literal(data.getPlayerQuestData().getStatus(quest.getQuestKey()).name()), x, this.height - 90, 0xFFAAAAAA, false);
             }
         }
         super.render(graphics, mouseX, mouseY, partialTick);
@@ -181,5 +204,21 @@ public class JournalScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    private static final class SlotButton extends Button {
+        private final java.util.function.BooleanSupplier selected;
+
+        private SlotButton(int x, int y, int width, int height, Runnable onPress, java.util.function.BooleanSupplier selected) {
+            super(x, y, width, height, Component.empty(), button -> onPress.run(), DEFAULT_NARRATION);
+            this.selected = selected;
+        }
+
+        @Override
+        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+            if (isHoveredOrFocused() || selected.getAsBoolean()) {
+                graphics.fill(getX(), getY(), getX() + width, getY() + height, 0x44E8C547);
+            }
+        }
     }
 }
