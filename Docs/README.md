@@ -109,12 +109,23 @@ Java 17 é obrigatório. Manual de jogo (controles, quests, progressão): [`manu
 /src                                → código-fonte do mod Bleach (Forge 1.20.1)
 ```
 
+## Plano de implementação e manutenção da documentação
+
+O plano ativo de estabilização do MVP e das próximas entregas está em [plano-implementacao-mvp.md](C:/Users/Gabriel/Desktop/PROJETOS/Bleach-Modpack/Docs/plano-implementacao-mvp.md). Ele consolida a [revisão técnica](C:/Users/Gabriel/Desktop/PROJETOS/Bleach-Modpack/Docs/revisao-tecnica-mvp-2026-09-10.md), os bugs visuais relatados em jogo e as novas telas e ferramentas solicitadas.
+
+Prioridades planejadas: corrigir rede, persistência e UI; corrigir transparência/orientação do Asauchi e dimensionamento dos assets; adicionar comandos de desenvolvimento, tela de status com compra de skills e categorias de pontos, e seleção radial de formas/habilidades disponíveis. Essas entregas ainda não estão implementadas.
+
+**Inimigos provisórios:** continuamos usando zumbis, com os esqueletos já presentes nas quests atuais. A criação do mob Hollow ficará para estudo posterior e não bloqueia o MVP. Textos e objetivos devem identificar os alvos reais.
+
+**Regra de conclusão:** toda alteração na lógica do jogo deve atualizar, no mesmo trabalho, todos os arquivos `.md` pertinentes em `Docs`, incluindo manual, arquitetura, regras, rede, persistência e UI quando afetados. Pesquisar referências antigas e eliminar contradições. O plano contém uma matriz de documentos por sistema. Preservar a distinção entre a engenharia reversa de Dragon Mine Z e a implementação Bleach; não apresentar planejamento como funcionalidade disponível.
+
 ## Roadmap
 
 | Fase | Descrição | Status |
 |---|---|---|
 | Fase 0 | Análise do repositório base + documentação | Concluída |
-| Fase 1 (MVP) | Raça Shinigami + Quests básicas | Implementada |
+| Fase 1 (MVP) | Raça Shinigami + Quests básicas | Base implementada; estabilização pendente |
+| Estabilização do MVP | Correções, status/categorias, radial, comandos e progressão útil | Planejada no plano ativo |
 | Fase 2 | Raça Hollow | ⏳ Planejado |
 | Fase 3 | Raças Quincy e Fullbringer | ⏳ Planejado |
 | Fase 4 | Conteúdo expandido e balanceamento | ⏳ Planejado |

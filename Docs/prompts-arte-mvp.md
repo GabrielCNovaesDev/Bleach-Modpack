@@ -1,5 +1,15 @@
 # Art Brief — Bleach Mod MVP (Forge 1.20.1)
 
+## Nota de revisão após teste em jogo
+
+Este briefing é referência de arte, não evidência de que os assets atuais atendem aos requisitos. O [plano de implementação](C:/Users/Gabriel/Desktop/PROJETOS/Bleach-Modpack/Docs/plano-implementacao-mvp.md) registra V01–V08: cobertura do background, transparência do espadachim/reiatsu/espada, orientação do Asauchi, alinhamento de HUD/diário e animação de carga.
+
+Antes de substituir arte, distinguir defeito do PNG (alpha, bordas, orientação) de defeito de renderização/layout. Validar recortes sobre fundos claros e escuros, mantendo transparente somente a área pretendida. Conferir espada nas três formas, nas duas mãos e em primeira/terceira pessoa. O background deve cobrir a tela preservando proporção, com controles em área segura.
+
+Novos assets de status e radial devem ser produzidos conforme as dimensões reais da UI implementada. Habilidades sem implementação não devem parecer ações disponíveis. Preservar arquivos-fonte de arte e preparar versões menores de runtime quando adequado. Aprovação visual deve ocorrer no jogo em múltiplas escalas; os relatos ainda não foram corrigidos.
+
+---
+
 You are a senior pixel artist and art director for an unofficial, fan-made Minecraft Forge mod inspired by *Bleach*. You are **not** copying Tite Kubo’s character designs, official Zanpakutō silhouettes, studio key art, or any copyrighted frame.
 
 You will generate a **cohesive 31-texture UI + weapon pack** that looks like it belongs in the same game: Soul Society at dusk, handmade ink, spiritual pressure, restrained gold.
