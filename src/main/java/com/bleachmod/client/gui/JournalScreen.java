@@ -1,224 +1,116 @@
 package com.bleachmod.client.gui;
-
-import com.bleachmod.Reference;
-import com.bleachmod.client.BleachTextures;
-import com.bleachmod.common.data.PlayerCapability;
-import com.bleachmod.common.data.PlayerData;
+import com.bleachmod.common.data.*;
 import com.bleachmod.common.network.NetworkHandler;
-import com.bleachmod.common.network.c2s.ClaimQuestRewardC2S;
-import com.bleachmod.common.network.c2s.QuestActionC2S;
-import com.bleachmod.common.network.c2s.SetTrackedQuestC2S;
-import com.bleachmod.common.network.c2s.UpdateSkillC2S;
-import com.bleachmod.common.quest.Quest;
-import com.bleachmod.common.quest.QuestAvailabilityChecker;
-import com.bleachmod.common.quest.QuestProgress;
-import com.bleachmod.common.quest.QuestRegistry;
-import com.bleachmod.common.quest.QuestStatus;
-import com.bleachmod.common.quest.objectives.QuestObjective;
-import com.bleachmod.common.quest.rewards.QuestReward;
+import com.bleachmod.common.network.c2s.*;
+import com.bleachmod.common.quest.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class JournalScreen extends Screen {
-    private final List<Quest> quests = new ArrayList<>();
-    private int selectedIndex;
-    private Button startButton;
-    private Button claimButton;
-    private Button trackButton;
-    private int bookX;
-    private int bookY;
-
-    public JournalScreen() {
-        super(Component.translatable("screen.bleachmod.journal"));
-    }
-
-    @Override
-    protected void init() {
-        quests.clear();
-        quests.addAll(QuestRegistry.allQuests());
-        bookX = (this.width - BleachTextures.JOURNAL_W) / 2;
-        bookY = (this.height - BleachTextures.JOURNAL_H) / 2 + 6;
-
-        int max = Math.min(quests.size(), BleachTextures.JOURNAL_SLOT_COUNT);
-        for (int i = 0; i < max; i++) {
-            int index = i;
-            addRenderableWidget(new SlotButton(
-                    bookX + BleachTextures.JOURNAL_SLOT_X,
-                    bookY + BleachTextures.JOURNAL_SLOT_Y + i * BleachTextures.JOURNAL_SLOT_STRIDE,
-                    BleachTextures.JOURNAL_SLOT_W,
-                    BleachTextures.JOURNAL_SLOT_H,
-                    () -> {
-                        selectedIndex = index;
-                        refreshActionButtons();
-                    }, () -> selectedIndex == index));
+public final class JournalScreen extends Screen {
+    private List<Quest> quests=List.of();
+    private final List<Button> slots=new ArrayList<>();
+    private String selected;
+    private int page,scroll,left,top,panelW,panelH,split;
+    private Button start,claim,track,previous,next;
+    public JournalScreen(){super(Component.translatable("screen.bleachmod.journal"));}
+    private PlayerData data(){return minecraft==null||minecraft.player==null?null:PlayerCapability.get(minecraft.player).orElse(null);}
+    private Quest quest(){return selected==null?null:QuestRegistry.getQuest(selected);}
+    @Override protected void init(){
+        quests=List.copyOf(QuestRegistry.allQuests());
+        if(quest()==null&&!quests.isEmpty())selected=quests.get(0).getQuestKey();
+        panelW=Math.min(480,width-16); panelH=Math.min(280,height-44);
+        left=(width-panelW)/2;top=8;split=left+panelW*2/5;
+        slots.clear();
+        for(int i=0;i<5;i++){
+            final int slot=i;
+            slots.add(addRenderableWidget(Button.builder(Component.empty(),b->{
+                int index=page*5+slot;
+                if(index<quests.size()){selected=quests.get(index).getQuestKey();scroll=0;refresh();}
+            }).bounds(left+8,top+30+i*24,split-left-16,20).build()));
         }
-
-        int by = bookY + BleachTextures.JOURNAL_H + 8;
-        startButton = addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.start"),
-                b -> sendStart()).bounds(bookX, by, 74, 20).build());
-        claimButton = addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.claim"),
-                b -> sendClaim()).bounds(bookX + 82, by, 74, 20).build());
-        trackButton = addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.track"),
-                b -> sendTrack()).bounds(bookX + 164, by, 74, 20).build());
-        addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.upgrade"),
-                b -> NetworkHandler.sendToServer(new UpdateSkillC2S(Reference.SKILL_ZANPAKUTO, UpdateSkillC2S.SkillAction.PURCHASE)))
-                .bounds(bookX + 246, by, 74, 20).build());
-        refreshActionButtons();
+        previous=addRenderableWidget(Button.builder(Component.literal("<"),b->{page--;refresh();}).bounds(left+8,top+154,30,20).build());
+        next=addRenderableWidget(Button.builder(Component.literal(">"),b->{page++;refresh();}).bounds(split-38,top+154,30,20).build());
+        int y=top+panelH+4,bw=(panelW-12)/4;
+        start=addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.start"),b->{
+            if(quest()!=null)NetworkHandler.sendToServer(new QuestActionC2S(QuestActionC2S.Action.START,selected));
+        }).bounds(left,y,bw,20).build());
+        claim=addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.claim"),b->claim())
+            .bounds(left+bw+4,y,bw,20).build());
+        track=addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.track"),b->{
+            PlayerData d=data(); if(d!=null&&quest()!=null)NetworkHandler.sendToServer(new SetTrackedQuestC2S(selected.equals(d.getPlayerQuestData().getTrackedQuestId())?"":selected));
+        }).bounds(left+2*(bw+4),y,bw,20).build());
+        addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.status"),b->minecraft.setScreen(new StatusScreen()))
+            .bounds(left+3*(bw+4),y,bw,20).build());
+        refresh();
     }
-
-    private void refreshActionButtons() {
-        PlayerData data = currentData();
-        Quest quest = selectedQuest();
-        boolean hasQuest = quest != null && data != null;
-        boolean available = hasQuest && QuestAvailabilityChecker.isAvailable(data, quest.getQuestKey());
-        boolean accepted = hasQuest && data.getPlayerQuestData().getStatus(quest.getQuestKey()) == QuestStatus.ACCEPTED;
-        boolean success = hasQuest && data.getPlayerQuestData().isCompleted(quest.getQuestKey());
-        boolean unclaimed = success && hasUnclaimed(data, quest);
-        startButton.active = available;
-        claimButton.active = unclaimed;
-        trackButton.active = accepted;
-    }
-
-    private boolean hasUnclaimed(PlayerData data, Quest quest) {
-        QuestProgress progress = data.getPlayerQuestData().getProgress(quest.getQuestKey());
-        if (progress == null) {
-            return true;
-        }
-        for (int i = 0; i < quest.getRewards().size(); i++) {
-            if (!progress.isRewardClaimed(i)) {
-                return true;
-            }
-        }
+    private boolean pending(PlayerData d,Quest q){
+        QuestProgress p=d.getPlayerQuestData().getProgress(q.getQuestKey());
+        if(p==null)return false;
+        for(int i=0;i<q.getRewards().size();i++)if(!p.isRewardClaimed(i))return true;
         return false;
     }
-
-    private void sendStart() {
-        Quest quest = selectedQuest();
-        if (quest != null) {
-            NetworkHandler.sendToServer(new QuestActionC2S(QuestActionC2S.Action.START, quest.getQuestKey()));
-        }
+    private void claim(){
+        PlayerData d=data();Quest q=quest();if(d==null||q==null)return;
+        QuestProgress p=d.getPlayerQuestData().getProgress(selected);
+        for(int i=0;i<q.getRewards().size();i++)if(p!=null&&!p.isRewardClaimed(i))NetworkHandler.sendToServer(new ClaimQuestRewardC2S(selected,i));
     }
-
-    private void sendClaim() {
-        Quest quest = selectedQuest();
-        PlayerData data = currentData();
-        if (quest == null || data == null) {
-            return;
-        }
-        QuestProgress progress = data.getPlayerQuestData().getProgress(quest.getQuestKey());
-        for (int i = 0; i < quest.getRewards().size(); i++) {
-            if (progress == null || !progress.isRewardClaimed(i)) {
-                NetworkHandler.sendToServer(new ClaimQuestRewardC2S(quest.getQuestKey(), i));
+    @Override public void tick(){
+        List<Quest> current=List.copyOf(QuestRegistry.allQuests());
+        if(!current.equals(quests)){quests=current;page=0;if(quest()==null)selected=quests.isEmpty()?null:quests.get(0).getQuestKey();}
+        refresh();
+    }
+    private void refresh(){
+        page=Math.max(0,Math.min(page,Math.max(0,(quests.size()-1)/5)));
+        PlayerData d=data();Quest q=quest();
+        for(int i=0;i<slots.size();i++){
+            int index=page*5+i;Button b=slots.get(i);b.visible=index<quests.size();
+            if(b.visible){
+                Quest item=quests.get(index);QuestStatus status=d==null?QuestStatus.NOT_STARTED:d.getPlayerQuestData().getStatus(item.getQuestKey());
+                String marker=switch(status){case ACCEPTED->"> ";case SUCCESS->"+ ";case FAILED->"! ";default->"  ";};
+                String name=Component.translatable(item.getTitle()).getString();
+                b.setMessage(Component.literal(marker+font.plainSubstrByWidth(name,b.getWidth()-20)));
             }
         }
+        previous.active=page>0;next.active=(page+1)*5<quests.size();
+        boolean valid=q!=null&&d!=null;
+        QuestProgress p=valid?d.getPlayerQuestData().getProgress(selected):null;
+        boolean compatible=p==null||p.matchesDefinition(q);
+        start.active=valid&&compatible&&QuestAvailabilityChecker.isAvailable(d,selected);
+        claim.active=valid&&compatible&&d.getPlayerQuestData().isCompleted(selected)&&pending(d,q);
+        track.active=valid&&d.getPlayerQuestData().isAccepted(selected);
+        track.setMessage(Component.translatable(valid&&selected.equals(d.getPlayerQuestData().getTrackedQuestId())?"screen.bleachmod.untrack":"screen.bleachmod.journal.track"));
     }
-
-    private void sendTrack() {
-        Quest quest = selectedQuest();
-        if (quest != null) {
-            NetworkHandler.sendToServer(new SetTrackedQuestC2S(quest.getQuestKey()));
+    private List<Component> details(){
+        List<Component> text=new ArrayList<>(); Quest q=quest();PlayerData d=data();if(q==null)return text;
+        QuestProgress p=d==null?null:d.getPlayerQuestData().getProgress(selected);
+        text.add(Component.translatable(q.getTitle()));text.add(Component.translatable(q.getDescription()));text.add(Component.empty());
+        if(p!=null&&!p.matchesDefinition(q))text.add(Component.translatable("message.bleachmod.quest.changed"));
+        else if(d!=null&&!QuestAvailabilityChecker.isAvailable(d,selected)&&d.getPlayerQuestData().getStatus(selected)==QuestStatus.NOT_STARTED)
+            text.add(Component.translatable("screen.bleachmod.quest_locked"));
+        text.add(Component.translatable("screen.bleachmod.journal.objectives"));
+        for(int i=0;i<q.getObjectives().size();i++){
+            var o=q.getObjectives().get(i);
+            text.add(o.describe().copy().append(" ["+(p==null?0:p.getObjectiveProgress(i))+"/"+(p==null?o.getRequired():p.getRequired(i,o.getRequired()))+"]"));
         }
+        text.add(Component.empty());text.add(Component.translatable("screen.bleachmod.journal.rewards"));
+        for(int i=0;i<q.getRewards().size();i++)text.add(q.getRewards().get(i).describe().copy().append(p!=null&&p.isRewardClaimed(i)?" ✓":""));
+        return text;
     }
-
-    private Quest selectedQuest() {
-        if (selectedIndex < 0 || selectedIndex >= quests.size()) {
-            return null;
-        }
-        return quests.get(selectedIndex);
+    @Override public boolean mouseScrolled(double x,double y,double delta){scroll=Math.max(0,scroll-(int)(delta*20));return true;}
+    @Override public void render(GuiGraphics g,int mx,int my,float dt){
+        renderBackground(g);g.fill(left,top,left+panelW,top+panelH,0xF0171321);
+        g.fill(split,top+26,left+panelW-6,top+panelH-6,0xFFDFD2AB);
+        g.drawCenteredString(font,title,width/2,top+10,0xE8C547);
+        List<FormattedCharSequence> lines=new ArrayList<>();
+        for(Component text:details())lines.addAll(font.split(text,left+panelW-split-20));
+        int available=panelH-38;scroll=Math.min(scroll,Math.max(0,lines.size()*12-available));
+        g.enableScissor(split+4,top+30,left+panelW-8,top+panelH-8);
+        int y=top+32-scroll;for(var line:lines){g.drawString(font,line,split+8,y,0x302318,false);y+=12;}
+        g.disableScissor();super.render(g,mx,my,dt);
     }
-
-    private PlayerData currentData() {
-        if (this.minecraft == null || this.minecraft.player == null) {
-            return null;
-        }
-        return PlayerCapability.get(this.minecraft.player).orElse(null);
-    }
-
-    @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(graphics);
-        BleachTextures.blitNative(graphics, BleachTextures.JOURNAL_BG, bookX, bookY,
-                BleachTextures.JOURNAL_W, BleachTextures.JOURNAL_H);
-        int headerX = bookX + (BleachTextures.JOURNAL_W - BleachTextures.HEADER_W) / 2;
-        int headerY = bookY - BleachTextures.HEADER_H - 2;
-        BleachTextures.blitNative(graphics, BleachTextures.JOURNAL_HEADER, headerX, headerY,
-                BleachTextures.HEADER_W, BleachTextures.HEADER_H);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, headerY + 10, 0xF2E9C8);
-
-        PlayerData data = currentData();
-        int visible = Math.min(quests.size(), BleachTextures.JOURNAL_SLOT_COUNT);
-        for (int i = 0; i < visible; i++) {
-            Quest quest = quests.get(i);
-            QuestStatus status = data == null ? QuestStatus.NOT_STARTED : data.getPlayerQuestData().getStatus(quest.getQuestKey());
-            ResourceLocation icon = BleachTextures.statusIcon(status.name());
-            int slotY = bookY + BleachTextures.JOURNAL_SLOT_Y + i * BleachTextures.JOURNAL_SLOT_STRIDE;
-            BleachTextures.blit(graphics, icon, bookX + 22, slotY + 4, 12, 12, 16, 16);
-            int color = i == selectedIndex ? 0xE8C547 : 0xF2E9C8;
-            graphics.drawString(this.font, Component.translatable(quest.getTitle()), bookX + 40, slotY + 5, color, false);
-        }
-
-        Quest quest = selectedQuest();
-        if (quest != null) {
-            int x = bookX + BleachTextures.JOURNAL_RIGHT_X;
-            int y = bookY + 24;
-            int wrap = BleachTextures.JOURNAL_RIGHT_WRAP;
-            graphics.drawString(this.font, Component.translatable(quest.getTitle()), x, y, 0x3A2A1C, false);
-            y += 12;
-            graphics.drawWordWrap(this.font, Component.translatable(quest.getDescription()), x, y, wrap, 0x5A4A3A);
-            y += 36;
-            graphics.drawString(this.font, Component.translatable("screen.bleachmod.journal.objectives"), x, y, 0x7B5CFF, false);
-            y += 12;
-            QuestProgress progress = data == null ? null : data.getPlayerQuestData().getProgress(quest.getQuestKey());
-            for (int i = 0; i < quest.getObjectives().size(); i++) {
-                QuestObjective objective = quest.getObjectives().get(i);
-                int current = progress == null ? 0 : progress.getObjectiveProgress(i);
-                int required = progress == null ? objective.getRequired() : progress.getRequired(i, objective.getRequired());
-                boolean kill = objective.getType() == QuestObjective.ObjectiveType.KILL;
-                ResourceLocation objIcon = kill ? BleachTextures.ICON_OBJECTIVE_KILL : BleachTextures.ICON_OBJECTIVE_ITEM;
-                int src = BleachTextures.objectiveSrc(kill);
-                BleachTextures.blit(graphics, objIcon, x, y, 10, 10, src, src);
-                graphics.drawString(this.font, Component.literal(current + "/" + required), x + 12, y + 1, 0x3A2A1C, false);
-                y += 12;
-            }
-            y += 6;
-            graphics.drawString(this.font, Component.translatable("screen.bleachmod.journal.rewards"), x, y, 0x7B5CFF, false);
-            y += 12;
-            int ri = 0;
-            for (QuestReward reward : quest.getRewards()) {
-                boolean claimed = progress != null && progress.isRewardClaimed(ri);
-                graphics.drawString(this.font, reward.describe().copy().append(claimed ? " *" : ""), x, y,
-                        claimed ? 0x5FA86A : 0x3A2A1C, false);
-                y += 10;
-                ri++;
-            }
-        }
-        super.render(graphics, mouseX, mouseY, partialTick);
-    }
-
-    @Override
-    public boolean isPauseScreen() {
-        return false;
-    }
-
-    private static final class SlotButton extends Button {
-        private final java.util.function.BooleanSupplier selected;
-
-        private SlotButton(int x, int y, int width, int height, Runnable onPress, java.util.function.BooleanSupplier selected) {
-            super(x, y, width, height, Component.empty(), button -> onPress.run(), DEFAULT_NARRATION);
-            this.selected = selected;
-        }
-
-        @Override
-        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            if (isHoveredOrFocused() || selected.getAsBoolean()) {
-                graphics.fill(getX(), getY(), getX() + width, getY() + height, 0x44E8C547);
-            }
-        }
-    }
+    @Override public boolean isPauseScreen(){return false;}
 }

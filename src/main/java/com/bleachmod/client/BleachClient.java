@@ -26,6 +26,8 @@ public final class BleachClient {
 
     private static void registerKeys(RegisterKeyMappingsEvent event) {
         event.register(ModKeybinds.JOURNAL);
+        event.register(ModKeybinds.STATUS);
+        event.register(ModKeybinds.WHEEL);
         event.register(ModKeybinds.CHARGE);
         event.register(ModKeybinds.CYCLE_FORM);
         event.register(ModKeybinds.DESCEND);
@@ -43,7 +45,7 @@ public final class BleachClient {
 
     private static void registerItemProperties() {
         ItemProperties.register(ModItems.ASAUCHI.get(), Reference.id("form"), (stack, level, entity, seed) -> {
-            Player player = entity instanceof Player holder ? holder : Minecraft.getInstance().player;
+            Player player = entity instanceof Player holder ? holder : null;
             if (player == null) {
                 return 0.0F;
             }

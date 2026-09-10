@@ -17,11 +17,17 @@ public final class StoryToastManager {
     private static Component subtitle = Component.empty();
     private static StoryToastS2C.ToastType type = StoryToastS2C.ToastType.START;
     private static long untilMs;
+    private static final java.util.ArrayDeque<StoryToastS2C> pending = new java.util.ArrayDeque<>();
+    public static void clear() { pending.clear(); untilMs = 0; }
 
     private StoryToastManager() {
     }
 
     public static void show(StoryToastS2C msg) {
+        if (System.currentTimeMillis() < untilMs) {
+            if (pending.size() < 8) pending.addLast(msg);
+            return;
+        }
         Quest quest = QuestRegistry.getQuest(msg.questId());
         Component questName = quest == null ? Component.literal(msg.questId()) : Component.translatable(quest.getTitle());
         type = msg.type();
@@ -38,7 +44,8 @@ public final class StoryToastManager {
 
     public static void render(GuiGraphics graphics, int width) {
         if (System.currentTimeMillis() > untilMs) {
-            return;
+            if (pending.isEmpty()) return;
+            show(pending.removeFirst());
         }
         Minecraft mc = Minecraft.getInstance();
         int toastW = BleachTextures.TOAST_W;

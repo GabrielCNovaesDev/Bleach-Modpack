@@ -10,6 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 public class ConfirmRaceScreen extends Screen {
+    private boolean pending;
     public ConfirmRaceScreen() {
         super(Component.translatable("screen.bleachmod.confirm_race"));
     }
@@ -19,16 +20,18 @@ public class ConfirmRaceScreen extends Screen {
         int cx = this.width / 2;
         addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.confirm_shinigami"), button -> {
             NetworkHandler.sendToServer(new ConfirmCharacterC2S(Reference.RACE_SHINIGAMI));
-            onClose();
+            pending = true;
+            button.active = false;
         }).bounds(cx - 100, this.height - 48, 200, 20).build());
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        int bgH = this.height;
-        int bgW = bgH * BleachTextures.CONFIRM_BG_W / BleachTextures.CONFIRM_BG_H;
+        double scale = Math.max((double) width / BleachTextures.CONFIRM_BG_W, (double) height / BleachTextures.CONFIRM_BG_H);
+        int bgW = (int) Math.ceil(BleachTextures.CONFIRM_BG_W * scale);
+        int bgH = (int) Math.ceil(BleachTextures.CONFIRM_BG_H * scale);
         int bgX = (this.width - bgW) / 2;
-        BleachTextures.blit(graphics, BleachTextures.CONFIRM_BG, bgX, 0, bgW, bgH,
+        BleachTextures.blit(graphics, BleachTextures.CONFIRM_BG, bgX, (height - bgH) / 2, bgW, bgH,
                 BleachTextures.CONFIRM_BG_W, BleachTextures.CONFIRM_BG_H);
         graphics.fill(0, 0, this.width, this.height, 0x44000000);
 
@@ -44,6 +47,13 @@ public class ConfirmRaceScreen extends Screen {
         super.render(graphics, mouseX, mouseY, partialTick);
     }
 
+    @Override
+    public void tick() {
+        if (minecraft.player != null && pending)
+            com.bleachmod.common.data.PlayerCapability.get(minecraft.player).ifPresent(data -> {
+                if (data.getStatus().hasCreatedCharacter()) onClose();
+            });
+    }
     @Override
     public boolean shouldCloseOnEsc() {
         return false;

@@ -116,6 +116,8 @@ public final class BleachTextures {
     }
 
     public static void blit(GuiGraphics graphics, ResourceLocation texture, int x, int y, int destW, int destH, int srcW, int srcH) {
+        com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+        com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
         graphics.blit(texture, x, y, destW, destH, 0.0F, 0.0F, srcW, srcH, srcW, srcH);
     }
 

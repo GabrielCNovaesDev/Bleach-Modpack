@@ -21,6 +21,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
 public class ClientForgeEvents {
     private static boolean lastCharging;
+    private static boolean instantHeld;
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
@@ -29,6 +30,8 @@ public class ClientForgeEvents {
         }
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) {
+            lastCharging = false;
+            instantHeld = false;
             return;
         }
 
@@ -46,8 +49,16 @@ public class ClientForgeEvents {
             return;
         }
 
+        while (ModKeybinds.STATUS.consumeClick()) mc.setScreen(new com.bleachmod.client.gui.StatusScreen());
+        while (ModKeybinds.WHEEL.consumeClick()) mc.setScreen(new com.bleachmod.client.gui.FormWheelScreen());
         while (ModKeybinds.JOURNAL.consumeClick()) {
             mc.setScreen(new JournalScreen());
+        }
+        if (mc.screen != null) {
+            if (lastCharging) NetworkHandler.sendToServer(new UpdateStatC2S(UpdateStatC2S.StatAction.ACTION_CHARGE, false));
+            lastCharging = false;
+            instantHeld = false;
+            return;
         }
         while (ModKeybinds.CYCLE_FORM.consumeClick()) {
             cycleForm(mc);
@@ -58,16 +69,28 @@ public class ClientForgeEvents {
 
         boolean charging = ModKeybinds.CHARGE.isDown();
         if (charging && mc.player.isShiftKeyDown()) {
-            if (!lastCharging) {
+            if (lastCharging) NetworkHandler.sendToServer(new UpdateStatC2S(UpdateStatC2S.StatAction.ACTION_CHARGE, false));
+            if (!instantHeld) {
                 NetworkHandler.sendToServer(new ExecuteActionC2S(ExecuteActionC2S.ActionType.INSTANT_TRANSFORM));
             }
-            lastCharging = charging;
+            instantHeld = true;
+            lastCharging = false;
             return;
         }
+        instantHeld = false;
         if (charging != lastCharging) {
             NetworkHandler.sendToServer(new UpdateStatC2S(UpdateStatC2S.StatAction.ACTION_CHARGE, charging));
             lastCharging = charging;
         }
+    }
+
+    @SubscribeEvent
+    public static void logout(net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) {
+        lastCharging = false;
+        instantHeld = false;
+        com.bleachmod.client.gui.StoryToastManager.clear();
+        com.bleachmod.common.quest.QuestRegistry.clearClient();
+        com.bleachmod.common.evolution.FormRegistry.clearClient();
     }
 
     private static void cycleForm(Minecraft mc) {
