@@ -22,11 +22,13 @@ public final class FormModeHandler {
             return 0;
         }
         int mastery = (int) data.getCharacter().getMastery(data.getCharacter().getSelectedFormGroup(), target.getName());
-        return 10 + Math.min(15, (int) (mastery * 0.2D));
+        return 2 + Math.min(3, (int) (mastery * 0.04D));
     }
 
     public static void attemptTransform(ServerPlayer player, PlayerData data) {
         transform(player, data, false);
+        data.resetTransientState();
+        SyncHelper.full(player);
     }
 
     public static void instantTransform(ServerPlayer player, PlayerData data) {
@@ -40,6 +42,8 @@ public final class FormModeHandler {
             return;
         }
         transform(player, data, true);
+        data.resetTransientState();
+        SyncHelper.full(player);
     }
 
     public static void descend(ServerPlayer player, PlayerData data) {
@@ -50,9 +54,9 @@ public final class FormModeHandler {
         data.getResources().setActionCharge(0);
         data.getStatus().setActionCharging(false);
         MinecraftForge.EVENT_BUS.post(new BleachEvents.FormChangeEvent(player, oldGroup, oldForm, data.getCharacter().getActiveFormGroup(), next));
-        player.displayClientMessage(Component.translatable("message.bleachmod.form.descend", next), true);
+        player.displayClientMessage(Component.translatable("message.bleachmod.form.descend", Component.translatable("form.bleachmod." + next)), true);
         SyncHelper.appearance(player);
-        SyncHelper.resources(player);
+        SyncHelper.full(player);
     }
 
     public static void revertToSealed(ServerPlayer player, PlayerData data, Component reason) {
@@ -81,7 +85,7 @@ public final class FormModeHandler {
         if (group.isEmpty()) {
             group = Reference.GROUP_ZANPAKUTO;
         }
-        if (!TransformationsHelper.isUnlocked(data, group, target.getName())) {
+        if (!data.getStatus().hasCreatedCharacter() || !player.isAlive() || !TransformationsHelper.isSelectable(data, group, target.getName())) {
             NetworkHandler.sendToPlayer(ActionFeedbackS2C.of(Component.translatable("message.bleachmod.form.locked")), player);
             return;
         }

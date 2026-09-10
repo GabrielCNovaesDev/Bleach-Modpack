@@ -26,8 +26,15 @@ public class TickHandler {
             if (!data.getStatus().hasCreatedCharacter()) {
                 return;
             }
+            if (!player.isAlive() || player.isSpectator()) {
+                data.resetTransientState();
+                return;
+            }
+
+            float previousEnergy = data.getResources().getCurrentReiatsu();
+            int previousCharge = data.getResources().getActionCharge();
             FormData active = TransformationsHelper.getActiveFormData(data);
-            float drain = active == null ? 0.0F : (float) active.getEnergyDrain();
+            float drain = active == null ? 0.0F : (float) active.getEnergyDrain() * (1 - .08F * data.getAttributes().level("control"));
             if (drain > 0.0F) {
                 data.getResources().addReiatsu(-drain);
                 if (data.getResources().getCurrentReiatsu() <= data.getResources().getMaxReiatsu() * Reference.REVERT_REIATSU_RATIO) {
@@ -46,6 +53,12 @@ public class TickHandler {
                 }
             }
 
+            if (player.tickCount % 4 == 0 || (previousEnergy != data.getResources().getCurrentReiatsu()
+                    && (data.getResources().getCurrentReiatsu() == data.getResources().getMaxReiatsu()
+                    || data.getResources().getCurrentReiatsu() == 0))) {
+                if (previousEnergy != data.getResources().getCurrentReiatsu() || previousCharge != data.getResources().getActionCharge())
+                    SyncHelper.resources(player);
+            }
             if (player.tickCount % 100 == 0 && active != null && !Reference.FORM_SEALED.equals(active.getName())) {
                 data.getCharacter().addMastery(
                         data.getCharacter().getActiveFormGroup(),
@@ -53,7 +66,7 @@ public class TickHandler {
                         active.getPassiveMasteryEveryFiveSeconds(),
                         active.getMaxMastery()
                 );
-                SyncHelper.appearance(player);
+                SyncHelper.full(player);
             }
         });
     }
@@ -63,9 +76,6 @@ public class TickHandler {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        PlayerCapability.get(player).ifPresent(data -> {
-            data.getStatus().setActionCharging(false);
-            data.getResources().setActionCharge(0);
-        });
+        PlayerCapability.get(player).ifPresent(data -> data.resetTransientState());
     }
 }
