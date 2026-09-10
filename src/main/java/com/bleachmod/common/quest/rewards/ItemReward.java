@@ -22,8 +22,8 @@ public class ItemReward extends QuestReward {
     @Override
     public void give(ServerPlayer player, PlayerData data) {
         Item item = ForgeRegistries.ITEMS.getValue(ResourceIds.parse(itemId));
-        if (item == null) {
-            return;
+        if (item == null || item == net.minecraft.world.item.Items.AIR) {
+            throw new IllegalArgumentException("Unknown reward item: " + itemId);
         }
         ItemStack stack = new ItemStack(item, count);
         if (!player.getInventory().add(stack)) {

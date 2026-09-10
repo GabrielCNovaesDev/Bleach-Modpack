@@ -84,10 +84,12 @@ public class QuestEvents {
                     if (!(quest.getObjectives().get(i) instanceof KillObjective kill)) {
                         continue;
                     }
+                    if (!QuestService.isObjectiveActive(quest, progress, i)) continue;
                     if (!kill.matches(killed, questKey, i)) {
                         continue;
                     }
                     QuestService.incrementObjective(killer, data, questKey, quest, i, 1);
+                    if (!quest.isParallelObjectives()) break;
                 }
             }
         });

@@ -16,8 +16,10 @@ public final class QuestAvailabilityChecker {
         if (quest == null) {
             return false;
         }
+        var progress = data.getPlayerQuestData().getProgress(questKey);
+        if (progress != null && !progress.matchesDefinition(quest)) return false;
         QuestStatus status = data.getPlayerQuestData().getStatus(questKey);
-        if (status == QuestStatus.ACCEPTED || status == QuestStatus.SUCCESS) {
+        if (status == QuestStatus.ACCEPTED || (status == QuestStatus.SUCCESS && (progress == null || !progress.canRepeat(quest)))) {
             return false;
         }
         if (status == QuestStatus.FAILED) {

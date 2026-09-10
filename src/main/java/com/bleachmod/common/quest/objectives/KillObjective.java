@@ -72,7 +72,7 @@ public class KillObjective extends QuestObjective {
 
     @Override
     public Component describe() {
-        return Component.translatable("bleachmod.objective.kill", getRequired(), entityId);
+        return Component.translatable("bleachmod.objective.kill", getRequired(), entityId.startsWith("#") ? Component.literal(entityId) : Component.translatable("entity." + entityId.replace(':', '.')));
     }
 
     @Override

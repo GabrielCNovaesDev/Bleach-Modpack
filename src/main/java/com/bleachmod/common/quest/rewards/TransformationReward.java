@@ -13,19 +13,14 @@ public class TransformationReward extends QuestReward {
     public TransformationReward(String formGroup, String formName, double mastery) {
         this.formGroup = formGroup;
         this.formName = formName;
-        this.mastery = mastery <= 0 ? 100.0D : mastery;
+        if (!Double.isFinite(mastery) || mastery < 0 || mastery > 100) throw new IllegalArgumentException("Invalid mastery");
+        this.mastery = mastery;
     }
 
     @Override
     public void give(ServerPlayer player, PlayerData data) {
         data.getCharacter().setMastery(formGroup, formName, Math.max(data.getCharacter().getMastery(formGroup, formName), mastery));
-        if (formName.equals("shikai")) {
-            data.getCharacter().setMastery(formGroup, "sealed", Math.max(data.getCharacter().getMastery(formGroup, "sealed"), 25.0D));
-            data.getSkills().setSkillLevel("zanpakuto", 1);
-        } else if (formName.equals("bankai")) {
-            data.getCharacter().setMastery(formGroup, "shikai", Math.max(data.getCharacter().getMastery(formGroup, "shikai"), 25.0D));
-            data.getSkills().setSkillLevel("zanpakuto", 2);
-        }
+        data.getCharacter().unlockForm(formName);
         if (data.getCharacter().getSelectedForm().isEmpty() || "sealed".equals(data.getCharacter().getSelectedForm())) {
             data.getCharacter().setSelectedForm(formGroup, formName);
         }
@@ -33,7 +28,7 @@ public class TransformationReward extends QuestReward {
 
     @Override
     public Component describe() {
-        return Component.translatable("bleachmod.reward.transformation", formGroup, formName);
+        return Component.translatable("bleachmod.reward.transformation", "", Component.translatable("form.bleachmod." + formName));
     }
 
     @Override

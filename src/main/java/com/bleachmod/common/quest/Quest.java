@@ -9,6 +9,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Quest {
+    private boolean repeatable;
+    public boolean isRepeatable() { return repeatable; }
+    public void setRepeatable(boolean value) { repeatable = value; }
+    private int version = 1;
+    public void setVersion(int version) {
+        if (version < 1) throw new IllegalArgumentException("Quest version must be positive");
+        this.version = version;
+    }
+    public String progressDefinition() {
+        JsonObject json = new JsonObject();
+        json.addProperty("version", version);
+        json.addProperty("repeatable", repeatable);
+        json.addProperty("parallel", parallelObjectives);
+        JsonArray objectivesJson = new JsonArray(), rewardsJson = new JsonArray();
+        objectives.forEach(o -> objectivesJson.add(o.toJson()));
+        rewards.forEach(r -> rewardsJson.add(r.toJson()));
+        json.add("objectives", objectivesJson);
+        json.add("rewards", rewardsJson);
+        return json.toString();
+    }
     private int numericId = -1;
     private String stringId;
     private QuestType type = QuestType.SIDEQUEST;
@@ -114,6 +134,8 @@ public class Quest {
 
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+        json.addProperty("repeatable", repeatable);
+        json.addProperty("version", version);
         if (type == QuestType.SAGA) {
             json.addProperty("id", numericId);
         } else {

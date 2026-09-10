@@ -34,8 +34,13 @@ public final class QuestService {
             NetworkHandler.sendToPlayer(ActionFeedbackS2C.of(Component.translatable("message.bleachmod.quest.unknown")), player);
             return;
         }
+        QuestProgress existing = data.getPlayerQuestData().getProgress(questKey);
+        if (existing != null && !existing.bindDefinition(quest)) {
+            player.displayClientMessage(Component.translatable("message.bleachmod.quest.changed"), false);
+            return;
+        }
         QuestStatus status = data.getPlayerQuestData().getStatus(questKey);
-        if (status == QuestStatus.ACCEPTED || status == QuestStatus.SUCCESS) {
+        if (status == QuestStatus.ACCEPTED || (status == QuestStatus.SUCCESS && (existing == null || !existing.canRepeat(quest)))) {
             NetworkHandler.sendToPlayer(ActionFeedbackS2C.of(Component.translatable("message.bleachmod.quest.already_active")), player);
             return;
         }
@@ -54,7 +59,7 @@ public final class QuestService {
 
     public static void incrementObjective(ServerPlayer player, PlayerData data, String questKey, Quest quest, int index, int amount) {
         QuestProgress progress = data.getPlayerQuestData().getProgress(questKey);
-        if (progress == null || progress.getStatus() != QuestStatus.ACCEPTED) {
+        if (progress == null || !progress.bindDefinition(quest) || progress.getStatus() != QuestStatus.ACCEPTED) {
             return;
         }
         if (!isObjectiveActive(quest, progress, index)) {
@@ -107,6 +112,10 @@ public final class QuestService {
         if (progress == null || progress.getStatus() != QuestStatus.ACCEPTED) {
             return;
         }
+        for (int i = 0; i < quest.getObjectives().size(); i++) {
+            if (quest.getObjectives().get(i) instanceof com.bleachmod.common.quest.objectives.ItemObjective item)
+                progress.setObjectiveProgress(i, Math.min(progress.getRequired(i, item.getRequired()), item.countInInventory(player)));
+        }
         if (!progress.allObjectivesComplete(quest)) {
             return;
         }
@@ -144,6 +153,10 @@ public final class QuestService {
             return;
         }
         QuestProgress progress = data.getPlayerQuestData().getOrCreateProgress(questKey);
+        if (!progress.bindDefinition(quest)) {
+            player.displayClientMessage(Component.translatable("message.bleachmod.quest.changed"), false);
+            return;
+        }
         if (progress.isRewardClaimed(rewardIndex)) {
             NetworkHandler.sendToPlayer(ActionFeedbackS2C.of(Component.translatable("message.bleachmod.quest.already_claimed")), player);
             return;
@@ -151,7 +164,8 @@ public final class QuestService {
         if (MinecraftForge.EVENT_BUS.post(new BleachEvents.QuestRewardClaimEvent(player, questKey, rewardIndex))) {
             return;
         }
-        quest.getRewards().get(rewardIndex).give(player, data);
+        try { quest.getRewards().get(rewardIndex).give(player, data); }
+        catch (IllegalArgumentException e) { player.displayClientMessage(Component.literal(e.getMessage()), false); return; }
         progress.claimReward(rewardIndex);
         NetworkHandler.sendToPlayer(new StoryToastS2C(StoryToastS2C.ToastType.CLAIM, questKey, rewardIndex, 0, 0), player);
         SyncHelper.full(player);

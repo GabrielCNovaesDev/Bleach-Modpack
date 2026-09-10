@@ -37,7 +37,8 @@ public class ItemObjective extends QuestObjective {
 
     @Override
     public Component describe() {
-        return Component.translatable("bleachmod.objective.item", getRequired(), itemId);
+        Item item = ForgeRegistries.ITEMS.getValue(ResourceIds.parse(itemId));
+        return Component.translatable("bleachmod.objective.item", getRequired(), item == null ? Component.literal(itemId) : item.getDescription());
     }
 
     @Override

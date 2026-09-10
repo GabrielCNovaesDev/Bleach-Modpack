@@ -6,6 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class QuestProgress {
+    private String definition = "";
+    /** Legacy saves bind to the definitions loaded on their first upgraded login. */
+    public boolean bindDefinition(Quest quest) {
+        if (definition.isEmpty()) definition = quest.progressDefinition();
+        return definition.equals(quest.progressDefinition());
+    }
+    public boolean matchesDefinition(Quest quest) { return definition.isEmpty() || definition.equals(quest.progressDefinition()); }
     private String questId;
     private QuestStatus status = QuestStatus.NOT_STARTED;
     private final Map<Integer, Integer> objectives = new HashMap<>();
@@ -45,6 +52,12 @@ public class QuestProgress {
         objectiveRequirements.put(index, required);
     }
 
+    public boolean canRepeat(Quest quest) {
+        if (!quest.isRepeatable() || status != QuestStatus.SUCCESS || !matchesDefinition(quest)) return false;
+        for (int i = 0; i < quest.getRewards().size(); i++) if (!isRewardClaimed(i)) return false;
+        return true;
+    }
+
     public boolean isRewardClaimed(int index) {
         return rewards.getOrDefault(index, false);
     }
@@ -64,6 +77,8 @@ public class QuestProgress {
     }
 
     public void initializeRequirements(Quest quest) {
+        if (!bindDefinition(quest)) throw new IllegalArgumentException("Quest definition changed");
+        rewards.clear();
         objectives.clear();
         objectiveRequirements.clear();
         for (int i = 0; i < quest.getObjectives().size(); i++) {
@@ -85,6 +100,7 @@ public class QuestProgress {
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.putString("questId", questId);
+        tag.putString("definition", definition);
         tag.putString("status", status.name());
         tag.putInt("failureCount", failureCount);
         tag.put("objectives", intMap(objectives));
@@ -97,13 +113,14 @@ public class QuestProgress {
 
     public static QuestProgress load(CompoundTag tag) {
         QuestProgress progress = new QuestProgress(tag.getString("questId"));
+        progress.definition = tag.getString("definition");
         progress.status = QuestStatus.fromName(tag.getString("status"));
         progress.failureCount = tag.getInt("failureCount");
         readIntMap(tag.getCompound("objectives"), progress.objectives);
         readIntMap(tag.getCompound("objectiveRequirements"), progress.objectiveRequirements);
         CompoundTag rewardTag = tag.getCompound("rewards");
         for (String key : rewardTag.getAllKeys()) {
-            progress.rewards.put(Integer.parseInt(key), rewardTag.getBoolean(key));
+            if (key.matches("[0-9]{1,3}")) progress.rewards.put(Integer.parseInt(key), rewardTag.getBoolean(key));
         }
         return progress;
     }
@@ -117,7 +134,7 @@ public class QuestProgress {
     private static void readIntMap(CompoundTag tag, Map<Integer, Integer> dest) {
         dest.clear();
         for (String key : tag.getAllKeys()) {
-            dest.put(Integer.parseInt(key), tag.getInt(key));
+            if (key.matches("[0-9]{1,3}")) dest.put(Integer.parseInt(key), Math.max(0, tag.getInt(key)));
         }
     }
 }

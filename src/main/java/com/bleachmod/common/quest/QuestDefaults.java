@@ -80,8 +80,7 @@ public final class QuestDefaults {
         quest.getObjectives().add(new ItemObjective("minecraft:rotten_flesh", 8));
         quest.getObjectives().add(new KillObjective("minecraft:skeleton", 3, KillObjective.SpawnMode.NATURAL, KillObjective.CountMode.ANY_MATCHING));
         quest.getRewards().add(new TpsReward(400));
-        quest.getRewards().add(new SkillReward(Reference.SKILL_ZANPAKUTO, 1));
-        quest.getRewards().add(new TransformationReward(Reference.GROUP_ZANPAKUTO, Reference.FORM_SHIKAI, 100));
+        quest.getRewards().add(new TransformationReward(Reference.GROUP_ZANPAKUTO, Reference.FORM_SHIKAI, 0));
         return quest;
     }
 
@@ -97,14 +96,14 @@ public final class QuestDefaults {
                 QuestPrerequisites.ConditionType.SAGA_QUEST, "soul_society", 2, null, null, 0, null));
         quest.getObjectives().add(new KillObjective("minecraft:zombie", 8, KillObjective.SpawnMode.NATURAL, KillObjective.CountMode.ANY_MATCHING));
         quest.getRewards().add(new TpsReward(600));
-        quest.getRewards().add(new SkillReward(Reference.SKILL_ZANPAKUTO, 2));
-        quest.getRewards().add(new TransformationReward(Reference.GROUP_ZANPAKUTO, Reference.FORM_BANKAI, 100));
+        quest.getRewards().add(new TransformationReward(Reference.GROUP_ZANPAKUTO, Reference.FORM_BANKAI, 0));
         return quest;
     }
 
     private static Quest rukiaTraining() {
         Quest quest = new Quest();
         quest.setStringId("rukia_basic_training");
+        quest.setRepeatable(true);
         quest.setType(QuestType.SIDEQUEST);
         quest.setTitle("bleachmod.quest.rukia_basic_training.name");
         quest.setDescription("bleachmod.quest.rukia_basic_training.desc");

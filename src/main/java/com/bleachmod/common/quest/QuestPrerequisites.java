@@ -108,6 +108,10 @@ public class QuestPrerequisites {
                 String skill = obj.has("skill") ? obj.get("skill").getAsString() : null;
                 int minLevel = obj.has("minLevel") ? obj.get("minLevel").getAsInt() : 0;
                 String race = obj.has("race") ? obj.get("race").getAsString() : null;
+                if (type == ConditionType.SKILL && (!"zanpakuto".equals(skill) || minLevel < 0 || minLevel > 2))
+                    throw new IllegalArgumentException("Invalid skill prerequisite");
+                if (type == ConditionType.RACE && !"shinigami".equals(race))
+                    throw new IllegalArgumentException("Invalid race prerequisite");
                 prereq.conditions.add(new Condition(type, sagaId, numericId, questKey, skill, minLevel, race));
             });
         }
