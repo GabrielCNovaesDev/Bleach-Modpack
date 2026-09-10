@@ -12,7 +12,7 @@ Depois que o jogo abrir, o [manual do jogador](../jogador/manual-do-jogador.md) 
 |---|---|
 | Git | Para clonar o repositório |
 | JDK **17** (64-bit) | Temurin, Microsoft OpenJDK ou equivalente. O `java` do PATH deve ser 17 |
-| Internet | A primeira execução baixa o Gradle 8.8, o Forge e o Minecraft (~vários GB no cache) |
+| Internet | A primeira execução baixa o Gradle 8.8, o Forge e o Minecraft (~vários GB no cache)|
 | RAM | O Gradle está configurado com `-Xmx3G` |
 
 Não é necessário instalar Minecraft nem Forge pelo launcher da Mojang. O `runClient` baixa e monta o ambiente de userdev sozinho.
@@ -168,8 +168,11 @@ O PATH está pegando outro JDK. `JAVA_HOME` e o `bin` do 17 precisam vir **antes
 **`JAVA_HOME is set to an invalid directory`**  
 A variável aponta para `bin` ou para uma pasta que não contém `bin/java`. Aponte para a raiz do JDK.
 
-**Download falha / timeout na primeira run**  
-Precisa de rede até `services.gradle.org` e `maven.minecraftforge.net`. Rode `./gradlew runClient` de novo; o cache retoma o que já baixou.
+**Download falha / `Connection reset` na primeira run**  
+O wrapper baixa `gradle-8.8-bin.zip` (~132 MB) de `services.gradle.org`. Essa conexão às vezes cai no meio; o timeout do wrapper neste projeto é 120 s. Rode `./gradlew --version` de novo. Se o zip ficar incompleto em `%USERPROFILE%\.gradle\wrapper\dists\`, apague essa pasta `gradle-8.8-bin` e tente outra vez. Com o Gradle já no cache, `runClient` ainda precisa de rede para o Forge/Minecraft.
+
+**A janela do Minecraft não abre na hora**  
+A primeira `./gradlew runClient` ainda não é o jogo: o Forge baixa e processa o Minecraft (`downloadClient`, `listLibraries`, `compileJava`). A janela só aparece quando a tarefa chegar em `:runClient`. Não cancele no meio (Ctrl+C / “finalizar o arquivo em lotes”). Pode levar 10–20 minutos na primeira vez; as seguintes são bem mais rápidas.
 
 **O jogo abre, mas o mod não aparece**  
 Confirme que o comando foi executado **na raiz** do repositório (onde está o `build.gradle`). O mod id é `bleachmod`.
