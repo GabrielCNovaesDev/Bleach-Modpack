@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [" I ", "PIP", " S "],
+  "key": {"P": {"item": "minecraft:paper"},"I": {"item": "minecraft:iron_ingot"}, "S": {"item": "minecraft:stick"}},
+  "result": {"item": "bleachmod:asauchi"}
+}
