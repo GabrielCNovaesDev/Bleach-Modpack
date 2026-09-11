@@ -35,3 +35,5 @@ $env:Path = "$javaHome\bin;$env:Path"
 Write-Host "Using JAVA_HOME=$javaHome"
 & (Join-Path $repoDir 'gradlew.bat') --no-daemon build
 exit $LASTEXITCODE
+
+# .\build-forge.ps1 para rodar
