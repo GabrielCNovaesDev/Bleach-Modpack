@@ -12,6 +12,7 @@ Este projeto é um trabalho derivado do mod **Dragon Mine Z**, distribuído sob 
 
 | Pasta | Para quê | Comece por |
 |---|---|---|
+| [`game-design/`](game-design/00-mapa-modular.md) | Planejamento modular da experiência, conteúdo e progressão | [Mapa modular](game-design/00-mapa-modular.md) |
 | [`desenvolvimento/`](desenvolvimento/manual-inicializacao.md) | Clone, Java 17, JAVA_HOME e `runClient` | [Manual de inicialização](desenvolvimento/manual-inicializacao.md) |
 | [`jogador/`](jogador/manual-do-jogador.md) | Jogar o MVP (controles, quests, progressão) | [Manual do jogador](jogador/manual-do-jogador.md) |
 | [`planejamento/`](planejamento/plano-implementacao-mvp.md) | Plano de entrega, revisão técnica e especificação da análise | [Plano do MVP](planejamento/plano-implementacao-mvp.md) |
@@ -22,7 +23,7 @@ Este projeto é um trabalho derivado do mod **Dragon Mine Z**, distribuído sob 
 
 ## Sobre o projeto
 
-Um mod de Minecraft que traz o universo de Bleach, com foco no sistema de progressão de poder (raça → estágio) e em missões data-driven. A arquitetura de quests e de evolução é reaproveitada do Dragon Mine Z; o conteúdo (Shinigami, Zanpakutō, Shikai/Bankai, reiatsu, arcos) é original deste projeto.
+Um mod de Minecraft que traz o universo de Bleach, com foco no sistema de progressão de poder (raça → estágio) e em missões data-driven. A arquitetura de quests e de evolução é reaproveitada do Dragon Mine Z; o projeto adapta raças, poderes, arcos e personagens de Bleach para uma experiência jogável própria.
 
 A documentação de engenharia reversa está em [`arquitetura/`](arquitetura/00-overview.md). Trechos de lógica não trivial do original estão em `/reference-code` (não entram no compile). O código do mod Bleach vive em `/src`.
 
@@ -31,7 +32,7 @@ A documentação de engenharia reversa está em [`arquitetura/`](arquitetura/00-
 - **Projeto original:** [Dragon Mine Z](https://github.com/DragonMineZ/dragonminez)
 - **Licença original:** GPL-3.0 (+ GeckoLib sob MIT; ver [`arquitetura/12-licenciamento-e-creditos.md`](arquitetura/12-licenciamento-e-creditos.md))
 - **O que foi reaproveitado:** arquitetura do sistema de quests (JSON no mundo, objetivos, rewards, persistência) e do sistema de evolução/progressão (raça → grupo → estágio + mastery)
-- **O que é original deste projeto:** todo o conteúdo temático de Bleach, raças, habilidades, balanceamento e conteúdo visual
+- **O que é desenvolvido neste projeto:** adaptação jogável, balanceamento, quests, integração com Minecraft e conteúdo visual; os poderes disponíveis seguem o catálogo canônico decidido nos documentos de game design
 
 ## Equipe
 
