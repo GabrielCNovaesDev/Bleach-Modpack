@@ -159,7 +159,7 @@ Os arquivos ficam em {mundo}/bleachmod/. Defaults só criam arquivos ausentes; n
 - Depois disso, mudanças estruturais incompatíveis bloqueiam início/progresso/resgate, preservando os dados. Restaure o JSON compatível ou faça migração explícita.
 - Alterações de título/descrição não invalidam progresso.
 - O parser aceita somente NATURAL + ANY_MATCHING neste MVP; configurações QUEST incompletas são rejeitadas.
-- Cliente e servidor precisam usar protocolo 2.0; atualizar ambos.
+- Cliente e servidor precisam usar protocolo 2.1; atualizar ambos.
 
 Faça backup antes de adaptar os JSONs de um mundo existente. A nova economia não é aplicada silenciosamente aos arquivos já configurados.
 
@@ -170,3 +170,9 @@ Sem mob Hollow próprio, outras raças, dimensões, party, NPCs complexos ou té
 ## 11. Manutenção
 
 Toda alteração de lógica deve revisar os .md relacionados em Docs, além deste manual. Atualize controles, UI, custos, quests, migrações e limites no mesmo trabalho. Os documentos numerados mantêm a referência do Dragon Mine Z e incluem notas separadas da implementação Bleach.
+
+## Correções de fechamento — 10/09/2026
+
+Receber no diário solicita todos os prêmios pendentes em um lote. Cada prêmio conserva seu controle individual de entrega; pedidos repetidos não repetem recompensas já recebidas. O status mostra saldo restante/insuficiente nos tooltips, e o radial explica bloqueios de sequência. As notificações usam desenho em código e texto limitado à área disponível.
+
+Pré-requisitos de formas precisam apontar para estágios anteriores e para valores de mastery alcançáveis. Alterações estruturais de quests são verificadas também nas rotas de inventário e conclusão. Consulte o [relatório de validação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md) antes de considerar os ajustes visuais homologados.

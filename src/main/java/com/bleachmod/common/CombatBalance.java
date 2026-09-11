@@ -14,6 +14,10 @@ public final class CombatBalance {
         return baseDamage * (1.0F + DAMAGE_PER_RANK * Math.max(0, rank) + Math.max(0, formBonus));
     }
 
+    public static float formDamageBonus(String form) {
+        return "bankai".equals(form) ? 0.50F : "shikai".equals(form) ? 0.20F : 0.0F;
+    }
+
     /** Diminishing returns keep defense useful without ever reaching damage immunity. */
     public static float incomingPhysicalDamage(float damage, int resistanceRank) {
         if (!Float.isFinite(damage) || damage <= 0) return damage;

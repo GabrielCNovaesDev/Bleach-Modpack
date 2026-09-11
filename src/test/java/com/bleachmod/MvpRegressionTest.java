@@ -56,6 +56,16 @@ public final class MvpRegressionTest {
             PlayerData copy=new PlayerData();copy.load(d.save());eq(650F,copy.getResources().getTrainingPoints());eq(120F,copy.getResources().getMaxReiatsu());
             eq(42D,copy.getCharacter().getMastery("zanpakuto","shikai"));yes(copy.getCharacter().isFormDiscovered("shikai"));
         });
+        test("raising reserve while full also fills the new maximum",()->{
+            PlayerData d=player();d.getResources().addTrainingPoints(100);
+            yes(d.getResources().isReiatsuFull());yes(d.getAttributes().purchase("reserve",d.getResources()));
+            d.refreshDerivedResources();eq(120F,d.getResources().getCurrentReiatsu());eq(120F,d.getResources().getMaxReiatsu());
+        });
+        test("raising reserve while depleted preserves current reiatsu",()->{
+            PlayerData d=player();d.getResources().setCurrentReiatsu(40);d.getResources().addTrainingPoints(100);
+            yes(d.getAttributes().purchase("reserve",d.getResources()));d.refreshDerivedResources();
+            eq(40F,d.getResources().getCurrentReiatsu());eq(120F,d.getResources().getMaxReiatsu());
+        });
         test("legacy skills migrate discovered forms without losing mastery",()->{
             PlayerData d=player();d.getSkills().setSkillLevel("zanpakuto",2);d.getCharacter().setMastery("zanpakuto","bankai",100);
             CompoundTag old=d.save();old.remove("attributes");old.remove("schemaVersion");old.getCompound("character").remove("unlockedForms");
@@ -66,6 +76,8 @@ public final class MvpRegressionTest {
             eq(17F,CombatBalance.outgoingDamage(10F,2,.5F));
             eq(8F,CombatBalance.incomingPhysicalDamage(10F,5));
             eq(12F,CombatBalance.kidouDamage(10F,2));
+            eq(.2F,CombatBalance.formDamageBonus("shikai"));
+            eq(.5F,CombatBalance.formDamageBonus("bankai"));
         });
         test("control drain has diminishing returns and never becomes regeneration",()->{
             eq(.08F,CombatBalance.formDrain(.08F,0));
@@ -171,6 +183,20 @@ public final class MvpRegressionTest {
             new Thread(net.minecraftforge.fml.util.thread.SidedThreadGroups.SERVER,task,"registry-regression").start();
             try { eq(.08D,task.get(5,java.util.concurrent.TimeUnit.SECONDS)); } catch(Exception e) { throw new AssertionError(e); }
             FormRegistry.clearClient();
+        });
+        test("self and forward form prerequisites are rejected",()->{
+            for(String target:List.of("shikai","bankai")) {
+                JsonObject json=forms();
+                json.getAsJsonObject("shinigami").getAsJsonObject("zanpakuto").getAsJsonObject("forms").getAsJsonObject("shikai").addProperty("formRequisite","zanpakuto."+target);
+                rejects(()->FormRegistry.parse(json.toString()));
+            }
+        });
+        test("prerequisite mastery must be attainable",()->{
+            JsonObject json=forms();
+            JsonObject map=json.getAsJsonObject("shinigami").getAsJsonObject("zanpakuto").getAsJsonObject("forms");
+            map.getAsJsonObject("shikai").addProperty("maxMastery",60);
+            map.getAsJsonObject("bankai").addProperty("unlockOnMastery",61);
+            rejects(()->FormRegistry.parse(json.toString()));
         });
         System.out.println("PASS: "+count+" regression scenarios");
     }

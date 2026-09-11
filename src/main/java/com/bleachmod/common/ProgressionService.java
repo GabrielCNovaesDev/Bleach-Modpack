@@ -33,6 +33,7 @@ public final class ProgressionService {
     public static void applyVitality(ServerPlayer player, PlayerData data) {
         AttributeInstance maxHealth = player.getAttribute(Attributes.MAX_HEALTH);
         if (maxHealth == null) return;
+        boolean wasFull = player.getHealth() >= player.getMaxHealth();
         maxHealth.removeModifier(VITALITY_MODIFIER_ID);
         double amount = Math.min(1004.0D, CombatBalance.HEALTH_PER_VITALITY_RANK
                 * data.getAttributes().level(AttributeData.VITALITY));
@@ -40,7 +41,7 @@ public final class ProgressionService {
             maxHealth.addTransientModifier(new AttributeModifier(VITALITY_MODIFIER_ID,
                     "bleachmod.vitality", amount, AttributeModifier.Operation.ADDITION));
         }
-        if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
+        if (wasFull || player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
     }
     public static void sync(ServerPlayer player,PlayerData data) {
         normalize(player, data); SyncHelper.full(player); SyncHelper.appearance(player);

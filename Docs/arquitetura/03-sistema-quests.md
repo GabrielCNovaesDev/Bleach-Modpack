@@ -1,5 +1,12 @@
 # Sistema de Quests
 
+## Atualização Bleach — 10/09/2026
+
+Resgate em lote usa índice -1 com flags individuais e sincronização final. As rotas de atualização/conclusão conferem a assinatura da quest. GameTests cobrem resgates de pontos, itens e transformação, repetição e reload.
+
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
+
+
 ## Resumo
 
 O sistema de quests é o coração reutilizável do original: definições em JSON no **mundo** (não datapack), progresso por jogador dentro da capability, objetivos polimórficos (10 tipos), recompensas reclamáveis (8 tipos), sagas lineares + sidequests, party com merge só-para-frente, e falha em wipe se a quest tem objetivo de kill. Recompensas **não** são automáticas — o jogador reclama na árvore ou no NPC. Tipos `DAILY` e `EVENT` existem no enum mas **não têm reset**.

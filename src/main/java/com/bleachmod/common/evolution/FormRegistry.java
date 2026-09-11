@@ -50,6 +50,18 @@ public final class FormRegistry {
                     validate(data); group.getForms().put(form,data);
                 }
                 FormData sealed=group.getForms().get("sealed");
+                List<String> order=List.of("sealed","shikai","bankai");
+                for(String form:order) {
+                    FormData data=group.getForms().get(form);
+                    if(data.getFormRequisite().isBlank()) continue;
+                    for(String token:data.getFormRequisite().split(",")) {
+                        String prerequisite=token.trim().substring("zanpakuto.".length());
+                        if(order.indexOf(prerequisite)>=order.indexOf(form))
+                            throw new IllegalArgumentException("Prerequisite must precede form: "+form);
+                        if(data.getUnlockOnMastery()>group.getForms().get(prerequisite).getMaxMastery())
+                            throw new IllegalArgumentException("Unreachable prerequisite mastery: "+form);
+                    }
+                }
                 if(sealed.getEnergyDrain()!=0||sealed.getUnlockOnSkillLevel()!=0||!sealed.getFormRequisite().isBlank())
                     throw new IllegalArgumentException("Sealed must be free and always unlocked");
                 groups.put(name,group);

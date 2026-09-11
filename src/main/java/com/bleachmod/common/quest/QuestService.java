@@ -84,7 +84,7 @@ public final class QuestService {
 
     public static void setObjectiveProgress(ServerPlayer player, PlayerData data, String questKey, Quest quest, int index, int value) {
         QuestProgress progress = data.getPlayerQuestData().getProgress(questKey);
-        if (progress == null || progress.getStatus() != QuestStatus.ACCEPTED) {
+        if (progress == null || !progress.bindDefinition(quest) || progress.getStatus() != QuestStatus.ACCEPTED) {
             return;
         }
         if (!isObjectiveActive(quest, progress, index)) {
@@ -109,7 +109,7 @@ public final class QuestService {
 
     public static void checkAndComplete(ServerPlayer player, PlayerData data, String questKey, Quest quest) {
         QuestProgress progress = data.getPlayerQuestData().getProgress(questKey);
-        if (progress == null || progress.getStatus() != QuestStatus.ACCEPTED) {
+        if (progress == null || !progress.bindDefinition(quest) || progress.getStatus() != QuestStatus.ACCEPTED) {
             return;
         }
         for (int i = 0; i < quest.getObjectives().size(); i++) {
@@ -139,7 +139,12 @@ public final class QuestService {
         SyncHelper.progression(player);
     }
 
+    /** Index -1 claims all remaining rewards with a single final synchronization. */
     public static void claimReward(ServerPlayer player, String questKey, int rewardIndex) {
+        claimReward(player, questKey, rewardIndex, true);
+    }
+
+    private static void claimReward(ServerPlayer player, String questKey, int rewardIndex, boolean synchronize) {
         PlayerData data = PlayerCapability.get(player).orElse(null);
         if (data == null) {
             return;
@@ -147,6 +152,18 @@ public final class QuestService {
         Quest quest = QuestRegistry.getQuest(questKey);
         if (quest == null || !data.getPlayerQuestData().isCompleted(questKey)) {
             NetworkHandler.sendToPlayer(ActionFeedbackS2C.of(Component.translatable("message.bleachmod.quest.cannot_claim")), player);
+            return;
+        }
+        if (rewardIndex == -1) {
+            QuestProgress current = data.getPlayerQuestData().getProgress(questKey);
+            if (current == null || !current.bindDefinition(quest)) {
+                player.displayClientMessage(Component.translatable("message.bleachmod.quest.changed"), false);
+                return;
+            }
+            for (int i = 0; i < quest.getRewards().size(); i++) {
+                if (!current.isRewardClaimed(i)) claimReward(player, questKey, i, false);
+            }
+            if (synchronize) SyncHelper.full(player);
             return;
         }
         if (rewardIndex < 0 || rewardIndex >= quest.getRewards().size()) {
@@ -168,7 +185,7 @@ public final class QuestService {
         catch (IllegalArgumentException e) { player.displayClientMessage(Component.literal(e.getMessage()), false); return; }
         progress.claimReward(rewardIndex);
         NetworkHandler.sendToPlayer(new StoryToastS2C(StoryToastS2C.ToastType.CLAIM, questKey, rewardIndex, 0, 0), player);
-        SyncHelper.full(player);
+        if (synchronize) SyncHelper.full(player);
     }
 
     public static boolean isObjectiveActive(Quest quest, QuestProgress progress, int index) {

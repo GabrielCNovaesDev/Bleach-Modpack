@@ -16,7 +16,7 @@ public record SelectFormC2S(String group, String form) {
     }
 
     public static SelectFormC2S decode(FriendlyByteBuf buf) {
-        return new SelectFormC2S(buf.readUtf(), buf.readUtf());
+        return new SelectFormC2S(buf.readUtf(32), buf.readUtf(32));
     }
 
     public static void handle(SelectFormC2S msg, Supplier<NetworkEvent.Context> ctx) {

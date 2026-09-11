@@ -62,6 +62,7 @@ public class TickHandler {
                 if (previousEnergy != data.getResources().getCurrentReiatsu() || previousCharge != data.getResources().getActionCharge())
                     SyncHelper.resources(player);
             }
+            active = TransformationsHelper.getActiveFormData(data);
             if (player.tickCount % 100 == 0 && active != null && !Reference.FORM_SEALED.equals(active.getName())) {
                 data.getCharacter().addMastery(
                         data.getCharacter().getActiveFormGroup(),

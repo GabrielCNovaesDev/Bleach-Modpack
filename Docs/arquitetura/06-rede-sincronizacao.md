@@ -1,5 +1,12 @@
 # Rede e sincronização
 
+## Atualização Bleach — 10/09/2026
+
+O Bleach usa protocolo 2.1. ClaimQuestRewardC2S aceita índice -1 para lote; limita o ID a 256 caracteres e exige jogador vivo, personagem criado e intervalo mínimo de quatro ticks. SelectFormC2S limita IDs a 32 caracteres. Cliente e servidor devem ser atualizados juntos.
+
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
+
+
 ## Resumo
 
 Um único `SimpleChannel` (`dragonminez:network`, protocolo `"1.0"`) com IDs sequenciais. A ordem de `NetworkHandler.register()` **é** o protocolo: só se acrescenta no fim. Quest e evolução não têm canal próprio. O client aplica NBT com merge parcial (`StatsData.load`): chaves ausentes no packet não são tocadas. Não existe um router central — cada caller escolhe o packet pelo domínio.

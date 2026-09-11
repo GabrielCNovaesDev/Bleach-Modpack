@@ -56,7 +56,7 @@ public final class JournalScreen extends Screen {
     private void claim(){
         PlayerData d=data();Quest q=quest();if(d==null||q==null)return;
         QuestProgress p=d.getPlayerQuestData().getProgress(selected);
-        for(int i=0;i<q.getRewards().size();i++)if(p!=null&&!p.isRewardClaimed(i))NetworkHandler.sendToServer(new ClaimQuestRewardC2S(selected,i));
+        if(p!=null)NetworkHandler.sendToServer(new ClaimQuestRewardC2S(selected,-1));
     }
     @Override public void tick(){
         List<Quest> current=List.copyOf(QuestRegistry.allQuests());

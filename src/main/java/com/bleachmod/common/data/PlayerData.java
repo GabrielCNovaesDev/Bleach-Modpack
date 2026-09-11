@@ -17,8 +17,10 @@ public class PlayerData {
     private final AttributeData attributes = new AttributeData();
     public AttributeData getAttributes() { return attributes; }
     public void refreshDerivedResources() {
+        boolean wasFull = resources.isReiatsuFull();
         double derived = Reference.BASE_REIATSU + 20.0D * attributes.level(AttributeData.RESERVE);
         resources.setMaxReiatsu((float)Math.min(Float.MAX_VALUE, derived));
+        if (wasFull) resources.fillReiatsu();
     }
 
     public double getBattlePower() {

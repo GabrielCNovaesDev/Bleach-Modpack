@@ -1,5 +1,12 @@
 # Build e dependências (Dragon Mine Z)
 
+## Atualização Bleach — 10/09/2026
+
+Build 0.2.0 aprovado com 32 regressões. Quatro GameTests aprovados em run-gametest. Executar gradlew.bat build e gradlew.bat runGameTestServer; dependências locais permitem --offline. Relatórios anteriores com 19/26/28 testes são históricos.
+
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
+
+
 Documento de referência para o fork Bleach. Fonte analisada: clone em `dragonminez/` (versão 2.1.3).
 
 ## Plataforma

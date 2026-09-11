@@ -4,7 +4,7 @@
 
 Plano consolidado a partir da revisão técnica de 10/09/2026 e do teste de jogo relatado pelo usuário com quatro imagens. Em 10/09/2026, T16–T19 receberam o rework de sete atributos sem cap, fórmulas de combate/reiatsu, migração e BP; a validação visual e multiplayer segue em T24.
 
-Estado: **planejado; funcionalidades e correções ainda não implementadas**. A aprovação da direção de trabalho não significa que todos os números, nomes de atributos e atalhos estejam definidos. Esta entrega organiza a implementação; não altera o comportamento do jogo.
+Estado: **implementação principal presente; alfa dos PNGs e homologação visual/multiplayer pendentes**. Ver relatório e matriz de evidências no final deste documento. Os requisitos abaixo não equivalem a testes já executados.
 
 A revisão detalhada continua em [revisao-tecnica-mvp-2026-09-10.md](revisao-tecnica-mvp-2026-09-10.md). Este plano passa a ser a referência de execução e ordem de entregas; a revisão conserva a evidência e os achados R01–R18.
 
@@ -335,3 +335,27 @@ Não impedem registrar o plano; devem ser fechadas antes das tarefas dependentes
 - Se habilidades exibidas no radial são selecionadas para uso posterior ou executadas diretamente; formas sempre conservam seleção distinta da carga nesta proposta.
 - Futuro mob Hollow: estudo separado, sem bloquear a implementação atual com zumbis.
 
+## Matriz de evidências — fechamento de 10/09/2026
+
+| Critério | Estado | Evidência ou pendência |
+|---|---|---|
+| T01 | Implementado; integração parcial | Direções explícitas e regressão de isolamento de registries; teste de rede com dois clientes pendente |
+| T02 | Implementado; homologação pendente | Sync de formas/aparência no código; dois clientes ainda não exercitados |
+| T03–T04 | Implementado; validação parcial | GameTest das permissões aprovado; execução manual completa dos comandos pendente |
+| T05 | Implementado; validação parcial | Regressões de recursos/seleção e correção de tick; fluidez e transições em cliente pendentes |
+| T06 | Implementado; validação parcial | GameTest de clone após invalidação aprovado; logout/dimensão com dois clientes pendentes |
+| T07 | Implementado; homologação pendente | Diário reativo e alvos descritos; inspeção visual pendente |
+| T08 | Parcial | Orientação corrigida por modelo; alfa dos PNGs e inspeção nas três formas pendentes |
+| T09–T11 | Implementado; homologação pendente | Fundo proporcional, HUD/diário, carga e toasts em código; inspeção visual pendente |
+| T12 | Implementado; validação parcial | Recontagem ITEM e sequência no código; assinatura reforçada; roteiro completo de inventário pendente |
+| T13 | Implementado | Parser rejeita spawn QUEST; regressão automatizada aprovada |
+| T14 | Implementado e testado em servidor de teste | GameTest de reload válido/inválido com missão ativa aprovado |
+| T15 | Implementado e testado parcialmente | Regressões de assinatura/NBT e GameTest de lote sem duplicação aprovados |
+| T16–T18 | Implementado; balanceamento manual pendente | Rework atual de sete atributos/BP preservado; regressões de migração e fórmulas aprovadas |
+| T19–T20 | Implementado; homologação pendente | Status compacto/tooltips e radial; escalas GUI ainda não inspecionadas em jogo |
+| T21 | Não aplicável nesta entrega | Não existem técnicas ativas para integrar |
+| T22 | Implementado; fluxo manual pendente | Receita, defaults e treino repetível; GameTest confirma repetibilidade após lote |
+| T23 | Parcial | Textos limitados, tooltips e toasts corrigidos; alfa e navegação visual longa pendentes |
+| T24 | Parcial | Build e 32 regressões aprovados, quatro GameTests aprovados; dois clientes e QA visual pendentes |
+
+Detalhes, artefato e roteiro: [relatório](relatorio-implementacao-mvp-2026-09-10.md). Lista operacional: [checklist](todo-mvp.md).

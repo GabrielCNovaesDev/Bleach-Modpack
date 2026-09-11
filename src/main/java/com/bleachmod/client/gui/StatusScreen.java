@@ -9,8 +9,8 @@ import net.minecraft.network.chat.Component;
 import java.util.*;
 
 public final class StatusScreen extends Screen {
-    private static final int PANEL_WIDTH=360;
-    private static final int PANEL_HEIGHT=250;
+    private static final int PANEL_WIDTH=304;
+    private static final int PANEL_HEIGHT=228;
     private final Map<String,Button> upgrades=new LinkedHashMap<>();
     private Button skill;
     private int left,top;
@@ -21,13 +21,13 @@ public final class StatusScreen extends Screen {
         int index=0;
         for(String id:AttributeData.IDS) {
             int column=index/4, row=index%4;
-            int x=left+100+column*176, y=top+104+row*26;
+            int x=left+78+column*148, y=top+90+row*26;
             Button button=addRenderableWidget(Button.builder(Component.empty(),b->NetworkHandler.sendToServer(new PurchaseAttributeC2S(id)))
                 .bounds(x,y,68,20).build());
             upgrades.put(id,button); index++;
         }
         skill=addRenderableWidget(Button.builder(Component.empty(),b->NetworkHandler.sendToServer(new UpdateSkillC2S("zanpakuto",UpdateSkillC2S.SkillAction.PURCHASE)))
-            .bounds(left+8,top+218,PANEL_WIDTH-16,20).build());
+            .bounds(left+8,top+202,PANEL_WIDTH-16,20).build());
         refresh();
     }
     @Override public void tick() { refresh(); }
@@ -37,6 +37,9 @@ public final class StatusScreen extends Screen {
             int cost=d.getAttributes().cost(id);
             b.setMessage(cost<0?Component.translatable("screen.bleachmod.max"):Component.translatable("screen.bleachmod.buy",cost));
             b.active=cost>=0&&d.getResources().getTrainingPoints()>=cost;
+            b.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("attribute.bleachmod."+id+".desc")
+                .append("\n").append(Component.translatable(cost<0?"screen.bleachmod.max":b.active?"screen.bleachmod.purchase_remaining":"screen.bleachmod.insufficient_points",
+                    Math.max(0,(int)d.getResources().getTrainingPoints()-cost)))));
         });
         int level=d.getSkills().getLevel("zanpakuto");
         int cost=d.getSkills().skillCostForNextLevel("zanpakuto");
@@ -45,6 +48,8 @@ public final class StatusScreen extends Screen {
             !discovered?Component.translatable("screen.bleachmod.quest_required"):
             Component.translatable("screen.bleachmod.skill_buy",level+1,cost));
         skill.active=level<2&&discovered&&d.getResources().getTrainingPoints()>=cost;
+        skill.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable(level>=2?"screen.bleachmod.skill_max":!discovered?"screen.bleachmod.quest_required":skill.active?"screen.bleachmod.purchase_remaining":"screen.bleachmod.insufficient_points",
+            Math.max(0,(int)d.getResources().getTrainingPoints()-cost))));
     }
     @Override public void render(GuiGraphics g,int mx,int my,float dt) {
         renderBackground(g);
@@ -64,12 +69,11 @@ public final class StatusScreen extends Screen {
             int index=0;
             for(String id:AttributeData.IDS) {
                 int column=index/4, row=index%4;
-                int x=left+8+column*176, attrY=top+110+row*26;
-                g.drawString(font,Component.translatable("attribute.bleachmod."+id).append(" "+d.getAttributes().level(id)),x,attrY,0xFFFFFF);
+                int x=left+8+column*148, attrY=top+96+row*26;
+                String label=Component.translatable("attribute.bleachmod."+id).getString()+" "+d.getAttributes().level(id);
+                g.drawString(font,font.plainSubstrByWidth(label,66),x,attrY,0xFFFFFF);
                 index++;
             }
-            for(var entry:upgrades.entrySet()) if(entry.getValue().isHoveredOrFocused())
-                g.renderTooltip(font,Component.translatable("attribute.bleachmod."+entry.getKey()+".desc"),mx,my);
         }
         super.render(g,mx,my,dt);
     }

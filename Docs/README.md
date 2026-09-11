@@ -161,3 +161,7 @@ O conteúdo temático de Dragon Ball pertence aos respectivos detentores. Este f
 
 - **Dragon Mine Z** — projeto original que serviu de base para os sistemas de quest e evolução: https://github.com/DragonMineZ/dragonminez
 - **Tite Kubo / Shueisha / Studio Pierrot** — criadores do universo de Bleach (sem afiliação com este projeto)
+
+## Estado da estabilização — 10/09/2026
+
+Consulte o [relatório de correções](planejamento/relatorio-implementacao-mvp-2026-09-10.md) e a [checklist atual](planejamento/todo-mvp.md). Build 0.2.0 aprovado com 32 regressões; quatro GameTests aprovados. Protocolo 2.1. A transparência dos PNGs e a homologação visual com dois clientes continuam pendentes. Mantidos sete atributos, BP e schema 3.

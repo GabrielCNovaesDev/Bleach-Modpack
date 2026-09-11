@@ -249,3 +249,7 @@ src/main/resources/assets/bleachmod/textures/gui/journal/status_failed.png
 ```
 
 When you finish an asset, reply with the filename and a one-line art note (what you changed from the previous stage). Then wait for the next filename. Do not invent extra files.
+
+## Revisão dos assets — 10/09/2026
+
+As três texturas de espada e o espadachim têm alfa parcial excessivo; os PNGs originais permanecem inalterados, aguardando autorização para edição determinística. As tentativas de geração não produziram alfa real. O modelo katana_handheld compensa a orientação em 180 graus; se uma futura edição rotacionar a textura, remover essa compensação. Toasts passam a usar desenho em código, preservando a fila e limitando textos; seus PNGs antigos não são mais renderizados. Ver contagens e limites no [relatório](../planejamento/relatorio-implementacao-mvp-2026-09-10.md).

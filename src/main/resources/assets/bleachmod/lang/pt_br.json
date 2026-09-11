@@ -59,7 +59,7 @@
   "screen.bleachmod.status": "Personagem",
   "screen.bleachmod.bp": "BP: %s",
   "screen.bleachmod.max": "Máximo",
-  "screen.bleachmod.buy": "Comprar • %s PE",
+  "screen.bleachmod.buy": "%s PE",
   "screen.bleachmod.skill_max": "Zanpakutō: nível máximo",
   "screen.bleachmod.quest_required": "Desperte a forma nas missões",
   "screen.bleachmod.skill_buy": "Zanpakutō nível %s • %s pontos",
@@ -87,5 +87,8 @@
   "attribute.bleachmod.control.desc": "Reduz progressivamente o consumo contínuo das formas.",
   "key.bleachmod.status": "Abrir personagem",
   "key.bleachmod.wheel": "Selecionar transformação",
-  "hud.bleachmod.target": "Alvo: %s"
+  "hud.bleachmod.target": "Alvo: %s",
+  "screen.bleachmod.purchase_remaining": "Saldo após a compra: %s PE",
+  "screen.bleachmod.wheel_chain": "Ative a forma anterior ou alcance o domínio para transformação livre.",
+  "screen.bleachmod.insufficient_points": "Pontos espirituais insuficientes."
 }

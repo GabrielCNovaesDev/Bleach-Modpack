@@ -1,5 +1,12 @@
 # Sistema de Evolução / Progressão
 
+## Atualização Bleach — 10/09/2026
+
+Pré-requisitos só podem referenciar estágios anteriores e mastery alcançável; o ganho periódico consulta a forma ativa após as transições do tick. O balanceamento e os sete atributos atuais foram preservados.
+
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
+
+
 ## Resumo
 
 Não existe um enum global `EvolutionStage`. A progressão é **data-driven em três camadas**: raça permanente → grupo de forms (árvore) → form (estágio ordenado). Uma camada ortogonal, *stack form*, empilha um multiplicador (Kaioken etc.). Unlock mistura **skill comprada com TP** + **mastery** na form anterior. A transição em si é uma **ação do jogador** (segurar charge até 100, ou instant se mastery alta), não um tick que “evolui sozinho”. Quests podem pular etapas via `TransformationReward`.

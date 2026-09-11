@@ -1,5 +1,12 @@
 # Eventos Forge
 
+## Atualização Bleach — 10/09/2026
+
+Quatro GameTests exercitam clone após invalidação, resgates sem duplicação, permissões e reload. O clone preservou pontos/mastery e cancelou carga. Isso não substitui teste com dois clientes reais.
+
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
+
+
 ## Resumo
 
 Quests avançam por quatro hooks de gameplay (tick, morte, interact, summon de dragão). Evolução avança por tick (charge, drain, mastery passiva) e por hits (mastery). A capability se anexa e se clona por eventos de lifecycle do player. Eventos **custom** (`DMZEvent`) encapsulam os pontos de extensão canceláveis. Abaixo só o que toca quest/evolução — o original tem dezenas de outros handlers de combate.

@@ -16,6 +16,7 @@ import com.bleachmod.common.network.s2c.ProgressionSyncS2C;
 import com.bleachmod.common.network.s2c.ResourceSyncS2C;
 import com.bleachmod.common.network.s2c.StoryToastS2C;
 import com.bleachmod.common.network.s2c.SyncQuestRegistryS2C;
+import com.bleachmod.common.network.s2c.DamageIndicatorS2C;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.NetworkDirection;
@@ -55,6 +56,7 @@ public final class NetworkHandler {
         CHANNEL.registerMessage(id++, SyncQuestRegistryS2C.class, SyncQuestRegistryS2C::encode, SyncQuestRegistryS2C::decode, SyncQuestRegistryS2C::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(id++, StoryToastS2C.class, StoryToastS2C::encode, StoryToastS2C::decode, StoryToastS2C::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(id++, ActionFeedbackS2C.class, ActionFeedbackS2C::encode, ActionFeedbackS2C::decode, ActionFeedbackS2C::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(id++, DamageIndicatorS2C.class, DamageIndicatorS2C::encode, DamageIndicatorS2C::decode, DamageIndicatorS2C::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToServer(Object message) {

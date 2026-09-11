@@ -1,5 +1,12 @@
 # UI e HUD
 
+## Atualização Bleach — 10/09/2026
+
+Status de 304 × 228 mantém sete atributos/BP, com tooltips de compra. Radial explica bloqueio de sequência. Toasts usam desenho em código e subtítulo de até duas linhas. katana_handheld compensa a orientação das três texturas. PNGs e homologação visual continuam pendentes.
+
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
+
+
 ## Resumo
 
 Quests e evolução têm superfícies distintas: uma **árvore de story** (tela cheia), um **HUD de quest trackeada**, um **diálogo de NPC**, **toasts**, e um **radial de forms**. Todas leem a capability **local** do client (populada pelos S2C). Nenhuma tela faz request/response de dados — só dispara C2S de ação. Character creation escolhe a raça (e portanto as árvores de form) antes de qualquer quest.
