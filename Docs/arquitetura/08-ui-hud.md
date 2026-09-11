@@ -6,6 +6,27 @@ Status de 304 × 228 mantém sete atributos/BP, com tooltips de compra. Radial e
 
 [Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
 
+## Branch `Life-UI` — HUD conceitual (2026)
+
+A branch `Life-UI` substitui os corações de Minecraft por uma HUD Bleach toda desenhada em código:
+
+- Painel base: `src/main/resources/assets/bleachmod/textures/gui/hud/bleach_hud_concept.png` (2170 × 725), desenhado em escala 0.45×.
+- Três trilhos de preenchimento entregues pelo usuário:
+  - `hud_health_fill.png` (Vida) — gradiente vermelho.
+  - `hud_reiatsu_fill.png` (Reiatsu) — gradiente azul.
+  - `hud_transform_fill.png` (Transformação) — gradiente vermelho→azul.
+- Spiritual Points e estágio da Zanpakutō ficam dentro da barra de Transformação. O game-side já chama esses valores de SP (Spiritual Points), embora a chave de tradução histórica seja `hud.bleachmod.tp`.
+- Cansaço da barra de Transformação: lê `ResourcesData.getActionCharge` (0–100). 0% quando o R não está sendo segurado.
+
+### Suprimir corações vanilla
+
+O contrato de `RegisterGuiOverlaysEvent` permite **registrar** overlays acima dos existentes, mas não remove os vanilla. A solução é escutar `RenderGuiOverlayEvent.Pre` no bus **Forge** e cancelar quando o overlay atual for o da vida do Minecraft.
+
+Componente: `com.bleachmod.client.hud.VanillaHealthHider` (registrado por `@Mod.EventBusSubscriber` com `Dist.CLIENT` e `Bus.FORGE`). Filtra por `VanillaGuiOverlay.PLAYER_HEALTH.type()` e por `StatusData.hasCreatedCharacter()` — antes da confirmação de Shinigami, os corações vanilla permanecem visíveis (mesma regra que o `ReiatsuHud` usa para se esconder).
+
+### Mapeamento dos pontos de saúde do client
+
+O `ProgressionService.applyVitality` aplica um modificador transient de `MAX_HEALTH` apenas no server. Para o client não voltar a 20 fixo, o `ReiatsuHud` reconstrói o `getMaxHealth()` somando `2 * nível de Vitalidade` (de `AttributeData.VITALITY`) ao valor base do atributo vanilla. Assim a barra de Vida segue a regra do manual do jogador §5 mesmo sem sync do modifier.
 
 ## Resumo
 
@@ -97,3 +118,7 @@ Quests e evolução têm superfícies distintas: uma **árvore de story** (tela 
 ## Implementação Bleach — tela de status
 
 A tela K distribui sete categorias em duas colunas, mostra rank sem sufixo de cap, custo do próximo nível e tooltip de efeito. O BP informativo é recalculado do snapshot local sincronizado. Compra continua sendo C2S e validada no servidor; a tela apenas desabilita o botão quando o saldo local é insuficiente.
+
+## Implementação Bleach — HUD (`bleach_player_hud`)
+
+A antiga `ReiatsuHud` foi rebatizada para overlay `bleach_player_hud` (registrado em `BleachClient.registerOverlays`) e reescrita para renderizar o painel conceitual. O overlay usa `GuiGraphics` para escalar o PNG inteiro com `PoseStack#scale`, depois blita cada fill na sua faixa interna e desenha a percentagem como texto. O cancelamento dos corações vanilla fica separado, em `VanillaHealthHider`, justamente porque o registro de overlay no Forge não permite removê-los.

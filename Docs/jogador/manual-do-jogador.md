@@ -43,7 +43,7 @@ Selecionar uma forma não a ativa. O HUD distingue forma ativa e alvo. Ainda nã
 - Personagem abre a tela de compras; as compras deixaram o diário.
 - Missões rastreadas desaparecem ao concluir/falhar. O painel resume até oito linhas; o diário contém os detalhes completos.
 - Notificações são enfileiradas com limite para evitar acúmulo.
-- HUD de recursos usa painel e barras desenhados por código; não depende dos antigos ícones com problemas visuais.
+- HUD de recursos usa o painel conceitual `bleach_hud_concept.png` em escala 0.45×, com três barras empilhadas: **Vida** (substitui os corações vanilla), **Reiatsu** e **Transformação** (progresso da carga do R). Spiritual Points e o estágio da Zanpakutō ficam dentro da barra de Transformação. Os corações vanilla somem quando o personagem é criado; fome, hotbar, XP e vignette continuam do Minecraft.
 
 ## 4. Progressão em mundos novos
 
