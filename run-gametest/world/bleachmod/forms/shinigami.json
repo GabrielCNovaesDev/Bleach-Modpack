@@ -1,0 +1,47 @@
+{
+  "race": "shinigami",
+  "groups": {
+    "zanpakuto": {
+      "groupName": "zanpakuto",
+      "formType": "zanpakuto",
+      "forms": {
+        "sealed": {
+          "name": "sealed",
+          "unlockOnSkillLevel": 0,
+          "formRequisite": "",
+          "formRequisiteType": "all",
+          "unlockOnMastery": 0.0,
+          "instantTransformOnMastery": 40.0,
+          "allowFreeTransformOnMastery": 0.0,
+          "energyDrain": 0.0,
+          "maxMastery": 100.0,
+          "passiveMasteryEveryFiveSeconds": 1.0
+        },
+        "shikai": {
+          "name": "shikai",
+          "unlockOnSkillLevel": 1,
+          "formRequisite": "zanpakuto.sealed",
+          "formRequisiteType": "all",
+          "unlockOnMastery": 0.0,
+          "instantTransformOnMastery": 40.0,
+          "allowFreeTransformOnMastery": 50.0,
+          "energyDrain": 0.4,
+          "maxMastery": 100.0,
+          "passiveMasteryEveryFiveSeconds": 1.0
+        },
+        "bankai": {
+          "name": "bankai",
+          "unlockOnSkillLevel": 2,
+          "formRequisite": "zanpakuto.shikai",
+          "formRequisiteType": "all",
+          "unlockOnMastery": 25.0,
+          "instantTransformOnMastery": 40.0,
+          "allowFreeTransformOnMastery": 50.0,
+          "energyDrain": 0.8,
+          "maxMastery": 100.0,
+          "passiveMasteryEveryFiveSeconds": 1.0
+        }
+      }
+    }
+  }
+}
