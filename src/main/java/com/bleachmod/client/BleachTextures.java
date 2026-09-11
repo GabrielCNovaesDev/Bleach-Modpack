@@ -88,29 +88,26 @@ public final class BleachTextures {
     public static final int HUD_SRC_W = 2169;
     public static final int HUD_SRC_H = 725;
     public static final float HUD_SCALE = 0.22F;
-    // Cada fill (hud_*_fill.png) tem 1280 x 110 com conteudo ocupando toda a imagem.
-    // Slot horizontal de cada barra dentro do painel: do inicio da area util (apos o
-    // emblema Hollow e label) ate a borda direita ciano. Medido: x=460..2140.
-    // Topos e alturas reais das 3 faixas (medidas em x=1200):
-    //   Vida:         y=240..296 (altura 56)
-    //   Reiatsu:      y=368..432 (altura 64)
-    //   Transformacao:y=488..560 (altura 72)
-    // BARS_X eh o x de inicio do slot (em pixel do PNG original, antes do scale).
-    public static final int HUD_BARS_X = 460;
-    // DRE/ALTURA por linha. A HUD sempre usa "primeiraY + stride" para as 3 barras,
-    // entao usamos a altura da menor (Vida=56) e mantemos o stride=130 (igual para as 3)
-    // para preencher a area util completa do painel.
-    public static final int HUD_FIRST_BAR_Y = 240;
-    public static final int HUD_BAR_H = 60;          // altura do slot usado pelo fill
-    public static final int HUD_BAR_STRIDE = 130;    // distancia entre topos
+    // Cada fill (hud_*_fill.png) tem 1280 x 110. Os pocos do painel, entretanto,
+    // nao formam uma grade uniforme: os rotulos avancam progressivamente para a
+    // direita e as duas extremidades internas sao inclinadas. O preenchimento cobre
+    // todo o poco ate a borda direita, como na referencia conceitual. Coordenadas
+    // medidas no PNG original (antes do HUD_SCALE).
+    public record HudBarBounds(int topX, int topRight, int bottomX, int bottomRight,
+                               int y, int height, int percentRight) {
+    }
+
+    // The wells are parallelograms rather than rectangles. These four horizontal
+    // limits follow the inner edges visible in the original concept reference.
+    public static final HudBarBounds HUD_HEALTH_BOUNDS =
+            new HudBarBounds(705, 2110, 665, 2035, 234, 71, 2048);
+    public static final HudBarBounds HUD_REIATSU_BOUNDS =
+            new HudBarBounds(820, 2138, 775, 2073, 364, 75, 2055);
+    public static final HudBarBounds HUD_TRANSFORM_BOUNDS =
+            new HudBarBounds(880, 2085, 850, 1995, 492, 75, 2038);
+
     public static final int HUD_FILL_SRC_W = 1280;   // largura real do fill base
     public static final int HUD_FILL_SRC_H = 110;    // altura do fill base
-    // O fill precisa comecar apos o label desenhado pela propria arte do painel.
-    // O label VIDA ocupa ate x ~ 510; o fill comeca em x=515 no PNG original.
-    // Distancia entre BARS_X (460) e o inicio visivel do fill (515) = 55 px.
-    public static final int HUD_FILL_OFFSET = 55;
-    // Largura util do fill: do inicio visivel (515) ate o contorno ciano direito (2135).
-    public static final int HUD_FILL_DRAW_W = 1620;
 
     private BleachTextures() {
     }

@@ -53,31 +53,36 @@ public final class ReiatsuHud {
         BleachTextures.blit(g, BleachTextures.HUD_PANEL, 0, 0, panelSrcW, panelSrcH, panelSrcW, panelSrcH);
         g.pose().popPose();
 
-        int barsX = BleachTextures.HUD_BARS_X;
-        int barH = BleachTextures.HUD_BAR_H;
-        int stride = BleachTextures.HUD_BAR_STRIDE;
-        int firstBarY = BleachTextures.HUD_FIRST_BAR_Y;
-
         // Three bar rows: VIDA, REIATSU, TRANSFORMACAO.
-        // Each row draws its fill on top of the panel base using its own slice of the panel
-        // so that labels and base-frame stay aligned with the concept art.
+        // Each fill uses the measured bounds of its own well. The three rows have
+        // different left edges and widths because their labels and right caps differ.
         float healthRatio = computeHealthRatio(mc, data);
         float reiatsuRatio = Math.max(0f, Math.min(1f,
                 data.getResources().getCurrentReiatsu() / Math.max(1f, data.getResources().getMaxReiatsu())));
         float transformRatio = computeTransformRatio(mc, data);
 
-        drawConceptBar(g, mc, x, y, scale, barsX, firstBarY, barH, BleachTextures.HUD_HEALTH_FILL, healthRatio);
-        drawConceptBar(g, mc, x, y, scale, barsX, firstBarY + stride, barH, BleachTextures.HUD_REIATSU_FILL, reiatsuRatio);
-        drawConceptBar(g, mc, x, y, scale, barsX, firstBarY + stride * 2, barH, BleachTextures.HUD_TRANSFORM_FILL, transformRatio);
+        drawConceptBar(g, x, y, scale,
+                BleachTextures.HUD_HEALTH_BOUNDS,
+                BleachTextures.HUD_HEALTH_FILL, healthRatio);
+        drawConceptBar(g, x, y, scale,
+                BleachTextures.HUD_REIATSU_BOUNDS,
+                BleachTextures.HUD_REIATSU_FILL, reiatsuRatio);
+        drawConceptBar(g, x, y, scale,
+                BleachTextures.HUD_TRANSFORM_BOUNDS,
+                BleachTextures.HUD_TRANSFORM_FILL, transformRatio);
 
         // Percentage labels (drawn in code so they track the live value).
-        drawPercentLabel(g, mc.font, x, y, scale, barsX, firstBarY, barH, healthRatio * 100f);
-        drawPercentLabel(g, mc.font, x, y, scale, barsX, firstBarY + stride, barH, reiatsuRatio * 100f);
-        drawPercentLabel(g, mc.font, x, y, scale, barsX, firstBarY + stride * 2, barH, transformRatio * 100f);
+        drawPercentLabel(g, mc.font, x, y, scale,
+                BleachTextures.HUD_HEALTH_BOUNDS, healthRatio * 100f);
+        drawPercentLabel(g, mc.font, x, y, scale,
+                BleachTextures.HUD_REIATSU_BOUNDS, reiatsuRatio * 100f);
+        drawPercentLabel(g, mc.font, x, y, scale,
+                BleachTextures.HUD_TRANSFORM_BOUNDS, transformRatio * 100f);
 
         // SP + Zanpakutō stage live inside the Transformacao row, below the bar fill.
-        int infoY = y + Math.round((firstBarY + stride * 2 + barH + 12) * scale);
-        int infoX = x + Math.round(barsX * scale);
+        BleachTextures.HudBarBounds transformBounds = BleachTextures.HUD_TRANSFORM_BOUNDS;
+        int infoY = y + Math.round((transformBounds.y() + transformBounds.height() + 12) * scale);
+        int infoX = x + Math.round(BleachTextures.HUD_HEALTH_BOUNDS.bottomX() * scale);
         g.drawString(mc.font,
                 Component.translatable("hud.bleachmod.reiatsu",
                         (int) data.getResources().getCurrentReiatsu(),
@@ -121,51 +126,46 @@ public final class ReiatsuHud {
         return Math.max(0f, Math.min(1f, shownCharge / 100f));
     }
 
-    private static void drawConceptBar(net.minecraft.client.gui.GuiGraphics g, Minecraft mc, int panelX, int panelY,
-                                       float scale, int srcX, int srcY, int srcH,
+    private static void drawConceptBar(net.minecraft.client.gui.GuiGraphics g, int panelX, int panelY,
+                                       float scale, BleachTextures.HudBarBounds bounds,
                                        ResourceLocation fillTexture, float ratio) {
         if (ratio <= 0f) {
             return;
         }
-        // Posicao do slot no GUI: origem (x=srcX, y=srcY) dentro do PNG original,
-        // escalada e ancorada em (panelX, panelY). O fill eh desenhado com altura
-        // propria (HUD_FILL_SRC_H) e largura esticada (HUD_FILL_DRAW_W) para nao
-        // distorcer as listras diagonais. Centralizamos verticalmente dentro do slot.
-        int destX = panelX + Math.round((srcX + BleachTextures.HUD_FILL_OFFSET) * scale);
-        int fillDestH = Math.round(BleachTextures.HUD_FILL_SRC_H * scale);
-        int slotDestH = Math.round(srcH * scale);
-        int destY = panelY + Math.round(srcY * scale) + (slotDestH - fillDestH) / 2;
-        int destFullW = Math.round(BleachTextures.HUD_FILL_DRAW_W * scale);
-        int destH = fillDestH;
+        int destY = panelY + Math.round(bounds.y() * scale);
+        int destH = Math.max(1, Math.round(bounds.height() * scale));
 
-        int visiblePixelW = Math.max(1, (int) Math.round(destFullW * ratio));
+        // Draw one GUI-pixel slice at a time. Both sides interpolate between their
+        // measured top and bottom positions, producing the same slanted well as the
+        // reference instead of a rectangular fill that crosses the frame.
+        for (int row = 0; row < destH; row++) {
+            float t = destH == 1 ? 0.5F : (row + 0.5F) / destH;
+            float sourceRow = t * bounds.height();
+            int left = panelX + Math.round(lerp(bounds.topX(), bounds.bottomX(), t) * scale);
+            int right = panelX + Math.round(lerp(bounds.topRight(), bounds.bottomRight(), t) * scale);
+            int fullWidth = Math.max(1, right - left);
+            int visibleWidth = Math.max(1, Math.round(fullWidth * ratio));
+            int srcY = Math.min(BleachTextures.HUD_FILL_SRC_H - 1,
+                    (int) (sourceRow * BleachTextures.HUD_FILL_SRC_H / bounds.height()));
 
-        // Scissor: limita o draw do fill ao retangulo GUI do slot preenchido.
-        // RenderSystem usa coordenadas de framebuffer com Y invertido (origem inferior-esquerdo).
-        // O blit do GuiGraphics opera em pixel GUI (origem superior-esquerdo); convertemos.
-        double guiScale = mc.getWindow().getGuiScale();
-        int fbH = mc.getWindow().getHeight();
-        int scX = (int) Math.floor(destX * guiScale);
-        int scW = Math.max(1, (int) Math.ceil(visiblePixelW * guiScale));
-        int scH = Math.max(1, (int) Math.ceil(destH * guiScale));
-        int scY = fbH - (int) Math.ceil(destY * guiScale) - scH;
-        com.mojang.blaze3d.systems.RenderSystem.enableScissor(scX, scY, scW, scH);
-        try {
-            BleachTextures.blitSlice(g, fillTexture, destX, destY, destFullW, destH,
-                    0, 0, BleachTextures.HUD_FILL_SRC_W, BleachTextures.HUD_FILL_SRC_H,
+            BleachTextures.blitSlice(g, fillTexture, left, destY + row, visibleWidth, 1,
+                    0, srcY,
+                    Math.max(1, Math.round(BleachTextures.HUD_FILL_SRC_W * ratio)), 1,
                     BleachTextures.HUD_FILL_SRC_W, BleachTextures.HUD_FILL_SRC_H);
-        } finally {
-            com.mojang.blaze3d.systems.RenderSystem.disableScissor();
         }
+    }
+
+    private static float lerp(int start, int end, float amount) {
+        return start + (end - start) * amount;
     }
 
     private static void drawPercentLabel(net.minecraft.client.gui.GuiGraphics g, net.minecraft.client.gui.Font font,
                                          int panelX, int panelY, float scale,
-                                         int srcX, int srcY, int srcH, float percent) {
+                                         BleachTextures.HudBarBounds bounds, float percent) {
         int pct = Math.round(percent);
         String text = pct + "%";
-        int rightX = panelX + Math.round((srcX + BleachTextures.HUD_FILL_OFFSET + BleachTextures.HUD_FILL_DRAW_W) * scale) - font.width(text) - 4;
-        int centerY = panelY + Math.round((srcY + srcH / 2f) * scale) - 4;
+        int rightX = panelX + Math.round(bounds.percentRight() * scale) - font.width(text);
+        int centerY = panelY + Math.round((bounds.y() + bounds.height() / 2f) * scale) - 4;
         g.drawString(font, text, rightX + 1, centerY + 1, 0x80000000, false);
         g.drawString(font, text, rightX, centerY, 0xFFFFFFFF, false);
     }
