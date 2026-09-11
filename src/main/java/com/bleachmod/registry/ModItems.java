@@ -1,20 +1,21 @@
-package com.bleachmod.init;
+package com.bleachmod.registry;
 
 import com.bleachmod.Reference;
-import com.bleachmod.registry.ModEntities;
+
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tiers;
+
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public final class ModItems {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Reference.MOD_ID);
+public class ModItems {
 
-    public static final RegistryObject<Item> ASAUCHI = ITEMS.register("asauchi",
-            () -> new SwordItem(Tiers.IRON, 3, -2.4F, new Item.Properties().stacksTo(1)));
+    public static final DeferredRegister<Item> ITEMS =
+            DeferredRegister.create(
+                    ForgeRegistries.ITEMS,
+                    Reference.MOD_ID
+            );
 
     public static final RegistryObject<Item> HOLLOW_SPAWN_EGG =
             ITEMS.register(
@@ -26,7 +27,4 @@ public final class ModItems {
                             new Item.Properties()
                     )
             );
-
-    private ModItems() {
-    }
 }
