@@ -78,5 +78,8 @@
   "attribute.bleachmod.control.desc": "-8% ongoing energy drain per level.",
   "key.bleachmod.status": "Open character",
   "key.bleachmod.wheel": "Select transformation",
-  "hud.bleachmod.target": "Target: %s"
+  "hud.bleachmod.target": "Target: %s",
+  "screen.bleachmod.purchase_remaining": "Balance after purchase: %s SP",
+  "screen.bleachmod.insufficient_points": "Not enough spirit points.",
+  "screen.bleachmod.wheel_chain": "Activate the previous form or reach the mastery needed for free transformation."
 }

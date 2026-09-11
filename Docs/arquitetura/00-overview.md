@@ -1,5 +1,12 @@
 # Overview — o que reaproveitar do Dragon Mine Z
 
+## Estado da implementação Bleach — 10/09/2026
+
+O MVP Bleach inclui status (K), seleção radial de formas (Z), categorias de pontos e comandos de desenvolvimento. Mantém zumbis; não implementa as demais raças e sistemas do original.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## O que o mod original faz
 
 Dragon Mine Z (Forge 1.20.1, v2.1.3) é um mod de progressão inspirado em Dragon Ball. O jogador cria um personagem de uma das seis raças, distribui stats com Training Points, transforma-se em forms com custo de ki e mastery, e atravessa sagas/sidequests definidas em JSON no mundo. Por cima disso há combate, dimensões, dragon balls, técnicas editáveis e worldgen — conteúdo temático que **não** entra no fork.

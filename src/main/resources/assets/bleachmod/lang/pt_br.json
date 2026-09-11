@@ -78,5 +78,8 @@
   "attribute.bleachmod.control.desc": "-8% de consumo contínuo por nível.",
   "key.bleachmod.status": "Abrir personagem",
   "key.bleachmod.wheel": "Selecionar transformação",
-  "hud.bleachmod.target": "Alvo: %s"
+  "hud.bleachmod.target": "Alvo: %s",
+  "screen.bleachmod.purchase_remaining": "Saldo após a compra: %s PE",
+  "screen.bleachmod.insufficient_points": "Pontos espirituais insuficientes.",
+  "screen.bleachmod.wheel_chain": "Ative a forma anterior ou alcance o domínio para transformação livre."
 }

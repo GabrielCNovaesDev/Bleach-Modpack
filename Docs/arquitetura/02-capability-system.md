@@ -1,5 +1,12 @@
 # Sistema de Capability
 
+## Estado da implementação Bleach — 10/09/2026
+
+PlayerData inclui AttributeData e schemaVersion 2. A clonagem recupera dados serializados e redefine estados transitórios; invalidação do provider e sincronização de respawn foram tratadas. O ciclo completo Forge ainda exige teste em jogo.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## Resumo
 
 Todo o estado persistente do jogador — raça, forms, energia, skills, quests — vive numa única Forge Capability: `StatsCapability` → `StatsData`, anexada a toda entidade `Player`. Não há capability isolada de quest ou evolução. O provider serializa o agregado inteiro em NBT; a rede reusa o mesmo `save()`/`load()` com merge parcial (só as chaves presentes no packet sobrescrevem).

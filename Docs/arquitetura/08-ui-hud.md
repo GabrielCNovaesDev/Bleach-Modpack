@@ -1,5 +1,12 @@
 # UI e HUD
 
+## Estado da implementação Bleach — 10/09/2026
+
+J abre o diário com paginação e rolagem, K reúne status/compras, Z seleciona formas. HUD e rastreamento são desenhados em código. Cobertura do fundo e interpolação de carga foram alteradas; os PNGs e a validação visual final permanecem pendentes.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## Resumo
 
 Quests e evolução têm superfícies distintas: uma **árvore de story** (tela cheia), um **HUD de quest trackeada**, um **diálogo de NPC**, **toasts**, e um **radial de forms**. Todas leem a capability **local** do client (populada pelos S2C). Nenhuma tela faz request/response de dados — só dispara C2S de ação. Character creation escolhe a raça (e portanto as árvores de form) antes de qualquer quest.

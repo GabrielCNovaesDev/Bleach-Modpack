@@ -15,7 +15,7 @@ public record SetTrackedQuestC2S(String questId) {
     }
 
     public static SetTrackedQuestC2S decode(FriendlyByteBuf buf) {
-        return new SetTrackedQuestC2S(buf.readUtf());
+        return new SetTrackedQuestC2S(buf.readUtf(256));
     }
 
     public static void handle(SetTrackedQuestC2S msg, Supplier<NetworkEvent.Context> ctx) {
@@ -25,6 +25,7 @@ public record SetTrackedQuestC2S(String questId) {
                 return;
             }
             PlayerCapability.get(player).ifPresent(data -> {
+                if (!data.getStatus().hasCreatedCharacter() || !player.isAlive() || !data.getStatus().allowAction(player.level().getGameTime())) return;
                 String id = msg.questId == null || msg.questId.isBlank() ? null : msg.questId;
                 if (id != null && data.getPlayerQuestData().getStatus(id) != QuestStatus.ACCEPTED) {
                     return;

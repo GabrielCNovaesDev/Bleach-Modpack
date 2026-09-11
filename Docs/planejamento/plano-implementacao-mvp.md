@@ -4,7 +4,7 @@
 
 Plano consolidado a partir da revisão técnica de 10/09/2026 e do teste de jogo relatado pelo usuário com quatro imagens. Inclui todas as recomendações da revisão, correções visuais, tela de status, distribuição de pontos por categorias, seletor radial e comandos de desenvolvimento.
 
-Estado: **planejado; funcionalidades e correções ainda não implementadas**. A aprovação da direção de trabalho não significa que todos os números, nomes de atributos e atalhos estejam definidos. Esta entrega organiza a implementação; não altera o comportamento do jogo.
+Estado: **em implementação; encerramento pendente**. Status, categorias, radial, comandos e correções de lógica estão no código. O [relatório de implementação de 10/09/2026](relatorio-implementacao-mvp-2026-09-10.md) discrimina entregas, testes executados e pendências. O restante deste documento conserva os requisitos e critérios de aceitação; não representa homologação das tarefas.
 
 A revisão detalhada continua em [revisao-tecnica-mvp-2026-09-10.md](revisao-tecnica-mvp-2026-09-10.md). Este plano passa a ser a referência de execução e ordem de entregas; a revisão conserva a evidência e os achados R01–R18.
 
@@ -333,4 +333,3 @@ Não impedem registrar o plano; devem ser fechadas antes das tarefas dependentes
 - Receita ou recuperação do Asauchi.
 - Se habilidades exibidas no radial são selecionadas para uso posterior ou executadas diretamente; formas sempre conservam seleção distinta da carga nesta proposta.
 - Futuro mob Hollow: estudo separado, sem bloquear a implementação atual com zumbis.
-

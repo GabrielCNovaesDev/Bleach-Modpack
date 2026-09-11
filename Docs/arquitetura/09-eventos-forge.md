@@ -1,5 +1,12 @@
 # Eventos Forge
 
+## Estado da implementação Bleach — 10/09/2026
+
+Eventos tratam clonagem, respawn, rastreamento, desconexão e dimensão. LivingHurtEvent aplica bônus ao ataque direto do jogador com Asauchi. A integração em servidor dedicado com dois clientes ainda não foi homologada.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## Resumo
 
 Quests avançam por quatro hooks de gameplay (tick, morte, interact, summon de dragão). Evolução avança por tick (charge, drain, mastery passiva) e por hits (mastery). A capability se anexa e se clona por eventos de lifecycle do player. Eventos **custom** (`DMZEvent`) encapsulam os pontos de extensão canceláveis. Abaixo só o que toca quest/evolução — o original tem dezenas de outros handlers de combate.

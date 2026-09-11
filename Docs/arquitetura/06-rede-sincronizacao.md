@@ -1,5 +1,12 @@
 # Rede e sincronização
 
+## Estado da implementação Bleach — 10/09/2026
+
+Protocolo 2.0, direções explícitas, definições de formas sincronizadas e aparência pública separada de dados privados. Algumas ações têm intervalo mínimo de quatro ticks. Não considerar concluída a otimização de todos os pacotes ou do resgate múltiplo.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## Resumo
 
 Um único `SimpleChannel` (`dragonminez:network`, protocolo `"1.0"`) com IDs sequenciais. A ordem de `NetworkHandler.register()` **é** o protocolo: só se acrescenta no fim. Quest e evolução não têm canal próprio. O client aplica NBT com merge parcial (`StatsData.load`): chaves ausentes no packet não são tocadas. Não existe um router central — cada caller escolhe o packet pelo domínio.

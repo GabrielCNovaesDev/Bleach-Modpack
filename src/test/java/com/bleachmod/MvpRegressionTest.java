@@ -150,6 +150,20 @@ public final class MvpRegressionTest {
             try { eq(.4D,task.get(5,java.util.concurrent.TimeUnit.SECONDS)); } catch(Exception e) { throw new AssertionError(e); }
             FormRegistry.clearClient();
         });
+        test("self and forward form prerequisites are rejected",()->{
+            for(String target:List.of("shikai","bankai")) {
+                JsonObject json=forms();
+                json.getAsJsonObject("shinigami").getAsJsonObject("zanpakuto").getAsJsonObject("forms").getAsJsonObject("shikai").addProperty("formRequisite","zanpakuto."+target);
+                rejects(()->FormRegistry.parse(json.toString()));
+            }
+        });
+        test("prerequisite mastery must be attainable",()->{
+            JsonObject json=forms();
+            JsonObject map=json.getAsJsonObject("shinigami").getAsJsonObject("zanpakuto").getAsJsonObject("forms");
+            map.getAsJsonObject("shikai").addProperty("maxMastery",60);
+            map.getAsJsonObject("bankai").addProperty("unlockOnMastery",61);
+            rejects(()->FormRegistry.parse(json.toString()));
+        });
         System.out.println("PASS: "+count+" regression scenarios");
     }
     private static PlayerData player(){PlayerData d=new PlayerData();d.initializeShinigami();return d;}

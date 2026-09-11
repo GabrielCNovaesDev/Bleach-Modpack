@@ -1,5 +1,12 @@
 # Sistema de Evolução / Progressão
 
+## Estado da implementação Bleach — 10/09/2026
+
+Descoberta, compra de skill e mastery são separados. A carga usa 2 + min(3, floor(mastery × 0,04)) por tick e revalida seleção na execução. Shikai e Bankai acrescentam respectivamente 20% e 50% ao multiplicador de dano com Asauchi.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## Resumo
 
 Não existe um enum global `EvolutionStage`. A progressão é **data-driven em três camadas**: raça permanente → grupo de forms (árvore) → form (estágio ordenado). Uma camada ortogonal, *stack form*, empilha um multiplicador (Kaioken etc.). Unlock mistura **skill comprada com TP** + **mastery** na form anterior. A transição em si é uma **ação do jogador** (segurar charge até 100, ou instant se mastery alta), não um tick que “evolui sozinho”. Quests podem pular etapas via `TransformationReward`.

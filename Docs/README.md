@@ -10,6 +10,8 @@ Este projeto é um trabalho derivado do mod **Dragon Mine Z**, distribuído sob 
 
 ## Índice da documentação
 
+Pendências atuais: [checklist do MVP](planejamento/todo-mvp.md), separando implementação, validação e fechamento.
+
 | Pasta | Para quê | Comece por |
 |---|---|---|
 | [`jogador/`](jogador/manual-do-jogador.md) | Jogar o MVP (controles, quests, progressão) | [Manual do jogador](jogador/manual-do-jogador.md) |
@@ -123,7 +125,7 @@ Java 17 é obrigatório. Manual de jogo (controles, quests, progressão): [`joga
 
 O plano ativo de estabilização do MVP e das próximas entregas está em [`planejamento/plano-implementacao-mvp.md`](planejamento/plano-implementacao-mvp.md). Ele consolida a [revisão técnica](planejamento/revisao-tecnica-mvp-2026-09-10.md), os bugs visuais relatados em jogo e as novas telas e ferramentas solicitadas.
 
-Prioridades planejadas: corrigir rede, persistência e UI; corrigir transparência/orientação do Asauchi e dimensionamento dos assets; adicionar comandos de desenvolvimento, tela de status com compra de skills e categorias de pontos, e seleção radial de formas/habilidades disponíveis. Essas entregas ainda não estão implementadas.
+Prioridades planejadas: corrigir rede, persistência e UI; corrigir transparência/orientação do Asauchi e dimensionamento dos assets; adicionar comandos de desenvolvimento, tela de status com compra de skills e categorias de pontos, e seleção radial de formas/habilidades disponíveis. Status, categorias, radial, comandos e correções de lógica estão implementados no código. A validação final e parte das artes permanecem pendentes; veja o [relatório de implementação](planejamento/relatorio-implementacao-mvp-2026-09-10.md).
 
 **Inimigos provisórios:** continuamos usando zumbis, com os esqueletos já presentes nas quests atuais. A criação do mob Hollow ficará para estudo posterior e não bloqueia o MVP. Textos e objetivos devem identificar os alvos reais.
 
@@ -135,7 +137,7 @@ Prioridades planejadas: corrigir rede, persistência e UI; corrigir transparênc
 |---|---|---|
 | Fase 0 | Análise do repositório base + documentação | Concluída |
 | Fase 1 (MVP) | Raça Shinigami + Quests básicas | Base implementada; estabilização pendente |
-| Estabilização do MVP | Correções, status/categorias, radial, comandos e progressão útil | Planejada no plano ativo |
+| Estabilização do MVP | Correções, status/categorias, radial, comandos e progressão útil | Implementação em andamento; validação final e artes pendentes |
 | Fase 2 | Raça Hollow | ⏳ Planejado |
 | Fase 3 | Raças Quincy e Fullbringer | ⏳ Planejado |
 | Fase 4 | Conteúdo expandido e balanceamento | ⏳ Planejado |

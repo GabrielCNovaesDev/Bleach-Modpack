@@ -1,5 +1,12 @@
 # Glossário
 
+## Estado da implementação Bleach — 10/09/2026
+
+No Bleach atual: reiatsu é energia; pontos espirituais compram skills/categorias; descoberta autoriza a compra da forma e mastery representa domínio. Hollow continua como tema; os alvos provisórios são zumbis.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 Termos do código original traduzidos para o domínio Bleach e para o vocabulário do fork.
 
 ## Identidade e progressão

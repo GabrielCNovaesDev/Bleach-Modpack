@@ -29,7 +29,10 @@ public final class FormWheelScreen extends Screen {
     }
     @Override public void tick() {
         if(minecraft.player==null){onClose();return;}
-        PlayerCapability.get(minecraft.player).ifPresent(d->buttons.forEach((form,b)->b.active=TransformationsHelper.isSelectable(d,"zanpakuto",form)));
+        PlayerCapability.get(minecraft.player).ifPresent(d->buttons.forEach((form,b)->{
+            b.active=TransformationsHelper.isSelectable(d,"zanpakuto",form);
+            b.setTooltip(b.active?null:net.minecraft.client.gui.components.Tooltip.create(Component.translatable("screen.bleachmod.wheel_chain")));
+        }));
     }
     @Override public void render(GuiGraphics g,int mx,int my,float dt) {
         renderBackground(g);

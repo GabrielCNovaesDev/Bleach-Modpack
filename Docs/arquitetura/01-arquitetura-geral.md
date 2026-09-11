@@ -1,5 +1,12 @@
 # Arquitetura geral (Dragon Mine Z)
 
+## Estado da implementação Bleach — 10/09/2026
+
+QuestRegistry e FormRegistry separam snapshots de cliente e servidor por lado lógico. RegistryReload prepara ambas as definições antes da instalação; ProgressionService centraliza compras e normalização.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## Visão da estrutura
 
 O original separa o código em quatro raízes sob `com.dragonminez`:

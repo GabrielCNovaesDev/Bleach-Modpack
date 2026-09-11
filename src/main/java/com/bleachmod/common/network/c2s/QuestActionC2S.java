@@ -18,13 +18,13 @@ public record QuestActionC2S(Action action, String questId) {
     }
 
     public static QuestActionC2S decode(FriendlyByteBuf buf) {
-        return new QuestActionC2S(buf.readEnum(Action.class), buf.readUtf());
+        return new QuestActionC2S(buf.readEnum(Action.class), buf.readUtf(256));
     }
 
     public static void handle(QuestActionC2S msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
-            if (player == null) {
+            if (player == null || !player.isAlive() || !com.bleachmod.common.data.PlayerCapability.get(player).map(data -> data.getStatus().hasCreatedCharacter() && data.getStatus().allowAction(player.level().getGameTime())).orElse(false)) {
                 return;
             }
             if (msg.action == Action.START) {

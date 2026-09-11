@@ -1,5 +1,12 @@
 # Sistema de Quests
 
+## Estado da implementação Bleach — 10/09/2026
+
+O MVP valida IDs, limites e objetivos, reconta itens e guarda assinatura/versão da definição. Mudanças estruturais incompatíveis bloqueiam progresso e resgate. Treino só reinicia após todos os prêmios; a ausência de repeatable no treino legado é interpretada como true. Novos despertares não concedem skill nem mastery máximo.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## Resumo
 
 O sistema de quests é o coração reutilizável do original: definições em JSON no **mundo** (não datapack), progresso por jogador dentro da capability, objetivos polimórficos (10 tipos), recompensas reclamáveis (8 tipos), sagas lineares + sidequests, party com merge só-para-frente, e falha em wipe se a quest tem objetivo de kill. Recompensas **não** são automáticas — o jogador reclama na árvore ou no NPC. Tipos `DAILY` e `EVENT` existem no enum mas **não têm reset**.

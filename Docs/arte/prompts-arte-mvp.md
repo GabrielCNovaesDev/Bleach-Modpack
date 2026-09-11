@@ -1,5 +1,8 @@
 # Art Brief — Bleach Mod MVP (Forge 1.20.1)
 
+Estado em 10/09/2026: o HUD foi redesenhado em código e o fundo recebeu cobertura proporcional. Os PNGs de espada e personagem permanecem pendentes; a tentativa gerada com quadriculado opaco foi descartada. Ver [relatório](../planejamento/relatorio-implementacao-mvp-2026-09-10.md).
+
+
 ## Nota de revisão após teste em jogo
 
 Este briefing é referência de arte, não evidência de que os assets atuais atendem aos requisitos. O [plano de implementação](../planejamento/plano-implementacao-mvp.md) registra V01–V08: cobertura do background, transparência do espadachim/reiatsu/espada, orientação do Asauchi, alinhamento de HUD/diário e animação de carga.

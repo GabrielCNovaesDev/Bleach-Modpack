@@ -144,6 +144,7 @@ Reload prepara quests e formas antes de substituí-las. Erros preservam os regis
 Os arquivos ficam em {mundo}/bleachmod/. Defaults só criam arquivos ausentes; não sobrescrevem configurações existentes.
 
 - Mundos antigos podem conservar recompensas de skill/mastery 100; consulte as recompensas reais do diário.
+- Exceção de compatibilidade: rukia_basic_training sem campo repeatable é interpretado como repetível; false explícito é respeitado.
 - Categorias novas começam em zero. Pontos, nível e mastery adquiridos são preservados.
 - A descoberta de formas de saves legados é inferida do nível da skill/mastery.
 - O estado usa schemaVersion 2. Não abra save migrado com versão antiga sem backup compatível.

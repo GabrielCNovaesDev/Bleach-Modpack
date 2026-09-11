@@ -1,5 +1,12 @@
 # Sistema de Habilidades
 
+## Estado da implementação Bleach — 10/09/2026
+
+Categorias Poder, Reserva e Controle têm cinco níveis, custo 100 × próximo nível. Cada nível concede +10% de dano, +20 de capacidade ou −8% de dreno, respectivamente. Compras ficam na tela K. Não foram adicionados respec nem técnicas ativas.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## Resumo
 
 O original tem **dois** sistemas que o nome “skill” mistura: (1) `Skill` — progressão/toggle/gate de form, comprada com TP; (2) `Technique` — ataque executável com custo, charge e cooldown. O sistema de evolução depende só do primeiro. Técnicas de ki customizáveis ficam fora do MVP Bleach; o que importa é o modelo de `Skill` + a ponte `SkillReward` / form-skill.

@@ -1,5 +1,12 @@
 # Persistência NBT
 
+## Estado da implementação Bleach — 10/09/2026
+
+Schema 2 persiste categorias e formas descobertas. Saves antigos inferem descobertas por skill/mastery. Quests sem assinatura vinculam-se à definição carregada; não há detecção retroativa de mudanças anteriores. JSONs existentes conservam recompensas antigas.
+
+Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+
+
 ## Resumo
 
 Quests e evolução salvam no **NBT do jogador**, dentro da capability `StatsData`. Não há SavedData de mundo para progresso individual. O original tem backends extras (JSON de arquivo e MariaDB via `StorageManager`) que, se ativos, **sobrescrevem** o NBT no login; o MVP Bleach deve usar só o caminho vanilla. Party também tem um `PartySavedData` de mundo — omitir se não houver party.

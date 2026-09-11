@@ -33,6 +33,9 @@ public final class StatusScreen extends Screen {
             int cost=d.getAttributes().cost(id);
             b.setMessage(cost<0?Component.translatable("screen.bleachmod.max"):Component.translatable("screen.bleachmod.buy",cost));
             b.active=cost>=0&&d.getResources().getTrainingPoints()>=cost;
+            b.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("attribute.bleachmod."+id+".desc")
+                .append("\n").append(Component.translatable(cost<0?"screen.bleachmod.max":b.active?"screen.bleachmod.purchase_remaining":"screen.bleachmod.insufficient_points",
+                    Math.max(0,(int)d.getResources().getTrainingPoints()-cost)))));
         });
         int level=d.getSkills().getLevel("zanpakuto");
         int cost=d.getSkills().skillCostForNextLevel("zanpakuto");
@@ -41,6 +44,8 @@ public final class StatusScreen extends Screen {
             !discovered?Component.translatable("screen.bleachmod.quest_required"):
             Component.translatable("screen.bleachmod.skill_buy",level+1,cost));
         skill.active=level<2&&discovered&&d.getResources().getTrainingPoints()>=cost;
+        skill.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable(level>=2?"screen.bleachmod.skill_max":!discovered?"screen.bleachmod.quest_required":skill.active?"screen.bleachmod.purchase_remaining":"screen.bleachmod.insufficient_points",
+            Math.max(0,(int)d.getResources().getTrainingPoints()-cost))));
     }
     @Override public void render(GuiGraphics g,int mx,int my,float dt) {
         renderBackground(g);
@@ -60,8 +65,6 @@ public final class StatusScreen extends Screen {
             for(String id:AttributeData.IDS) {
                 g.drawString(font,Component.translatable("attribute.bleachmod."+id).append(" "+d.getAttributes().level(id)+"/5"),left+8,y,0xFFFFFF); y+=24;
             }
-            for(var entry:upgrades.entrySet()) if(entry.getValue().isHoveredOrFocused())
-                g.renderTooltip(font,Component.translatable("attribute.bleachmod."+entry.getKey()+".desc"),mx,my);
         }
         super.render(g,mx,my,dt);
     }
