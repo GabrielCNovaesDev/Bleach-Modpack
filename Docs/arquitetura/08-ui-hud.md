@@ -86,3 +86,7 @@ Quests e evolução têm superfícies distintas: uma **árvore de story** (tela 
 - Forçar character creation no tick é agressivo (bloqueia o mundo). Manter, senão quests/forms correm sem raça.
 - HUD deve sobreviver a `trackedQuestId` apontando para quest que o registry ainda não recebeu (race no login): esconder até o registry chegar.
 - Não documentar pixel-a-pixel: o visual Bleach será outro. A estrutura funcional acima é o contrato.
+
+## Implementação Bleach — tela de status
+
+A tela K distribui sete categorias em duas colunas, mostra rank sem sufixo de cap, custo do próximo nível e tooltip de efeito. O BP informativo é recalculado do snapshot local sincronizado. Compra continua sendo C2S e validada no servidor; a tela apenas desabilita o botão quando o saldo local é insuficiente.

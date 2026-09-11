@@ -1,6 +1,8 @@
 package com.bleachmod.server.events;
 
 import com.bleachmod.Reference;
+import com.bleachmod.common.CombatBalance;
+import com.bleachmod.common.data.AttributeData;
 import com.bleachmod.common.data.PlayerCapability;
 import com.bleachmod.common.evolution.FormData;
 import com.bleachmod.common.evolution.TransformationsHelper;
@@ -34,7 +36,8 @@ public class TickHandler {
             float previousEnergy = data.getResources().getCurrentReiatsu();
             int previousCharge = data.getResources().getActionCharge();
             FormData active = TransformationsHelper.getActiveFormData(data);
-            float drain = active == null ? 0.0F : (float) active.getEnergyDrain() * (1 - .08F * data.getAttributes().level("control"));
+            float drain = active == null ? 0.0F : CombatBalance.formDrain((float) active.getEnergyDrain(),
+                    data.getAttributes().level(AttributeData.CONTROL));
             if (drain > 0.0F) {
                 data.getResources().addReiatsu(-drain);
                 if (data.getResources().getCurrentReiatsu() <= data.getResources().getMaxReiatsu() * Reference.REVERT_REIATSU_RATIO) {

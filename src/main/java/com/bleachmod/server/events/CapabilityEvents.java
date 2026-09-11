@@ -52,7 +52,7 @@ public final class CapabilityEvents {
         @SubscribeEvent
         public static void login(PlayerEvent.PlayerLoggedInEvent event) {
             if (event.getEntity() instanceof ServerPlayer player) {
-                PlayerCapability.get(player).ifPresent(data -> com.bleachmod.common.ProgressionService.normalize(data));
+                PlayerCapability.get(player).ifPresent(data -> com.bleachmod.common.ProgressionService.normalize(player, data));
                 PlayerCapability.get(player).ifPresent(data -> data.getPlayerQuestData().bindDefinitions());
                 SyncHelper.questRegistry(player);
                 SyncHelper.full(player);
@@ -62,7 +62,10 @@ public final class CapabilityEvents {
         @SubscribeEvent
         public static void respawn(PlayerEvent.PlayerRespawnEvent event) {
             if (event.getEntity() instanceof ServerPlayer player) {
-                PlayerCapability.get(player).ifPresent(data -> data.getResources().setCurrentReiatsu(data.getResources().getMaxReiatsu()));
+                PlayerCapability.get(player).ifPresent(data -> {
+                    com.bleachmod.common.ProgressionService.normalize(player, data);
+                    data.getResources().setCurrentReiatsu(data.getResources().getMaxReiatsu());
+                });
                 SyncHelper.full(player);
                 SyncHelper.appearance(player);
             }

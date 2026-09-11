@@ -238,3 +238,7 @@ Ritmo da charge: `10 + min(15, mastery * 0.2)` por passo no handler.
 - `updateTransformationSkillLimits` no load: esquecer isso deixa form-skills com maxLevel 0.
 - Não portar oozaru/lua/android upgraded/mutant/ultimate-best-form no MVP — cada um é um ramo extra.
 - Aparência (modelo, cabelo, aura) pode ser stub: só um indicador de estágio no HUD basta para o MVP.
+
+## Implementação Bleach — drain rebalanceado
+
+Os defaults novos usam `energyDrain` 0,08/tick no Shikai e 0,16/tick no Bankai. Controle aplica `drain base ÷ (1 + 0,10 × rank)`, com retorno decrescente e sem possibilidade de drain negativo. O custo de entrada continua usando o `energyDrain` configurado. Como defaults não sobrescrevem JSON de mundo, configurações antigas 0,4/0,8 precisam de migração explícita.

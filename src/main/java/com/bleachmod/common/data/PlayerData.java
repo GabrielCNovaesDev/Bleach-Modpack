@@ -16,7 +16,16 @@ public class PlayerData {
     private boolean dataLoaded;
     private final AttributeData attributes = new AttributeData();
     public AttributeData getAttributes() { return attributes; }
-    public void refreshDerivedResources() { resources.setMaxReiatsu(100 + 20 * attributes.level("reserve")); }
+    public void refreshDerivedResources() {
+        double derived = Reference.BASE_REIATSU + 20.0D * attributes.level(AttributeData.RESERVE);
+        resources.setMaxReiatsu((float)Math.min(Float.MAX_VALUE, derived));
+    }
+
+    public double getBattlePower() {
+        long totalRanks = 0;
+        for (String id : AttributeData.IDS) totalRanks += attributes.level(id);
+        return totalRanks * (resources.getMaxReiatsu() / 10.0D);
+    }
 
     public CharacterData getCharacter() {
         return character;
@@ -68,7 +77,7 @@ public class PlayerData {
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
-        tag.putInt("schemaVersion", 2);
+        tag.putInt("schemaVersion", 3);
         tag.put("attributes", attributes.save());
         tag.put("character", character.save());
         tag.put("resources", resources.save());

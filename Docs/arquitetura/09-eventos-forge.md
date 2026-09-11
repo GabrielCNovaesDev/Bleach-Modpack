@@ -96,3 +96,7 @@ Os handlers leem/escrevem a mesma `StatsData`. Eventos custom são o ponto para 
 - Wipe de party no mesmo `LivingDeathEvent` do kill: race sutil se o último hit mata o player e o mob no mesmo tick.
 - Client tick forçando GUI compete com vanilla pause/death screen — testar.
 - Não assinar `DragonSummonedEvent`.
+
+## Implementação Bleach — combate
+
+`LivingHurtEvent` separa três caminhos: Zanpakutō/Asauchi usa Zanjutsu e bônus da forma; mão principal vazia usa Hakuda; jogador atingido por golpe físico direto usa Resistência. Vitalidade é um modifier de `MAX_HEALTH` reaplicado na normalização do jogador. Danos ambientais, mágicos e de projéteis não passam pela mitigação de Resistência.

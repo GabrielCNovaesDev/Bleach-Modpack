@@ -56,6 +56,9 @@ A documentação de engenharia reversa está em [`arquitetura/`](arquitetura/00-
 - [x] **Sistema de energia (Reiatsu)**
   - [x] Barra de energia com regeneração
   - [x] Custo de energia ao transformar e drain enquanto Shikai/Bankai estiver ativo
+- [x] **Atributos de combate e BP**
+  - [x] Zanjutsu, Hakuda, Vitalidade, Resistência, Kidou, Reserva e Controle sem teto de nível de gameplay
+  - [x] Dano armado/desarmado separado, vida máxima, mitigação física e BP informativo
 - [x] **Sistema de Quests (base)**
   - [x] Registro de quests via JSON no mundo (`{world}/bleachmod/`; defaults gerados em Java se a pasta não existir)
   - [x] Objetivos KILL e ITEM
@@ -125,7 +128,7 @@ Manual de jogo (controles, quests, progressão): [`jogador/manual-do-jogador.md`
 
 O plano ativo de estabilização do MVP e das próximas entregas está em [`planejamento/plano-implementacao-mvp.md`](planejamento/plano-implementacao-mvp.md). Ele consolida a [revisão técnica](planejamento/revisao-tecnica-mvp-2026-09-10.md), os bugs visuais relatados em jogo e as novas telas e ferramentas solicitadas.
 
-Prioridades planejadas: corrigir rede, persistência e UI; corrigir transparência/orientação do Asauchi e dimensionamento dos assets; adicionar comandos de desenvolvimento, tela de status com compra de skills e categorias de pontos, e seleção radial de formas/habilidades disponíveis. Essas entregas ainda não estão implementadas.
+A estabilização já inclui rede direcionada, persistência versionada, comandos de desenvolvimento, tela de status, categorias de pontos e seletor radial. O rework atual substitui Poder por Zanjutsu/Hakuda, adiciona Vitalidade/Resistência/Kidou, exibe BP e reduz o consumo das formas. A inspeção visual final dos assets e o teste dedicado com dois clientes continuam pendentes.
 
 **Inimigos provisórios:** continuamos usando zumbis, com os esqueletos já presentes nas quests atuais. A criação do mob Hollow ficará para estudo posterior e não bloqueia o MVP. Textos e objetivos devem identificar os alvos reais.
 

@@ -143,3 +143,7 @@ Relevantes: `Transforming` (= `isActionCharging`), `SelectedAction` (ActionMode)
 - `copyFrom` de quest via serialize/deserialize (não field-copy) — garante deep copy; replicar.
 - Não persistir `Quest.completed` / `currentObjectiveIndex` da definição: progresso é só no player.
 - Prefixar persistent-data keys com o id do Bleach, nunca `dmz_`.
+
+## Implementação Bleach — schema 3
+
+O composto `attributes` grava as sete chaves em camelCase/minúsculas. No load, ranks negativos viram zero e ranks acima de cinco são preservados. Saves schema 2 com `power` e sem `zanjutsu` migram o valor de Poder para Zanjutsu; as quatro categorias inéditas começam em zero. BP e bônus derivados não são salvos.

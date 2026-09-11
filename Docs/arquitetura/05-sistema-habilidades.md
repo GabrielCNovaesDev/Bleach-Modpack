@@ -89,3 +89,7 @@ Custo de energia da transformação **não** está na Skill; está na FormData (
 - `isUnlockedAtLevel` vs `level > 0`: o original trata nível da skill como índice do tier, não como booleano.
 - Não portar o editor de técnicas (create/import/upgrade) — é um jogo dentro do jogo.
 - Cooldowns de técnica não devem ser confundidos com cooldown de form (não existe).
+
+## Implementação Bleach — Kidou
+
+Kidou é atualmente um atributo passivo, não uma skill executável. A fórmula central já fornece +10% de dano de feitiço por rank, mas nenhum ataque existente chama esse caminho ainda. Ao criar a primeira rajada, o handler deverá aplicar `CombatBalance.kidouDamage` no servidor; não reutilizar Zanjutsu ou Hakuda.

@@ -2,7 +2,7 @@
 
 ## 1. Resumo
 
-Plano consolidado a partir da revisão técnica de 10/09/2026 e do teste de jogo relatado pelo usuário com quatro imagens. Inclui todas as recomendações da revisão, correções visuais, tela de status, distribuição de pontos por categorias, seletor radial e comandos de desenvolvimento.
+Plano consolidado a partir da revisão técnica de 10/09/2026 e do teste de jogo relatado pelo usuário com quatro imagens. Em 10/09/2026, T16–T19 receberam o rework de sete atributos sem cap, fórmulas de combate/reiatsu, migração e BP; a validação visual e multiplayer segue em T24.
 
 Estado: **planejado; funcionalidades e correções ainda não implementadas**. A aprovação da direção de trabalho não significa que todos os números, nomes de atributos e atalhos estejam definidos. Esta entrega organiza a implementação; não altera o comportamento do jogo.
 
@@ -62,7 +62,7 @@ Multiplayer básico com servidor dedicado e duas pessoas continua necessário pa
 - Reutilizar registries, capability e serviços atuais, corrigindo fronteiras e responsabilidades.
 - A tela de status assume compras; o diário concentra missões e pode oferecer atalho para status.
 - O radial seleciona forma; executar transformação continua sendo ação distinta, preservando carga/custo.
-- Categorias propostas abaixo são uma base pequena para implementação futura, não escolhas já confirmadas pelo usuário.
+- As sete categorias confirmadas estão implementadas; coeficientes ainda devem ser observados em teste dedicado/PvP.
 - Novos atalhos devem ser remapeáveis e escolhidos verificando conflitos. Não fixar teclas arbitrárias no manual antes de implementar.
 - Comportamentos planejados não devem ser descritos como disponíveis no manual do jogador.
 
@@ -132,15 +132,16 @@ Os documentos 00–12 descrevem principalmente a engenharia reversa do Dragon Mi
 
 ### Tela de status e categorias
 
-Proposta inicial de três categorias, sujeita a ajuste de nomes/números:
+Categorias implementadas:
 
-| Categoria proposta | Efeito limitado | Limite de escopo |
-|---|---|---|
-| Poder espiritual | Melhora moderada do combate com Asauchi | Não alterar dano de toda arma nem criar fórmula extensa de atributos |
-| Reserva de reiatsu | Aumenta capacidade máxima | Não criar nível global de personagem |
-| Controle espiritual | Melhora eficiência, preferencialmente reduzindo drain | Evitar sobreposição com mastery, que conserva domínio/velocidade/instantâneo |
+| Categoria | Efeito |
+|---|---|
+| Zanjutsu / Hakuda | +10% por nível com Zanpakutō / desarmado |
+| Vitalidade / Resistência | +2 de vida máxima / mitigação de golpe direto com retorno decrescente |
+| Kidou | +10% por nível para futuros ataques de feitiço |
+| Reserva / Controle | +20 de máximo / drain dividido por `1 + 0,10 × nível` |
 
-Definir níveis máximos pequenos, tabela de custos crescente e limites contra drain zero/negativo. Evitar bônus acumulados após reload, reconexão ou repetição de transformação.
+Não há teto de nível de gameplay. O custo cresce em 100 por nível e satura em 1.000.000 por compra. Controle nunca torna o drain zero/negativo. BP é a soma dos sete níveis multiplicada pela reiatsu máxima/10 e não altera combate.
 
 A revisão anterior propôs pontos como custo de desbloqueio para evitar moeda sem uso. Com a solicitação explícita de categorias, **a economia precisa ser reavaliada**: pontos passam a financiar melhorias e eventualmente skills; não manter compra redundante de algo que a quest concede grátis sem deixar o benefício claro. A implementação deve fechar uma tabela única de desbloqueios, custos e recompensas.
 
@@ -325,7 +326,7 @@ A matriz é ponto de partida, não lista exaustiva: pesquisar referências antig
 
 Não impedem registrar o plano; devem ser fechadas antes das tarefas dependentes.
 
-- Nomes, efeitos, caps e custos das categorias; proposta inicial: poder, reserva e controle.
+- Reavaliar coeficientes após teste dedicado/PvP; nomes, papéis, ausência de cap e custos das sete categorias já estão definidos.
 - Papel final da compra de Zanpakutō frente às recompensas de quest.
 - Política de reembolso/respec: não prometida no MVP; evitar botão sem regra definida.
 - Atalhos e gesto de confirmação/cancelamento do radial após verificar conflitos.
