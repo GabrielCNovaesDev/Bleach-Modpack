@@ -121,6 +121,18 @@ O Bleach pode renomear, mas o **contrato de multiplier por stat** (form JSON) as
 | FORCE_DESCEND | Volta um estágio / base |
 | INSTANT_RELEASE | Sobe power release sem hold |
 
+## Atributos da implementação Bleach
+
+| Termo | Definição atual |
+|---|---|
+| Zanjutsu | Dano físico bruto com Zanpakutō selada ou liberada |
+| Hakuda | Dano físico desarmado |
+| Vitalidade | Aumento de vida máxima, sem mitigação |
+| Resistência | Mitigação de golpes físicos diretos |
+| Kidou | Dano de rajadas/feitiços; infraestrutura pronta, sem ataque disponível |
+| Reserva / Controle | Reiatsu máxima / eficiência do drain de forma |
+| BP (Battle Power) | Indicador sem efeito mecânico: soma dos sete ranks × reiatsu máxima/10 |
+
 ## Prefixos e ids
 
 | Prefixo | Uso |

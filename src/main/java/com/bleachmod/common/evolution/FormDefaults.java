@@ -45,7 +45,7 @@ public final class FormDefaults {
         shikai.setUnlockOnSkillLevel(1);
         shikai.setFormRequisite("zanpakuto.sealed");
         shikai.setUnlockOnMastery(0.0D);
-        shikai.setEnergyDrain(0.4D);
+        shikai.setEnergyDrain(0.08D);
         shikai.setInstantTransformOnMastery(40.0D);
         shikai.setAllowFreeTransformOnMastery(50.0D);
         group.getForms().put(Reference.FORM_SHIKAI, shikai);
@@ -55,7 +55,7 @@ public final class FormDefaults {
         bankai.setUnlockOnSkillLevel(2);
         bankai.setFormRequisite("zanpakuto.shikai");
         bankai.setUnlockOnMastery(25.0D);
-        bankai.setEnergyDrain(0.8D);
+        bankai.setEnergyDrain(0.16D);
         bankai.setInstantTransformOnMastery(40.0D);
         bankai.setAllowFreeTransformOnMastery(50.0D);
         group.getForms().put(Reference.FORM_BANKAI, bankai);

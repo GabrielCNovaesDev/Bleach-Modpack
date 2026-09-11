@@ -1,5 +1,6 @@
 package com.bleachmod;
 
+import com.bleachmod.common.CombatBalance;
 import com.bleachmod.common.data.*;
 import com.bleachmod.common.quest.*;
 import com.bleachmod.common.quest.objectives.*;
@@ -22,7 +23,7 @@ public final class MvpRegressionTest {
         test("exact balance purchases one attribute",()->{
             ResourcesData r=new ResourcesData();r.addTrainingPoints(100);
             AttributeData a=new AttributeData();
-            yes(a.purchase("power",r));eq(1,a.level("power"));eq(0F,r.getTrainingPoints());
+            yes(a.purchase("zanjutsu",r));eq(1,a.level("zanjutsu"));eq(0F,r.getTrainingPoints());
         });
         test("insufficient balance does not change rank or points",()->{
             ResourcesData r=new ResourcesData();r.addTrainingPoints(99);
@@ -33,17 +34,21 @@ public final class MvpRegressionTest {
             ResourcesData r=new ResourcesData();r.addTrainingPoints(1000);
             yes(!new AttributeData().purchase("unknown",r));eq(1000F,r.getTrainingPoints());
         });
-        test("attribute cap survives repeated purchases",()->{
+        test("attributes continue beyond the old level five cap",()->{
             ResourcesData r=new ResourcesData();r.addTrainingPoints(10000);AttributeData a=new AttributeData();
-            for(int i=0;i<5;i++)yes(a.purchase("control",r));
-            float before=r.getTrainingPoints();yes(!a.purchase("control",r));eq(before,r.getTrainingPoints());eq(5,a.level("control"));
+            for(int i=0;i<6;i++)yes(a.purchase("control",r));
+            eq(6,a.level("control"));eq(700,a.cost("control"));
         });
         test("negative/NaN debit cannot create money or energy",()->{
             ResourcesData r=new ResourcesData();yes(!r.consumeTrainingPoints(-1));yes(!r.consumeReiatsu(Float.NaN));eq(100F,r.getCurrentReiatsu());
         });
-        test("attribute NBT rejects negative and excessive ranks",()->{
-            CompoundTag tag=new CompoundTag();tag.putInt("power",-50);tag.putInt("reserve",900);
-            AttributeData a=new AttributeData();a.load(tag);eq(0,a.level("power"));eq(5,a.level("reserve"));
+        test("attribute NBT rejects negative ranks and preserves high ranks",()->{
+            CompoundTag tag=new CompoundTag();tag.putInt("zanjutsu",-50);tag.putInt("reserve",900);
+            AttributeData a=new AttributeData();a.load(tag);eq(0,a.level("zanjutsu"));eq(900,a.level("reserve"));
+        });
+        test("legacy power migrates to zanjutsu",()->{
+            CompoundTag tag=new CompoundTag();tag.putInt("power",4);
+            AttributeData a=new AttributeData();a.load(tag);eq(4,a.level("zanjutsu"));eq(0,a.level("hakuda"));
         });
         test("save roundtrip preserves progression",()->{
             PlayerData d=player();d.getResources().addTrainingPoints(750);d.getAttributes().purchase("reserve",d.getResources());d.refreshDerivedResources();
@@ -51,10 +56,39 @@ public final class MvpRegressionTest {
             PlayerData copy=new PlayerData();copy.load(d.save());eq(650F,copy.getResources().getTrainingPoints());eq(120F,copy.getResources().getMaxReiatsu());
             eq(42D,copy.getCharacter().getMastery("zanpakuto","shikai"));yes(copy.getCharacter().isFormDiscovered("shikai"));
         });
+        test("raising reserve while full also fills the new maximum",()->{
+            PlayerData d=player();d.getResources().addTrainingPoints(100);
+            yes(d.getResources().isReiatsuFull());yes(d.getAttributes().purchase("reserve",d.getResources()));
+            d.refreshDerivedResources();eq(120F,d.getResources().getCurrentReiatsu());eq(120F,d.getResources().getMaxReiatsu());
+        });
+        test("raising reserve while depleted preserves current reiatsu",()->{
+            PlayerData d=player();d.getResources().setCurrentReiatsu(40);d.getResources().addTrainingPoints(100);
+            yes(d.getAttributes().purchase("reserve",d.getResources()));d.refreshDerivedResources();
+            eq(40F,d.getResources().getCurrentReiatsu());eq(120F,d.getResources().getMaxReiatsu());
+        });
         test("legacy skills migrate discovered forms without losing mastery",()->{
             PlayerData d=player();d.getSkills().setSkillLevel("zanpakuto",2);d.getCharacter().setMastery("zanpakuto","bankai",100);
             CompoundTag old=d.save();old.remove("attributes");old.remove("schemaVersion");old.getCompound("character").remove("unlockedForms");
-            PlayerData copy=new PlayerData();copy.load(old);yes(copy.getCharacter().isFormDiscovered("bankai"));eq(100D,copy.getCharacter().getMastery("zanpakuto","bankai"));eq(0,copy.getAttributes().level("power"));
+            PlayerData copy=new PlayerData();copy.load(old);yes(copy.getCharacter().isFormDiscovered("bankai"));eq(100D,copy.getCharacter().getMastery("zanpakuto","bankai"));eq(0,copy.getAttributes().level("zanjutsu"));
+        });
+        test("combat attributes use their separate damage paths",()->{
+            eq(12F,CombatBalance.outgoingDamage(10F,2,0));
+            eq(17F,CombatBalance.outgoingDamage(10F,2,.5F));
+            eq(8F,CombatBalance.incomingPhysicalDamage(10F,5));
+            eq(12F,CombatBalance.kidouDamage(10F,2));
+            eq(.2F,CombatBalance.formDamageBonus("shikai"));
+            eq(.5F,CombatBalance.formDamageBonus("bankai"));
+        });
+        test("control drain has diminishing returns and never becomes regeneration",()->{
+            eq(.08F,CombatBalance.formDrain(.08F,0));
+            yes(CombatBalance.formDrain(.08F,100)>0);
+            yes(CombatBalance.formDrain(.08F,100)<.08F);
+        });
+        test("battle power is the weighted sum of all categories",()->{
+            PlayerData d=player();d.getResources().addTrainingPoints(1000);
+            yes(d.getAttributes().purchase("zanjutsu",d.getResources()));
+            yes(d.getAttributes().purchase("hakuda",d.getResources()));
+            eq(20D,d.getBattlePower());
         });
         test("undiscovered skill purchase cannot consume points",()->{
             PlayerData d=player();d.getResources().addTrainingPoints(500);
@@ -147,7 +181,7 @@ public final class MvpRegressionTest {
             eq(.2D,FormRegistry.getForm("shinigami","zanpakuto","shikai").getEnergyDrain());
             java.util.concurrent.FutureTask<Double> task=new java.util.concurrent.FutureTask<>(()->FormRegistry.getForm("shinigami","zanpakuto","shikai").getEnergyDrain());
             new Thread(net.minecraftforge.fml.util.thread.SidedThreadGroups.SERVER,task,"registry-regression").start();
-            try { eq(.4D,task.get(5,java.util.concurrent.TimeUnit.SECONDS)); } catch(Exception e) { throw new AssertionError(e); }
+            try { eq(.08D,task.get(5,java.util.concurrent.TimeUnit.SECONDS)); } catch(Exception e) { throw new AssertionError(e); }
             FormRegistry.clearClient();
         });
         test("self and forward form prerequisites are rejected",()->{

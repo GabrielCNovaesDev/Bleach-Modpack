@@ -2,9 +2,9 @@
 
 ## 1. Resumo
 
-Plano consolidado a partir da revisão técnica de 10/09/2026 e do teste de jogo relatado pelo usuário com quatro imagens. Inclui todas as recomendações da revisão, correções visuais, tela de status, distribuição de pontos por categorias, seletor radial e comandos de desenvolvimento.
+Plano consolidado a partir da revisão técnica de 10/09/2026 e do teste de jogo relatado pelo usuário com quatro imagens. Em 10/09/2026, T16–T19 receberam o rework de sete atributos sem cap, fórmulas de combate/reiatsu, migração e BP; a validação visual e multiplayer segue em T24.
 
-Estado: **em implementação; encerramento pendente**. Status, categorias, radial, comandos e correções de lógica estão no código. O [relatório de implementação de 10/09/2026](relatorio-implementacao-mvp-2026-09-10.md) discrimina entregas, testes executados e pendências. O restante deste documento conserva os requisitos e critérios de aceitação; não representa homologação das tarefas.
+Estado: **implementação principal presente; alfa dos PNGs e homologação visual/multiplayer pendentes**. Ver relatório e matriz de evidências no final deste documento. Os requisitos abaixo não equivalem a testes já executados.
 
 A revisão detalhada continua em [revisao-tecnica-mvp-2026-09-10.md](revisao-tecnica-mvp-2026-09-10.md). Este plano passa a ser a referência de execução e ordem de entregas; a revisão conserva a evidência e os achados R01–R18.
 
@@ -62,7 +62,7 @@ Multiplayer básico com servidor dedicado e duas pessoas continua necessário pa
 - Reutilizar registries, capability e serviços atuais, corrigindo fronteiras e responsabilidades.
 - A tela de status assume compras; o diário concentra missões e pode oferecer atalho para status.
 - O radial seleciona forma; executar transformação continua sendo ação distinta, preservando carga/custo.
-- Categorias propostas abaixo são uma base pequena para implementação futura, não escolhas já confirmadas pelo usuário.
+- As sete categorias confirmadas estão implementadas; coeficientes ainda devem ser observados em teste dedicado/PvP.
 - Novos atalhos devem ser remapeáveis e escolhidos verificando conflitos. Não fixar teclas arbitrárias no manual antes de implementar.
 - Comportamentos planejados não devem ser descritos como disponíveis no manual do jogador.
 
@@ -132,15 +132,16 @@ Os documentos 00–12 descrevem principalmente a engenharia reversa do Dragon Mi
 
 ### Tela de status e categorias
 
-Proposta inicial de três categorias, sujeita a ajuste de nomes/números:
+Categorias implementadas:
 
-| Categoria proposta | Efeito limitado | Limite de escopo |
-|---|---|---|
-| Poder espiritual | Melhora moderada do combate com Asauchi | Não alterar dano de toda arma nem criar fórmula extensa de atributos |
-| Reserva de reiatsu | Aumenta capacidade máxima | Não criar nível global de personagem |
-| Controle espiritual | Melhora eficiência, preferencialmente reduzindo drain | Evitar sobreposição com mastery, que conserva domínio/velocidade/instantâneo |
+| Categoria | Efeito |
+|---|---|
+| Zanjutsu / Hakuda | +10% por nível com Zanpakutō / desarmado |
+| Vitalidade / Resistência | +2 de vida máxima / mitigação de golpe direto com retorno decrescente |
+| Kidou | +10% por nível para futuros ataques de feitiço |
+| Reserva / Controle | +20 de máximo / drain dividido por `1 + 0,10 × nível` |
 
-Definir níveis máximos pequenos, tabela de custos crescente e limites contra drain zero/negativo. Evitar bônus acumulados após reload, reconexão ou repetição de transformação.
+Não há teto de nível de gameplay. O custo cresce em 100 por nível e satura em 1.000.000 por compra. Controle nunca torna o drain zero/negativo. BP é a soma dos sete níveis multiplicada pela reiatsu máxima/10 e não altera combate.
 
 A revisão anterior propôs pontos como custo de desbloqueio para evitar moeda sem uso. Com a solicitação explícita de categorias, **a economia precisa ser reavaliada**: pontos passam a financiar melhorias e eventualmente skills; não manter compra redundante de algo que a quest concede grátis sem deixar o benefício claro. A implementação deve fechar uma tabela única de desbloqueios, custos e recompensas.
 
@@ -325,7 +326,7 @@ A matriz é ponto de partida, não lista exaustiva: pesquisar referências antig
 
 Não impedem registrar o plano; devem ser fechadas antes das tarefas dependentes.
 
-- Nomes, efeitos, caps e custos das categorias; proposta inicial: poder, reserva e controle.
+- Reavaliar coeficientes após teste dedicado/PvP; nomes, papéis, ausência de cap e custos das sete categorias já estão definidos.
 - Papel final da compra de Zanpakutō frente às recompensas de quest.
 - Política de reembolso/respec: não prometida no MVP; evitar botão sem regra definida.
 - Atalhos e gesto de confirmação/cancelamento do radial após verificar conflitos.
@@ -333,3 +334,28 @@ Não impedem registrar o plano; devem ser fechadas antes das tarefas dependentes
 - Receita ou recuperação do Asauchi.
 - Se habilidades exibidas no radial são selecionadas para uso posterior ou executadas diretamente; formas sempre conservam seleção distinta da carga nesta proposta.
 - Futuro mob Hollow: estudo separado, sem bloquear a implementação atual com zumbis.
+
+## Matriz de evidências — fechamento de 10/09/2026
+
+| Critério | Estado | Evidência ou pendência |
+|---|---|---|
+| T01 | Implementado; integração parcial | Direções explícitas e regressão de isolamento de registries; teste de rede com dois clientes pendente |
+| T02 | Implementado; homologação pendente | Sync de formas/aparência no código; dois clientes ainda não exercitados |
+| T03–T04 | Implementado; validação parcial | GameTest das permissões aprovado; execução manual completa dos comandos pendente |
+| T05 | Implementado; validação parcial | Regressões de recursos/seleção e correção de tick; fluidez e transições em cliente pendentes |
+| T06 | Implementado; validação parcial | GameTest de clone após invalidação aprovado; logout/dimensão com dois clientes pendentes |
+| T07 | Implementado; homologação pendente | Diário reativo e alvos descritos; inspeção visual pendente |
+| T08 | Parcial | Orientação corrigida por modelo; alfa dos PNGs e inspeção nas três formas pendentes |
+| T09–T11 | Implementado; homologação pendente | Fundo proporcional, HUD/diário, carga e toasts em código; inspeção visual pendente |
+| T12 | Implementado; validação parcial | Recontagem ITEM e sequência no código; assinatura reforçada; roteiro completo de inventário pendente |
+| T13 | Implementado | Parser rejeita spawn QUEST; regressão automatizada aprovada |
+| T14 | Implementado e testado em servidor de teste | GameTest de reload válido/inválido com missão ativa aprovado |
+| T15 | Implementado e testado parcialmente | Regressões de assinatura/NBT e GameTest de lote sem duplicação aprovados |
+| T16–T18 | Implementado; balanceamento manual pendente | Rework atual de sete atributos/BP preservado; regressões de migração e fórmulas aprovadas |
+| T19–T20 | Implementado; homologação pendente | Status compacto/tooltips e radial; escalas GUI ainda não inspecionadas em jogo |
+| T21 | Não aplicável nesta entrega | Não existem técnicas ativas para integrar |
+| T22 | Implementado; fluxo manual pendente | Receita, defaults e treino repetível; GameTest confirma repetibilidade após lote |
+| T23 | Parcial | Textos limitados, tooltips e toasts corrigidos; alfa e navegação visual longa pendentes |
+| T24 | Parcial | Build e 32 regressões aprovados, quatro GameTests aprovados; dois clientes e QA visual pendentes |
+
+Detalhes, artefato e roteiro: [relatório](relatorio-implementacao-mvp-2026-09-10.md). Lista operacional: [checklist](todo-mvp.md).

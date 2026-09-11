@@ -1,10 +1,10 @@
 # Rede e sincronização
 
-## Estado da implementação Bleach — 10/09/2026
+## Atualização Bleach — 10/09/2026
 
-Protocolo 2.0, direções explícitas, definições de formas sincronizadas e aparência pública separada de dados privados. Algumas ações têm intervalo mínimo de quatro ticks. Não considerar concluída a otimização de todos os pacotes ou do resgate múltiplo.
+O Bleach usa protocolo 2.1. ClaimQuestRewardC2S aceita índice -1 para lote; limita o ID a 256 caracteres e exige jogador vivo, personagem criado e intervalo mínimo de quatro ticks. SelectFormC2S limita IDs a 32 caracteres. Cliente e servidor devem ser atualizados juntos.
 
-Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
 
 
 ## Resumo

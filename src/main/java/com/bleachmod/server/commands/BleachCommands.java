@@ -74,6 +74,7 @@ public final class BleachCommands {
             ctx.getSource().sendSuccess(()->Component.literal(p.getScoreboardName()+": "+d.getCharacter().getRace()
                 +" | "+d.getCharacter().getActiveForm()+" -> "+d.getCharacter().getSelectedForm()
                 +" | reiatsu="+d.getResources().getCurrentReiatsu()+"/"+d.getResources().getMaxReiatsu()
+                +" | BP="+Math.round(d.getBattlePower())
                 +" | points="+d.getResources().getTrainingPoints()+" | zanpakuto="+d.getSkills().getLevel("zanpakuto")
                 +" | mastery="+d.getCharacter().getMastery("zanpakuto","shikai")+"/"+d.getCharacter().getMastery("zanpakuto","bankai")),false);
             return 1;

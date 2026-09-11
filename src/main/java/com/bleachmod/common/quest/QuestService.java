@@ -139,7 +139,7 @@ public final class QuestService {
         SyncHelper.progression(player);
     }
 
-    /** -1 requests all outstanding rewards; each reward keeps its own delivery flag. */
+    /** Index -1 claims all remaining rewards with a single final synchronization. */
     public static void claimReward(ServerPlayer player, String questKey, int rewardIndex) {
         claimReward(player, questKey, rewardIndex, true);
     }
@@ -163,7 +163,7 @@ public final class QuestService {
             for (int i = 0; i < quest.getRewards().size(); i++) {
                 if (!current.isRewardClaimed(i)) claimReward(player, questKey, i, false);
             }
-            SyncHelper.full(player);
+            if (synchronize) SyncHelper.full(player);
             return;
         }
         if (rewardIndex < 0 || rewardIndex >= quest.getRewards().size()) {

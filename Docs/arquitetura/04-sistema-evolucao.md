@@ -1,10 +1,10 @@
 # Sistema de Evolução / Progressão
 
-## Estado da implementação Bleach — 10/09/2026
+## Atualização Bleach — 10/09/2026
 
-Descoberta, compra de skill e mastery são separados. A carga usa 2 + min(3, floor(mastery × 0,04)) por tick e revalida seleção na execução. Shikai e Bankai acrescentam respectivamente 20% e 50% ao multiplicador de dano com Asauchi.
+Pré-requisitos só podem referenciar estágios anteriores e mastery alcançável; o ganho periódico consulta a forma ativa após as transições do tick. O balanceamento e os sete atributos atuais foram preservados.
 
-Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
 
 
 ## Resumo
@@ -245,3 +245,7 @@ Ritmo da charge: `10 + min(15, mastery * 0.2)` por passo no handler.
 - `updateTransformationSkillLimits` no load: esquecer isso deixa form-skills com maxLevel 0.
 - Não portar oozaru/lua/android upgraded/mutant/ultimate-best-form no MVP — cada um é um ramo extra.
 - Aparência (modelo, cabelo, aura) pode ser stub: só um indicador de estágio no HUD basta para o MVP.
+
+## Implementação Bleach — drain rebalanceado
+
+Os defaults novos usam `energyDrain` 0,08/tick no Shikai e 0,16/tick no Bankai. Controle aplica `drain base ÷ (1 + 0,10 × rank)`, com retorno decrescente e sem possibilidade de drain negativo. O custo de entrada continua usando o `energyDrain` configurado. Como defaults não sobrescrevem JSON de mundo, configurações antigas 0,4/0,8 precisam de migração explícita.

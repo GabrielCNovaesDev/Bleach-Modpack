@@ -34,6 +34,14 @@ public class ResourcesData {
         return maxReiatsu;
     }
 
+    public boolean isReiatsuFull() {
+        return currentReiatsu >= maxReiatsu;
+    }
+
+    public void fillReiatsu() {
+        currentReiatsu = maxReiatsu;
+    }
+
     public void setMaxReiatsu(float maxReiatsu) {
         this.maxReiatsu = Math.max(1.0F, maxReiatsu);
         setCurrentReiatsu(currentReiatsu);

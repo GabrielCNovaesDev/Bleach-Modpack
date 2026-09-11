@@ -67,15 +67,21 @@ A seleção pode permanecer visível mesmo quando uma exigência ainda falta; us
 
 ## 5. Categorias de pontos
 
-Cada categoria possui cinco níveis. Os preços por nível são 100, 200, 300, 400 e 500 pontos. Não há respec implementado.
+As categorias não têm mais limite de nível. O próximo nível custa `100 × (nível atual + 1)` pontos; por segurança numérica, o preço individual deixa de crescer ao atingir 1.000.000. Não há respec implementado.
 
 | Categoria | Efeito por nível |
 |---|---|
-| Poder | +10% do dano do golpe com Asauchi |
+| Zanjutsu | +10% do dano físico com Zanpakutō selada ou liberada |
+| Hakuda | +10% do dano físico quando a mão principal está vazia |
+| Vitalidade | +2 pontos de vida máxima (um coração) |
+| Resistência | Reduz golpes físicos diretos pela fórmula `dano ÷ (1 + 0,05 × nível)` |
+| Kidou | +10% no dano de ataques de feitiço; a fórmula está pronta, mas ainda não existem ataques Kidou |
 | Reserva | +20 de reiatsu máxima |
-| Controle | Reduz consumo contínuo da forma em 8% do valor base |
+| Controle | Reduz o consumo contínuo pela fórmula `drain base ÷ (1 + 0,10 × nível)` |
 
-Aumentar reserva preserva a energia atual; não recarrega a barra gratuitamente. No nível cinco, reserva máxima chega a 200; controle reduz drain em 40%.
+Aumentar reserva preserva a energia atual; não recarrega a barra gratuitamente. Vitalidade aumenta o máximo, mas não reduz o dano recebido; esse é o papel de Resistência. Controle tem retorno decrescente e nunca converte drain em regeneração.
+
+O BP (Battle Power) é informativo e aparece na tela K. A fórmula atual é `(soma dos níveis de Zanjutsu, Hakuda, Vitalidade, Resistência, Kidou, Reserva e Controle) × reiatsu máxima ÷ 10`. BP não concede bônus por si só.
 
 A sidequest de treino pode ser repetida depois de receber todas as recompensas, permitindo continuar obtendo pontos. Essa regra está nos novos defaults; veja a seção de compatibilidade para mundos existentes.
 
@@ -86,20 +92,20 @@ Valores base das formas continuam configuráveis nos JSONs do mundo:
 | Situação | Valor base |
 |---|---|
 | Selada | +0,25 reiatsu/tick, cerca de 5/s |
-| Shikai | -0,4/tick, cerca de 8/s |
-| Bankai | -0,8/tick, cerca de 16/s |
+| Shikai | -0,08/tick, cerca de 1,6/s |
+| Bankai | -0,16/tick, cerca de 3,2/s |
 | Reiatsu chega a 5% do máximo | Reversão automática à selada |
 
-Controle afeta apenas drain contínuo: drain efetivo = drain base × (1 − 0,08 × nível de controle).
+Controle afeta apenas drain contínuo: `drain efetivo = drain base ÷ (1 + 0,10 × nível de Controle)`.
 
-Custo de transformação carregada = máximo de reiatsu × 10% × drain base; instantânea = drain base × 4. Com máximo 100: Shikai custa 4 carregado/1,6 instantâneo; Bankai custa 8/3,2.
+Custo de transformação carregada = máximo de reiatsu × 10% × drain base; instantânea = drain base × 4. Com máximo 100: Shikai custa 0,8 carregado/0,32 instantâneo; Bankai custa 1,6/0,64.
 
 Bônus de combate se aplica ao golpe direto de jogador com Asauchi na mão principal:
 - Shikai: +20%.
 - Bankai: +50%.
-- Poder: +10% por nível, somado ao percentual da forma.
+- Zanjutsu: +10% por nível, somado ao percentual da forma.
 
-Exemplo: Bankai com Poder 2 multiplica o dano original por 1,7. O dano original mantém cooldown de ataque, crítico e encantamentos; os percentuais são aplicados no evento de dano antes das etapas posteriores de mitigação. Não há bônus persistente empilhado ao alternar formas.
+Exemplo: Bankai com Zanjutsu 2 multiplica o dano original por 1,7. Hakuda usa a mesma progressão de 10% quando o golpe é desarmado, sem bônus de forma. O dano original mantém cooldown, crítico e encantamentos; os percentuais entram no evento de dano antes das etapas posteriores de mitigação. Não há bônus persistente empilhado ao alternar formas.
 
 Morte retorna à selada e respawn recupera reiatsu. Carga é cancelada ao abrir telas, mudar alvo, morrer, desconectar ou trocar de dimensão. Falhas de transformação não devem ficar repetindo a tentativa por tick.
 
@@ -144,16 +150,16 @@ Reload prepara quests e formas antes de substituí-las. Erros preservam os regis
 Os arquivos ficam em {mundo}/bleachmod/. Defaults só criam arquivos ausentes; não sobrescrevem configurações existentes.
 
 - Mundos antigos podem conservar recompensas de skill/mastery 100; consulte as recompensas reais do diário.
-- Exceção de compatibilidade: rukia_basic_training sem campo repeatable é interpretado como repetível; false explícito é respeitado.
-- Categorias novas começam em zero. Pontos, nível e mastery adquiridos são preservados.
+- Hakuda, Vitalidade, Resistência e Kidou começam em zero. O antigo Poder migra integralmente para Zanjutsu; Reserva, Controle, pontos, skill, quests e mastery são preservados.
 - A descoberta de formas de saves legados é inferida do nível da skill/mastery.
-- O estado usa schemaVersion 2. Não abra save migrado com versão antiga sem backup compatível.
+- O estado usa schemaVersion 3. Não abra save migrado com versão antiga sem backup compatível.
+- JSONs de forma existentes não são sobrescritos. Para adotar o novo balanceamento, ajuste `energyDrain` de Shikai/Bankai para `0.08`/`0.16`; mundos novos já usam esses valores.
 - Progresso de quest passa a guardar assinatura dos objetivos/recompensas e versão.
 - No primeiro login atualizado, quests antigas sem assinatura vinculam-se ao conteúdo carregado naquele momento. Não é possível detectar retroativamente edições feitas antes dessa vinculação.
 - Depois disso, mudanças estruturais incompatíveis bloqueiam início/progresso/resgate, preservando os dados. Restaure o JSON compatível ou faça migração explícita.
 - Alterações de título/descrição não invalidam progresso.
 - O parser aceita somente NATURAL + ANY_MATCHING neste MVP; configurações QUEST incompletas são rejeitadas.
-- Cliente e servidor precisam usar protocolo 2.0; atualizar ambos.
+- Cliente e servidor precisam usar protocolo 2.1; atualizar ambos.
 
 Faça backup antes de adaptar os JSONs de um mundo existente. A nova economia não é aplicada silenciosamente aos arquivos já configurados.
 
@@ -164,3 +170,9 @@ Sem mob Hollow próprio, outras raças, dimensões, party, NPCs complexos ou té
 ## 11. Manutenção
 
 Toda alteração de lógica deve revisar os .md relacionados em Docs, além deste manual. Atualize controles, UI, custos, quests, migrações e limites no mesmo trabalho. Os documentos numerados mantêm a referência do Dragon Mine Z e incluem notas separadas da implementação Bleach.
+
+## Correções de fechamento — 10/09/2026
+
+Receber no diário solicita todos os prêmios pendentes em um lote. Cada prêmio conserva seu controle individual de entrega; pedidos repetidos não repetem recompensas já recebidas. O status mostra saldo restante/insuficiente nos tooltips, e o radial explica bloqueios de sequência. As notificações usam desenho em código e texto limitado à área disponível.
+
+Pré-requisitos de formas precisam apontar para estágios anteriores e para valores de mastery alcançáveis. Alterações estruturais de quests são verificadas também nas rotas de inventário e conclusão. Consulte o [relatório de validação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md) antes de considerar os ajustes visuais homologados.

@@ -9,21 +9,25 @@ import net.minecraft.network.chat.Component;
 import java.util.*;
 
 public final class StatusScreen extends Screen {
+    private static final int PANEL_WIDTH=304;
+    private static final int PANEL_HEIGHT=228;
     private final Map<String,Button> upgrades=new LinkedHashMap<>();
     private Button skill;
     private int left,top;
     public StatusScreen() { super(Component.translatable("screen.bleachmod.status")); }
     private PlayerData data() { return minecraft==null||minecraft.player==null?null:PlayerCapability.get(minecraft.player).orElse(null); }
     @Override protected void init() {
-        left=(width-300)/2; top=Math.max(6,(height-218)/2); upgrades.clear();
-        int y=top+102;
+        left=(width-PANEL_WIDTH)/2; top=Math.max(6,(height-PANEL_HEIGHT)/2); upgrades.clear();
+        int index=0;
         for(String id:AttributeData.IDS) {
+            int column=index/4, row=index%4;
+            int x=left+78+column*148, y=top+90+row*26;
             Button button=addRenderableWidget(Button.builder(Component.empty(),b->NetworkHandler.sendToServer(new PurchaseAttributeC2S(id)))
-                .bounds(left+176,y,116,20).build());
-            upgrades.put(id,button); y+=24;
+                .bounds(x,y,68,20).build());
+            upgrades.put(id,button); index++;
         }
         skill=addRenderableWidget(Button.builder(Component.empty(),b->NetworkHandler.sendToServer(new UpdateSkillC2S("zanpakuto",UpdateSkillC2S.SkillAction.PURCHASE)))
-            .bounds(left+8,top+177,284,20).build());
+            .bounds(left+8,top+202,PANEL_WIDTH-16,20).build());
         refresh();
     }
     @Override public void tick() { refresh(); }
@@ -49,11 +53,12 @@ public final class StatusScreen extends Screen {
     }
     @Override public void render(GuiGraphics g,int mx,int my,float dt) {
         renderBackground(g);
-        g.fill(left,top,left+300,top+216,0xEE171321);
+        g.fill(left,top,left+PANEL_WIDTH,top+PANEL_HEIGHT,0xEE171321);
         g.drawCenteredString(font,title,width/2,top+8,0xE8C547);
         PlayerData d=data();
         if(d!=null) {
             g.drawString(font,Component.translatable("hud.bleachmod.tp",(int)d.getResources().getTrainingPoints()),left+8,top+26,0xA0E8A0);
+            g.drawString(font,Component.translatable("screen.bleachmod.bp",Math.round(d.getBattlePower())),left+190,top+26,0xF4D35E);
             g.drawString(font,Component.translatable("screen.bleachmod.forms",Component.translatable("form.bleachmod."+d.getCharacter().getActiveForm()),
                 Component.translatable("form.bleachmod."+d.getCharacter().getSelectedForm())),left+8,top+40,0xFFFFFF);
             int y=top+56;
@@ -61,9 +66,13 @@ public final class StatusScreen extends Screen {
                 g.drawString(font,Component.translatable("screen.bleachmod.mastery",Component.translatable("form.bleachmod."+form),
                     (int)d.getCharacter().getMastery("zanpakuto",form)),left+8,y,0xCAB7FF); y+=13;
             }
-            y=top+108;
+            int index=0;
             for(String id:AttributeData.IDS) {
-                g.drawString(font,Component.translatable("attribute.bleachmod."+id).append(" "+d.getAttributes().level(id)+"/5"),left+8,y,0xFFFFFF); y+=24;
+                int column=index/4, row=index%4;
+                int x=left+8+column*148, attrY=top+96+row*26;
+                String label=Component.translatable("attribute.bleachmod."+id).getString()+" "+d.getAttributes().level(id);
+                g.drawString(font,font.plainSubstrByWidth(label,66),x,attrY,0xFFFFFF);
+                index++;
             }
         }
         super.render(g,mx,my,dt);

@@ -1,0 +1,25 @@
+{
+  "repeatable": true,
+  "version": 1,
+  "id": "rukia_basic_training",
+  "title": "bleachmod.quest.rukia_basic_training.name",
+  "type": "SIDEQUEST",
+  "description": "bleachmod.quest.rukia_basic_training.desc",
+  "category": "training",
+  "parallel_objectives": false,
+  "objectives": [
+    {
+      "type": "KILL",
+      "entity": "minecraft:zombie",
+      "count": 10,
+      "spawn": "NATURAL",
+      "count_mode": "ANY_MATCHING"
+    }
+  ],
+  "rewards": [
+    {
+      "type": "TPS",
+      "amount": 150.0
+    }
+  ]
+}

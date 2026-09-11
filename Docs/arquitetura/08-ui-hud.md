@@ -1,10 +1,10 @@
 # UI e HUD
 
-## Estado da implementação Bleach — 10/09/2026
+## Atualização Bleach — 10/09/2026
 
-J abre o diário com paginação e rolagem, K reúne status/compras, Z seleciona formas. HUD e rastreamento são desenhados em código. Cobertura do fundo e interpolação de carga foram alteradas; os PNGs e a validação visual final permanecem pendentes.
+Status de 304 × 228 mantém sete atributos/BP, com tooltips de compra. Radial explica bloqueio de sequência. Toasts usam desenho em código e subtítulo de até duas linhas. katana_handheld compensa a orientação das três texturas. PNGs e homologação visual continuam pendentes.
 
-Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
 
 
 ## Resumo
@@ -93,3 +93,7 @@ Quests e evolução têm superfícies distintas: uma **árvore de story** (tela 
 - Forçar character creation no tick é agressivo (bloqueia o mundo). Manter, senão quests/forms correm sem raça.
 - HUD deve sobreviver a `trackedQuestId` apontando para quest que o registry ainda não recebeu (race no login): esconder até o registry chegar.
 - Não documentar pixel-a-pixel: o visual Bleach será outro. A estrutura funcional acima é o contrato.
+
+## Implementação Bleach — tela de status
+
+A tela K distribui sete categorias em duas colunas, mostra rank sem sufixo de cap, custo do próximo nível e tooltip de efeito. O BP informativo é recalculado do snapshot local sincronizado. Compra continua sendo C2S e validada no servidor; a tela apenas desabilita o botão quando o saldo local é insuficiente.

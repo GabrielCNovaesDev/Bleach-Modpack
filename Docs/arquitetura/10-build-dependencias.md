@@ -1,10 +1,10 @@
 # Build e dependências (Dragon Mine Z)
 
-## Estado da implementação Bleach — 10/09/2026
+## Atualização Bleach — 10/09/2026
 
-A tarefa regressionTest integra check. Um build intermediário passou com 19 cenários; a suíte atual tem 26 e aguarda execução final. O código declara 0.2.0, mas não há confirmação de JAR atualizado dessa versão.
+Build 0.2.0 aprovado com 32 regressões. Quatro GameTests aprovados em run-gametest. Executar gradlew.bat build e gradlew.bat runGameTestServer; dependências locais permitem --offline. Relatórios anteriores com 19/26/28 testes são históricos.
 
-Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
 
 
 Documento de referência para o fork Bleach. Fonte analisada: clone em `dragonminez/` (versão 2.1.3).

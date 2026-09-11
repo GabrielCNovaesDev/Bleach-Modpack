@@ -37,6 +37,7 @@ public final class BleachClient {
         event.registerAboveAll("bleach_reiatsu", com.bleachmod.client.hud.ReiatsuHud.OVERLAY);
         event.registerAboveAll("bleach_tracked_quest", com.bleachmod.client.hud.TrackedQuestHud.OVERLAY);
         event.registerAboveAll("bleach_toast", com.bleachmod.client.gui.StoryToastManager.OVERLAY);
+        event.registerAboveAll("bleach_damage", com.bleachmod.client.hud.DamageHud.OVERLAY);
     }
 
     private static void onClientSetup(FMLClientSetupEvent event) {

@@ -1,73 +1,81 @@
-# Relatório de implementação do MVP — 10/09/2026
+# Relatório de correções do MVP — 10/09/2026
 
-## 1. Situação da entrega
+## Estado da entrega
 
-**O plano completo ainda não está finalizado.** A implementação principal está no código, mas a validação da última revisão, as correções dos PNGs e os testes visuais/multiplayer continuam pendentes. Este relatório distingue código implementado de comportamento comprovado em jogo.
+As correções de lógica, rede, modelos de item e interface descritas abaixo estão implementadas. A transparência dos PNGs e a homologação visual/multiplayer continuam pendentes. Não considerar esta entrega integralmente homologada.
 
-Escopo mantido: Shinigami, Asauchi, Shikai/Bankai, missões e progressão. Zumbis continuam como inimigos provisórios; o mob Hollow próprio permanece para estudo futuro.
+O código atual conserva o rework de sete atributos e Battle Power, schema NBT 3 e balanceamento recente. Não houve retorno ao sistema antigo de três categorias com cinco níveis.
 
-## 2. O que foi implementado
+## Correções aplicadas nesta revisão
 
-| Área | Alterações no código | Efeito esperado |
-|---|---|---|
-| Status e compras | Tela K; compra de Zanpakutō e categorias Poder, Reserva e Controle | Unificar consulta e investimento de pontos |
-| Categorias | Cinco níveis; custo de 100 × próximo nível; Poder +10% de dano por nível, Reserva +20 de reiatsu, Controle −8% do dreno | Dar utilidade aos pontos sem ampliar para uma árvore extensa |
-| Seleção | Radial Z para formas disponíveis | Selecionar a transformação sem ativá-la automaticamente |
-| Progressão | Descoberta de formas separada da compra da skill; novos prêmios de despertar com mastery zero | Evitar conceder desbloqueio, compra e domínio máximo juntos |
-| Combate | Bônus com Asauchi: Shikai +20%, Bankai +50%, somados ao bônus de Poder | Tornar a transformação útil sem acumular modificadores persistentes |
-| Carga | Revalidação da seleção, cancelamento e sincronização; velocidade de 2 a 5 pontos por tick conforme mastery | Impedir saltos indevidos de forma e tentativas repetidas após falhas |
-| Economia | Treino básico repetível após receber todas as recompensas; receita de Asauchi | Permitir recuperar pontos e obter outra espada |
-| Missões | Assinatura de definição e versão, validação de IDs/limites, recontagem de itens e correção de objetivos sequenciais | Proteger progresso contra alterações incompatíveis e contagem indevida |
-| Registros | Snapshots separados por lado lógico; preparação de quests e formas antes da instalação no reload | Evitar interferência entre cliente e servidor e preservar configuração anterior inválida |
-| Rede | Direções explícitas dos pacotes; protocolo 2.0; sincronização de formas; aparência separada dos dados privados | Reduzir exposição de dados e inconsistências entre jogadores |
-| Persistência | Schema 2, categorias e formas descobertas; normalização de valores; clonagem e reset do estado transitório | Preservar evolução e encerrar cargas em mudanças de ciclo de vida |
-| Interface | Diário com paginação/rolagem e botões reativos, HUD redesenhado em código, rastreamento e interpolação visual da carga | Melhorar alinhamento, legibilidade e resposta às atualizações |
-| Seleção de personagem | Fundo preenchendo a tela com proporção preservada; confirmação aguarda resposta | Corrigir dimensionamento e fechamento prematuro da tela |
-| Desenvolvimento | Comandos `/bleachdev` de pontos, skill, mastery, reiatsu, Asauchi e inspeção; permissão 2 | Facilitar testes controlados |
-
-As regras, os atalhos e os exemplos de comandos estão no [manual do jogador](../jogador/manual-do-jogador.md). A radial não contém técnicas ativas novas: elas ainda não existem neste escopo.
-
-## 3. Verificação executada e seus limites
-
-- Houve compilação e um build completo bem-sucedido com **19 cenários de regressão aprovados** durante a implementação.
-- Depois desse build, foram feitos ajustes adicionais e adicionados sete cenários. A suíte atual contém **26 cenários**, mas a execução dessa versão final está pendente.
-- Os cenários cobrem compras, saldo, limites, NBT, descoberta, recompensas, alterações estruturais de quests, ordenação e validação de formas. Os sete adicionais incluem repetição de missões, limites de mastery, seleção antiga, preservação de snapshots, provider invalidado e isolamento dos lados lógicos.
-- A tarefa `regressionTest` foi ligada ao `check` do Gradle. Testes isolados não substituem teste real do ciclo de vida Forge e multiplayer.
-- O código declara versão **0.2.0**. O último build bem-sucedido ocorreu antes dessa mudança; não está comprovada a geração de um JAR 0.2.0 atualizado.
-- Não foi concluída uma rodada visual em jogo, nem uma sessão em servidor dedicado com dois clientes.
-
-A tentativa de build da última revisão foi rejeitada pela revisão automática de aprovação por limite de uso da conta. Não foi executado um caminho alternativo para contornar a rejeição. Portanto, não considerar a revisão atual liberada para distribuição.
-
-## 4. Bugs visuais: estado real
-
-| Relato | Estado |
+| Sistema | Alteração |
 |---|---|
-| Background mal dimensionado | Algoritmo de cobertura alterado; conferir em resoluções e escalas GUI diferentes |
-| HUD desalinhado e ícone de reiatsu | HUD passou a usar desenho em código; PNG original não foi reparado |
-| Marcações do diário | Layout substituído; conferir seleção, paginação e textos longos em jogo |
-| Animação da transformação | Carga e interpolação alteradas; fluidez ainda exige teste visual |
-| Espadachim com transparência incorreta | PNG original permanece pendente |
-| Espada transparente e empunhada ao contrário | Correção final de textura/orientação permanece pendente |
+| Resgates | O diário solicita todas as recompensas em um único pacote. O servidor mantém as flags individuais, respeita cancelamentos e sincroniza ao terminar. Repetir o pedido não entrega novamente prêmios já recebidos. |
+| Rede | Protocolo 2.1; pedido de resgate limitado a IDs de 256 caracteres, jogador vivo/personagem criado e intervalo mínimo de quatro ticks. IDs de seleção de forma limitados a 32 caracteres. |
+| Missões | Atualização e conclusão de objetivos conferem a assinatura da definição, inclusive objetivos de inventário após reload. |
+| Formas | Pré-requisitos precisam apontar para estágios anteriores e ter mastery alcançável. Rejeita dependência de si mesmo ou de estágio posterior. |
+| Tick | O ganho periódico de mastery consulta a forma ativa após as transições do tick. |
+| Status | Layout de 304 × 228 para a área mínima usual de GUI; preserva sete atributos e BP. Tooltips mostram benefício, saldo restante e insuficiência de pontos. |
+| Radial | Formas momentaneamente não selecionáveis explicam o requisito de sequência/domínio. |
+| Espadas | Modelo compartilhado `katana_handheld` compensa em 180° a orientação original das três texturas, nas duas mãos, primeira/terceira pessoa e inventário. Posição final ainda precisa de inspeção visual. |
+| Toasts | Fundo e marcações desenhados em código, sem depender dos PNGs translúcidos. Texto limitado à largura, subtítulo em até duas linhas e fila preservada. |
 
-Uma tentativa de geração da textura da espada retornou fundo quadriculado opaco, inadequado para o jogo, e foi descartada. Foi solicitada autorização para ajustar os PNGs existentes por processamento determinístico; essa alternativa ainda não recebeu resposta. Não houve substituição das artes por esse resultado.
+## Evidências de validação
 
-## 5. Compatibilidade e documentação
+- Os quatro testes Forge executaram com sucesso em `run-gametest`, separado dos saves de jogo. O log registra **All 4 required tests passed**.
+- Clonagem após invalidar a capability preserva pontos/mastery e remove forma/carga transitória.
+- Pedidos repetidos de resgate entregam pontos, dois diamantes e descoberta de Shikai uma única vez; o treino pode reiniciar após receber tudo.
+- As raízes `/bleachdev` e `/bleachreload` negam permissão 0 e aceitam permissão 2.
+- Reload inválido preserva registry e missão ativa; reload válido posterior mantém compatibilidade do progresso.
+- A suíte isolada inclui os cenários existentes dos sete atributos, migração, BP, economia, quests e registries, além de duas regressões de pré-requisitos de formas.
+- A execução desses testes não equivale a dois clientes conectados com latência nem à inspeção de renderização.
 
-- Os JSONs existentes no mundo não são sobrescritos pelos novos defaults; mundos antigos podem conservar recompensas de skill/mastery anteriores.
-- O treino `rukia_basic_training` sem campo `repeatable` passa a ser interpretado como repetível. Um `false` explícito é respeitado.
-- Progresso legado sem assinatura é vinculado ao conteúdo no primeiro carregamento atualizado; mudanças anteriores a essa vinculação não podem ser detectadas retroativamente.
-- Cliente e servidor precisam da mesma versão de protocolo. Fazer backup antes de migrar mundos/configurações.
-- O manual foi reescrito para as regras implementadas. O índice e o plano apontam para este relatório; os documentos de arquitetura distinguem a referência Dragon Mine Z das alterações Bleach.
+## Assets: diagnóstico e limite
 
-## 6. Pendências para encerrar o plano
+Contagem dos arquivos originais antes de qualquer alteração de imagem:
 
-1. Executar o build da revisão atual e os 26 cenários; corrigir eventuais falhas e gerar o artefato correspondente.
-2. Resolver os PNGs da espada/personagem e validar empunhadura nas duas mãos, inventário e primeira/terceira pessoa.
-3. Testar o fluxo completo em mundo novo e existente: escolher raça, concluir/resgatar quests, comprar skills/categorias, transformar e repetir treino.
-4. Testar morte/respawn, reconexão, mudança de dimensão, rastreamento e reload válido/inválido com dois clientes em servidor dedicado.
-5. Validar diário, status e radial com escalas GUI variadas, textos longos e estados sem saldo ou sem desbloqueio.
-6. Revisar os critérios restantes do plano, incluindo feedback contextual de ações, otimização do resgate múltiplo e limites de sincronização. Não foram marcados como concluídos apenas pela existência das telas.
+| Arquivo | Pixels parcialmente transparentes | Pixels opacos |
+|---|---:|---:|
+| asauchi.png | 486 | 47 |
+| asauchi_shikai.png | 840 | 54 |
+| asauchi_bankai.png | 1211 | 109 |
+| race_shinigami.png | 317008 | 9 |
 
-## 7. Critério de conclusão
+O fundo da seleção já é opaco. O ícone de reiatsu original não tem alfa parcial, mas o HUD atual não depende dele. Os PNGs antigos de toast também apresentam alfa parcial; deixaram de ser usados pelo renderizador de notificações.
 
-Encerrar a entrega quando o build atual passar, os problemas visuais relatados forem conferidos em jogo e os fluxos de persistência/multiplayer forem exercitados. Atualizar este relatório com evidências e resultado de cada pendência. O [plano de implementação](plano-implementacao-mvp.md) permanece como backlog detalhado, e não como lista de funcionalidades já homologadas.
+As tentativas de geração de imagem não produziram alfa real. Os PNGs das espadas e do espadachim **não foram alterados**. Foi solicitada autorização explícita para corrigi-los por código, preservando a arte; ela permanece pendente. Se as texturas forem rotacionadas depois, remover a compensação do modelo para não aplicar duas rotações.
+
+## Pendências de homologação
+
+- Corrigir o alfa das espadas e do espadachim após definir o método autorizado.
+- Inspecionar mão principal/secundária, primeira/terceira pessoa e inventário nas três formas.
+- Executar cliente real em mundo novo e existente, incluindo progressão, treino repetível, receita, telas e carga.
+- Executar dois clientes em dedicado: rastreamento, reconexão, morte/respawn, dimensão e latência.
+- Conferir textos longos e mais de cinco missões em escalas GUI distintas.
+
+A tentativa de controle visual falhou na inicialização do runtime de automação (`failed to write kernel assets`, caminho não encontrado). Não foram registrados testes visuais como concluídos. O bloqueio antigo do Gradle por limite de uso foi superado.
+
+## Artefato e roteiro de teste
+
+Artefato esperado da revisão: `build/libs/bleachmod-0.2.0.jar`. Cliente e servidor precisam do protocolo 2.1. Não misturar com builds anteriores que também se chamavam 0.2.0.
+
+1. Fazer backup do mundo e instalar o mesmo JAR nos dois lados.
+2. Em mundo novo, escolher Shinigami; abrir J, K e Z e conferir textos/controles.
+3. Concluir e resgatar as missões; comprar Zanpakutō, ativar Shikai, treinar mastery e acessar Bankai.
+4. Gastar pontos nas categorias e repetir o treino para comprovar recuperação da economia.
+5. Conferir a receita da Asauchi e as três aparências da espada.
+6. Morrer, reconectar e trocar de dimensão; conferir persistência e cancelamento da carga.
+7. Com dois jogadores, conferir aparência remota, resgates repetidos e comandos como operador/jogador comum.
+8. Repetir em cópia de save antigo e conferir migração do antigo Poder para Zanjutsu, sem perda de progressão.
+
+Comandos de verificação: `gradlew.bat build --offline` e `gradlew.bat runGameTestServer --offline`, com Java 17 e dependências previamente disponíveis. GameTests criam fixtures no mundo de teste e restauram os arquivos de configuração modificados por seus cenários.
+
+## Resultado final do build
+
+`BUILD SUCCESSFUL in 21s`, com **32 cenários de regressão aprovados**. Os quatro GameTests haviam passado antes dos ajustes finais de apresentação/modelos e limite do pacote. Esses ajustes foram incluídos no build final.
+
+JAR gerado: `build/libs/bleachmod-0.2.0.jar`, 7.079.499 bytes.
+
+SHA-256: `26D51BF32120ED110DF59818D18D2BAC538DD586DA7188038E43EBD39CFC930E`.
+
+Persistem avisos de depreciação de Gradle/API, sem falha de build. O artefato foi gerado; não foi distribuído nem instalado em um servidor externo.

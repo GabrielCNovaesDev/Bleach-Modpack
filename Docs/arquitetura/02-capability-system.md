@@ -161,3 +161,7 @@ Ver detalhe completo em `03-sistema-quests.md` e `07-persistencia-nbt.md`. Campo
 - `copyFrom` no clone precisa copiar quests **e** forms; senão morte reseta Shikai/Bankai ou missões.
 - `getLevel()` derivado: se o Bleach quiser nível explícito (mais natural para Shinigami), documentar a mudança — o checker de quests do original assume a fórmula de stats.
 - Storage JSON/MariaDB é um segundo caminho de persistência que **sobrescreve** o NBT no login. Não portar no MVP.
+
+## Implementação Bleach — atributos e derivados
+
+`PlayerData` agrega `AttributeData` com sete ranks sem teto de gameplay: `zanjutsu`, `hakuda`, `vitality`, `resistance`, `kidou`, `reserve` e `control`. `refreshDerivedResources()` recalcula reiatsu máxima a partir de Reserva; `ProgressionService` reaplica um modifier transitório de vida máxima com UUID fixo para Vitalidade, evitando acumulação em login/respawn/compra. BP é derivado, não persistido: soma dos sete ranks × reiatsu máxima/10.

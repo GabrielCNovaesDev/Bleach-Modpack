@@ -1,13 +1,13 @@
 package com.bleachmod.client.gui;
 
-import com.bleachmod.client.BleachTextures;
+
 import com.bleachmod.common.network.s2c.StoryToastS2C;
 import com.bleachmod.common.quest.Quest;
 import com.bleachmod.common.quest.QuestRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 public final class StoryToastManager {
@@ -48,36 +48,22 @@ public final class StoryToastManager {
             show(pending.removeFirst());
         }
         Minecraft mc = Minecraft.getInstance();
-        int toastW = BleachTextures.TOAST_W;
-        int toastH = BleachTextures.TOAST_H;
-        int x = width / 2 - toastW / 2;
-        int y = 8;
-        BleachTextures.blit(graphics, BleachTextures.TOAST_BG, x, y, toastW, toastH,
-                BleachTextures.TOAST_SRC_W, BleachTextures.TOAST_SRC_H);
-        int iconSrc = iconSrc(type);
-        BleachTextures.blit(graphics, iconFor(type), x + BleachTextures.TOAST_ICON_X, y + BleachTextures.TOAST_ICON_Y,
-                16, 16, iconSrc, iconSrc);
-        graphics.drawString(mc.font, title, x + BleachTextures.TOAST_TEXT_X, y + 12, 0x3A2A1C, false);
-        graphics.drawString(mc.font, subtitle, x + BleachTextures.TOAST_TEXT_X, y + 24, 0x1A1028, false);
-    }
-
-    private static ResourceLocation iconFor(StoryToastS2C.ToastType toastType) {
-        return switch (toastType) {
-            case START -> BleachTextures.TOAST_START;
-            case OBJECTIVE -> BleachTextures.TOAST_OBJECTIVE;
-            case COMPLETE -> BleachTextures.TOAST_COMPLETE;
-            case FAIL -> BleachTextures.TOAST_FAIL;
-            case CLAIM -> BleachTextures.TOAST_CLAIM;
+        int toastW = Math.min(280, width - 16);
+        int x = (width - toastW) / 2, y = 8;
+        var lines = mc.font.split(subtitle, toastW - 40);
+        int toastH = 30 + Math.min(2, lines.size()) * 11;
+        int accent = type == StoryToastS2C.ToastType.FAIL ? 0xFFE07B7B : 0xFFE8C547;
+        graphics.fill(x, y, x + toastW, y + toastH, 0xF0171321);
+        graphics.fill(x, y, x + 3, y + toastH, accent);
+        String mark = switch (type) {
+            case START -> ">";
+            case OBJECTIVE, COMPLETE -> "+";
+            case FAIL -> "!";
+            case CLAIM -> "*";
         };
-    }
-
-    private static int iconSrc(StoryToastS2C.ToastType toastType) {
-        return switch (toastType) {
-            case START -> BleachTextures.TOAST_START_SRC;
-            case OBJECTIVE -> BleachTextures.TOAST_OBJECTIVE_SRC;
-            case COMPLETE -> BleachTextures.TOAST_COMPLETE_SRC;
-            case FAIL -> BleachTextures.TOAST_FAIL_SRC;
-            case CLAIM -> BleachTextures.TOAST_CLAIM_SRC;
-        };
+        graphics.drawString(mc.font, mark, x + 12, y + 12, accent, false);
+        graphics.drawString(mc.font, mc.font.plainSubstrByWidth(title.getString(), toastW - 40), x + 30, y + 9, accent, false);
+        for (int i = 0; i < Math.min(2, lines.size()); i++)
+            graphics.drawString(mc.font, lines.get(i), x + 30, y + 23 + i * 11, 0xFFF2E9C8, false);
     }
 }

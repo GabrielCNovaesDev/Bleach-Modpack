@@ -1,10 +1,10 @@
 # Eventos Forge
 
-## Estado da implementação Bleach — 10/09/2026
+## Atualização Bleach — 10/09/2026
 
-Eventos tratam clonagem, respawn, rastreamento, desconexão e dimensão. LivingHurtEvent aplica bônus ao ataque direto do jogador com Asauchi. A integração em servidor dedicado com dois clientes ainda não foi homologada.
+Quatro GameTests exercitam clone após invalidação, resgates sem duplicação, permissões e reload. O clone preservou pontos/mastery e cancelou carga. Isso não substitui teste com dois clientes reais.
 
-Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
 
 
 ## Resumo
@@ -103,3 +103,7 @@ Os handlers leem/escrevem a mesma `StatsData`. Eventos custom são o ponto para 
 - Wipe de party no mesmo `LivingDeathEvent` do kill: race sutil se o último hit mata o player e o mob no mesmo tick.
 - Client tick forçando GUI compete com vanilla pause/death screen — testar.
 - Não assinar `DragonSummonedEvent`.
+
+## Implementação Bleach — combate
+
+`LivingHurtEvent` separa três caminhos: Zanpakutō/Asauchi usa Zanjutsu e bônus da forma; mão principal vazia usa Hakuda; jogador atingido por golpe físico direto usa Resistência. Vitalidade é um modifier de `MAX_HEALTH` reaplicado na normalização do jogador. Danos ambientais, mágicos e de projéteis não passam pela mitigação de Resistência.

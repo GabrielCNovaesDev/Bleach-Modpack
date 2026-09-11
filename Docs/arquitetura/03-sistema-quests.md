@@ -1,10 +1,10 @@
 # Sistema de Quests
 
-## Estado da implementação Bleach — 10/09/2026
+## Atualização Bleach — 10/09/2026
 
-O MVP valida IDs, limites e objetivos, reconta itens e guarda assinatura/versão da definição. Mudanças estruturais incompatíveis bloqueiam progresso e resgate. Treino só reinicia após todos os prêmios; a ausência de repeatable no treino legado é interpretada como true. Novos despertares não concedem skill nem mastery máximo.
+Resgate em lote usa índice -1 com flags individuais e sincronização final. As rotas de atualização/conclusão conferem a assinatura da quest. GameTests cobrem resgates de pontos, itens e transformação, repetição e reload.
 
-Consulte o [manual atual](../jogador/manual-do-jogador.md) e o [relatório de implementação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções seguintes preservam a referência do Dragon Mine Z e não devem ser interpretadas como funcionalidades já entregues no Bleach.
+[Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
 
 
 ## Resumo
