@@ -12,9 +12,11 @@
 - [x] Quatro GameTests aprovados: clone, lote, permissões e reload.
 - [x] Preservar sete atributos, BP, schema 3 e balanceamento atual.
 - [x] Atualizar relatório, regras e roteiro de homologação.
+- [x] Branch `Life-UI`: HUD conceitual com painel `bleach_hud_concept.png` e três barras (Vida/Reiatsu/Transformação); `VanillaHealthHider` cancela corações vanilla após criação de personagem.
 
 ## Ainda pendente
 
+- [ ] Receber do usuário os slices `hud_health_fill.png`, `hud_reiatsu_fill.png`, `hud_transform_fill.png` recortados da concept. Ajustar constantes em `BleachTextures` se as dimensões finais divergirem do esperado.
 - [ ] Corrigir alfa dos PNGs das espadas e do espadachim; autorização para edição por código solicitada.
 - [ ] Homologar orientação das espadas visualmente nas duas mãos e três formas.
 - [ ] Testar ciclo completo em mundo novo e existente, receita e recuperação de pontos pelo treino.

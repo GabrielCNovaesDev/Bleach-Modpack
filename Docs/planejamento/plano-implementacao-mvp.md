@@ -346,7 +346,7 @@ Não impedem registrar o plano; devem ser fechadas antes das tarefas dependentes
 | T06 | Implementado; validação parcial | GameTest de clone após invalidação aprovado; logout/dimensão com dois clientes pendentes |
 | T07 | Implementado; homologação pendente | Diário reativo e alvos descritos; inspeção visual pendente |
 | T08 | Parcial | Orientação corrigida por modelo; alfa dos PNGs e inspeção nas três formas pendentes |
-| T09–T11 | Implementado; homologação pendente | Fundo proporcional, HUD/diário, carga e toasts em código; inspeção visual pendente |
+| T09–T11 | Implementado; homologação pendente | Fundo proporcional, HUD/diário, carga e toasts em código; inspeção visual pendente. Branch `Life-UI` substitui corações vanilla pelo painel `bleach_hud_concept.png` com três barras; slices finais dos fills pendentes. |
 | T12 | Implementado; validação parcial | Recontagem ITEM e sequência no código; assinatura reforçada; roteiro completo de inventário pendente |
 | T13 | Implementado | Parser rejeita spawn QUEST; regressão automatizada aprovada |
 | T14 | Implementado e testado em servidor de teste | GameTest de reload válido/inválido com missão ativa aprovado |
