@@ -78,7 +78,8 @@ A documentação de engenharia reversa está em [`arquitetura/`](arquitetura/00-
 - [ ] **Raça: Fullbringer**
 - [ ] Árvore de quests com pré-requisitos entre missões
 - [ ] Sistema de habilidades expandido por raça
-- [ ] Novos biomas/dimensões temáticas (ex: Soul Society, Hueco Mundo)
+- [x] Soul Society: dimensão com mapa importado e viagens (0.3.0; mapa real pendente)
+- [ ] Hueco Mundo e demais dimensões temáticas
 - [ ] Balanceamento multiplayer/PvP
 - [ ] [Adicionar outras conforme o grupo decidir]
 
@@ -165,3 +166,7 @@ O conteúdo temático de Dragon Ball pertence aos respectivos detentores. Este f
 ## Estado da estabilização — 10/09/2026
 
 Consulte o [relatório de correções](planejamento/relatorio-implementacao-mvp-2026-09-10.md) e a [checklist atual](planejamento/todo-mvp.md). Build 0.2.0 aprovado com 32 regressões; quatro GameTests aprovados. Protocolo 2.1. A transparência dos PNGs e a homologação visual com dois clientes continuam pendentes. Mantidos sete atributos, BP e schema 3.
+
+## Soul Society — implementação 0.3.0
+
+Dimensão e viagens implementadas com tecla H, importação automática de save Java 1.20.1, retorno gratuito e validação server-side. [Instalação do mapa e regras](desenvolvimento/soul-society-instalacao.md). Protocolo atual 2.3 e schema 4; os números da estabilização de 10/09 abaixo/acima são históricos. O mapa real ainda não foi fornecido e a homologação visual com dois clientes continua pendente.

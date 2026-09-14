@@ -15,6 +15,7 @@ import java.util.*;
 public final class MvpRegressionTest {
     private static int count;
     public static void main(String[] args) {
+        TravelRegressionTest.run();
         test("cleared tracking replaces old client value",()->{
             PlayerQuestData server=new PlayerQuestData(), client=new PlayerQuestData();
             client.setTrackedQuestId("old"); client.load(server.save());

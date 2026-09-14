@@ -165,3 +165,9 @@ Ver detalhe completo em `03-sistema-quests.md` e `07-persistencia-nbt.md`. Campo
 ## Implementação Bleach — atributos e derivados
 
 `PlayerData` agrega `AttributeData` com sete ranks sem teto de gameplay: `zanjutsu`, `hakuda`, `vitality`, `resistance`, `kidou`, `reserve` e `control`. `refreshDerivedResources()` recalcula reiatsu máxima a partir de Reserva; `ProgressionService` reaplica um modifier transitório de vida máxima com UUID fixo para Vitalidade, evitando acumulação em login/respawn/compra. BP é derivado, não persistido: soma dos sete ranks × reiatsu máxima/10.
+
+## Bleach 0.3.0 — TravelData
+
+A capability PlayerData existente agrega TravelData: retorno e cooldown persistentes. Nenhuma capability nova. Clone copia os dados; resetTransientState não apaga cooldown/retorno. Load de sync parcial sem travel preserva o estado; full save antigo (com schemaVersion) inicia sem travel.
+
+PlayerProvider renova o LazyOptional quando a entidade volta a permitir consulta depois de reviveCaps. O PlayerData é preservado; handles antigos continuam inválidos. GameTest cobre invalidação, bloqueio antes de revive e preservação de progressão depois.

@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFW;
 
 public final class ModKeybinds {
     public static final String CATEGORY = "key.categories.bleachmod";
+    public static final KeyMapping SENKAIMON = new KeyMapping("key.bleachmod.senkaimon", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, CATEGORY);
 
     public static final KeyMapping JOURNAL = new KeyMapping(
             "key.bleachmod.journal",

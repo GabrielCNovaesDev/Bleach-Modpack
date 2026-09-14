@@ -107,3 +107,7 @@ Os handlers leem/escrevem a mesma `StatsData`. Eventos custom são o ponto para 
 ## Implementação Bleach — combate
 
 `LivingHurtEvent` separa três caminhos: Zanpakutō/Asauchi usa Zanjutsu e bônus da forma; mão principal vazia usa Hakuda; jogador atingido por golpe físico direto usa Resistência. Vitalidade é um modifier de `MAX_HEALTH` reaplicado na normalização do jogador. Danos ambientais, mágicos e de projéteis não passam pela mitigação de Resistência.
+
+## Bleach 0.3.0 — ciclo de vida das viagens
+
+TravelEvents importa o mapa em ServerAboutToStartEvent, antes da abertura dos níveis. ServerStartingEvent carrega configurações. ServerTickEvent END conclui preparação de chunks e aplica teleporte na thread do servidor. Logout, morte e mudança externa de dimensão cancelam pendências; ServerStoppedEvent libera tickets e remove estado por servidor. EntityTravelToDimensionEvent impede portais externos de entrar/sair da Soul Society; PlayerSetSpawnEvent impede respawn nessa dimensão.

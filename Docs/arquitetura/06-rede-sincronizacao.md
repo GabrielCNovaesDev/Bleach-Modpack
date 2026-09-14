@@ -2,7 +2,7 @@
 
 ## Atualização Bleach — 10/09/2026
 
-O Bleach usa protocolo 2.1. ClaimQuestRewardC2S aceita índice -1 para lote; limita o ID a 256 caracteres e exige jogador vivo, personagem criado e intervalo mínimo de quatro ticks. SelectFormC2S limita IDs a 32 caracteres. Cliente e servidor devem ser atualizados juntos.
+Na revisão de 10/09, o Bleach usava protocolo 2.1; o protocolo atual é 2.3 (seção ao final). ClaimQuestRewardC2S aceita índice -1 para lote; limita o ID a 256 caracteres e exige jogador vivo, personagem criado e intervalo mínimo de quatro ticks. SelectFormC2S limita IDs a 32 caracteres. Cliente e servidor devem ser atualizados juntos.
 
 [Relatório atual](../planejamento/relatorio-implementacao-mvp-2026-09-10.md). As seções de Dragon Mine Z abaixo são referência do original.
 
@@ -96,3 +96,9 @@ Party packets (`CreatePartyC2S` … `LeavePartyC2S`) existem e afetam quest stat
 - `SyncQuestRegistryS2C` com 200+ quests DB é grande; o MVP Shinigami terá poucas — Utf simples basta.
 - Periodic full sync a cada 10 ticks: para o MVP, sync-on-change + sync-on-login é suficiente e mais barato.
 - Nunca reusar os IDs numéricos do original (são do protocolo `dragonminez:network`).
+
+## Bleach 0.3.0 — viagens, protocolo 2.3
+
+Acrescentados ao fim do canal: TravelPackets.Query e Request (PLAY_TO_SERVER), Catalog e Result (PLAY_TO_CLIENT). Request leva requestId, targetId limitado a 128 caracteres e revisão; sem coordenadas, preço ou identidade de outro jogador. Catálogo contém um destino aplicável (entrada ou retorno), custo, recarga e bloqueio. Result correlaciona processamento/conclusão.
+
+Servidor revalida no pedido e após preparação. Consulta e execução têm limites independentes de 10 ticks; uma pendência por jogador, oito globais. UUID do sender identifica estado. Débito é reservado após pouso validado e reembolsado se teleporte for cancelado; full sync final corrige os snapshots enviados por eventos durante a troca.

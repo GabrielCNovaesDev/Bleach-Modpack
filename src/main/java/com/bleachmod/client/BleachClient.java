@@ -25,6 +25,7 @@ public final class BleachClient {
     }
 
     private static void registerKeys(RegisterKeyMappingsEvent event) {
+        event.register(ModKeybinds.SENKAIMON);
         event.register(ModKeybinds.JOURNAL);
         event.register(ModKeybinds.STATUS);
         event.register(ModKeybinds.WHEEL);

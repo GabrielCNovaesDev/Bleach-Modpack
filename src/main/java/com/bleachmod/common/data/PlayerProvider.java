@@ -15,7 +15,8 @@ public class PlayerProvider implements ICapabilityProvider, INBTSerializable<Com
     public static final ResourceLocation ID = Reference.id("player_data");
 
     private final PlayerData data = new PlayerData();
-    private final LazyOptional<PlayerData> optional = LazyOptional.of(() -> data);
+    private LazyOptional<PlayerData> optional = LazyOptional.of(() -> data);
+    private boolean invalidated;
 
     public PlayerData getData() {
         return data;
@@ -23,10 +24,18 @@ public class PlayerProvider implements ICapabilityProvider, INBTSerializable<Com
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap == PlayerCapability.INSTANCE ? optional.cast() : LazyOptional.empty();
+        if (cap != PlayerCapability.INSTANCE) return LazyOptional.empty();
+        // Entity's CapabilityProvider gates access while invalid. After reviveCaps (dimension travel),
+        // the dispatcher is reused; renew its invalidated handle while preserving the PlayerData instance.
+        if (invalidated) {
+            optional = LazyOptional.of(() -> data);
+            invalidated = false;
+        }
+        return optional.cast();
     }
 
     public void invalidate() {
+        invalidated = true;
         optional.invalidate();
     }
 

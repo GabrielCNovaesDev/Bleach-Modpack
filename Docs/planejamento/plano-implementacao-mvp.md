@@ -359,3 +359,7 @@ Não impedem registrar o plano; devem ser fechadas antes das tarefas dependentes
 | T24 | Parcial | Build e 32 regressões aprovados, quatro GameTests aprovados; dois clientes e QA visual pendentes |
 
 Detalhes, artefato e roteiro: [relatório](relatorio-implementacao-mvp-2026-09-10.md). Lista operacional: [checklist](todo-mvp.md).
+
+## Incremento Soul Society — 11/09/2026
+
+Implementação 0.3.0 adiciona importação automática de save e viagens dimensionais. [Guia operacional](../desenvolvimento/soul-society-instalacao.md). O mapa real e a homologação com dois clientes permanecem pendentes. Protocolo atual 2.3/schema 4; não alterar a progressão das quests por associação com o nome da saga.

@@ -57,6 +57,10 @@ public final class NetworkHandler {
         CHANNEL.registerMessage(id++, StoryToastS2C.class, StoryToastS2C::encode, StoryToastS2C::decode, StoryToastS2C::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(id++, ActionFeedbackS2C.class, ActionFeedbackS2C::encode, ActionFeedbackS2C::decode, ActionFeedbackS2C::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(id++, DamageIndicatorS2C.class, DamageIndicatorS2C::encode, DamageIndicatorS2C::decode, DamageIndicatorS2C::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(id++, TravelPackets.Query.class, TravelPackets.Query::encode, TravelPackets.Query::decode, TravelPackets.Query::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(id++, TravelPackets.Request.class, TravelPackets.Request::encode, TravelPackets.Request::decode, TravelPackets.Request::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(id++, TravelPackets.Catalog.class, TravelPackets.Catalog::encode, TravelPackets.Catalog::decode, TravelPackets.Catalog::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(id++, TravelPackets.Result.class, TravelPackets.Result::encode, TravelPackets.Result::decode, TravelPackets.Result::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToServer(Object message) {

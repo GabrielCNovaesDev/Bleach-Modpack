@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public final class Reference {
     public static final String MOD_ID = "bleachmod";
-    public static final String NETWORK_PROTOCOL = "2.2";
+    public static final String NETWORK_PROTOCOL = "2.3";
 
     public static final String RACE_SHINIGAMI = "shinigami";
     public static final String GROUP_ZANPAKUTO = "zanpakuto";

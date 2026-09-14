@@ -152,14 +152,14 @@ Os arquivos ficam em {mundo}/bleachmod/. Defaults só criam arquivos ausentes; n
 - Mundos antigos podem conservar recompensas de skill/mastery 100; consulte as recompensas reais do diário.
 - Hakuda, Vitalidade, Resistência e Kidou começam em zero. O antigo Poder migra integralmente para Zanjutsu; Reserva, Controle, pontos, skill, quests e mastery são preservados.
 - A descoberta de formas de saves legados é inferida do nível da skill/mastery.
-- O estado usa schemaVersion 3. Não abra save migrado com versão antiga sem backup compatível.
+- O estado usa schemaVersion 4. Não abra save migrado com versão antiga sem backup compatível.
 - JSONs de forma existentes não são sobrescritos. Para adotar o novo balanceamento, ajuste `energyDrain` de Shikai/Bankai para `0.08`/`0.16`; mundos novos já usam esses valores.
 - Progresso de quest passa a guardar assinatura dos objetivos/recompensas e versão.
 - No primeiro login atualizado, quests antigas sem assinatura vinculam-se ao conteúdo carregado naquele momento. Não é possível detectar retroativamente edições feitas antes dessa vinculação.
 - Depois disso, mudanças estruturais incompatíveis bloqueiam início/progresso/resgate, preservando os dados. Restaure o JSON compatível ou faça migração explícita.
 - Alterações de título/descrição não invalidam progresso.
 - O parser aceita somente NATURAL + ANY_MATCHING neste MVP; configurações QUEST incompletas são rejeitadas.
-- Cliente e servidor precisam usar protocolo 2.1; atualizar ambos.
+- Cliente e servidor precisam usar protocolo 2.3; atualizar ambos.
 
 Faça backup antes de adaptar os JSONs de um mundo existente. A nova economia não é aplicada silenciosamente aos arquivos já configurados.
 
@@ -176,3 +176,9 @@ Toda alteração de lógica deve revisar os .md relacionados em Docs, além dest
 Receber no diário solicita todos os prêmios pendentes em um lote. Cada prêmio conserva seu controle individual de entrega; pedidos repetidos não repetem recompensas já recebidas. O status mostra saldo restante/insuficiente nos tooltips, e o radial explica bloqueios de sequência. As notificações usam desenho em código e texto limitado à área disponível.
 
 Pré-requisitos de formas precisam apontar para estágios anteriores e para valores de mastery alcançáveis. Alterações estruturais de quests são verificadas também nas rotas de inventário e conclusão. Consulte o [relatório de validação](../planejamento/relatorio-implementacao-mvp-2026-09-10.md) antes de considerar os ajustes visuais homologados.
+
+## Senkaimon — Soul Society (0.3.0)
+
+Pressione **H** para abrir o Senkaimon. Shinigami com personagem criado pode entrar a partir do Overworld por 20 reiatsu; o retorno é gratuito, com recarga padrão de cinco segundos. O servidor escolhe chegada segura e guarda sua partida. Retorno inseguro tenta o spawn do Overworld; se ambos falham, nenhuma viagem é feita. Sem mapa instalado, a tela informa indisponibilidade. Não requer Shikai/Bankai.
+
+Mortos, spectators, jogadores dormindo ou montados/com passageiros não podem viajar. A Soul Society não muda seu respawn por cama. Além dos chunks importados há vazio; esta versão não protege construções nem limita exploração. [Instalação e administração](../desenvolvimento/soul-society-instalacao.md).

@@ -154,3 +154,9 @@ Relevantes: `Transforming` (= `isActionCharging`), `SelectedAction` (ActionMode)
 ## Implementação Bleach — schema 3
 
 O composto `attributes` grava as sete chaves em camelCase/minúsculas. No load, ranks negativos viram zero e ranks acima de cinco são preservados. Saves schema 2 com `power` e sem `zanjutsu` migram o valor de Poder para Zanjutsu; as quatro categorias inéditas começam em zero. BP e bônus derivados não são salvos.
+
+## Implementação Bleach — schema 4 (0.3.0)
+
+Adiciona `travel` com `returnLocation` opcional (dimension, x/y/z, yaw/pitch) e `nextTravelAt`. O relógio é gameTime do Overworld; offline não reduz cooldown. Valores inválidos não produzem retorno utilizável e cooldown é limitado a 72000 ticks. Schema 3 mantém todos os atributos existentes e inicia sem retorno. Requests, pendências e tickets não são salvos.
+
+Mapa e manifesto ficam em `<save>/dimensions/bleachmod/soul_society/`; configuração em `<save>/bleachmod/travel/settings.json`. [Operação e recuperação](../desenvolvimento/soul-society-instalacao.md).

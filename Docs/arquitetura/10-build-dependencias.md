@@ -107,3 +107,7 @@ Dependências mínimas sugeridas no MVP Bleach:
 - Forge 1.20.1
 - Nenhuma lib de animação no MVP (HUD + itens vanilla bastam)
 - Sem TerraBlender / Curios / MariaDB até as fases futuras
+
+## Bleach 0.3.0 — dimensão e datagen
+
+TravelWorldGen usa DatapackBuiltinEntriesProvider/RegistrySetBuilder no evento GatherData do MOD bus para emitir DimensionType e LevelStem. `runData` gera dois JSONs versionados em src/generated/resources; build inclui esses arquivos no JAR. Gerador vanilla flat sem camadas/estruturas preserva chunks importados e produz vazio fora deles. Java 17/Forge 47.4.10 mantidos; nenhuma dependência nova.

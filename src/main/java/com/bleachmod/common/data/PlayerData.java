@@ -8,6 +8,8 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.Optional;
 
 public class PlayerData {
+    private final TravelData travel = new TravelData();
+    public TravelData getTravel() { return travel; }
     private final CharacterData character = new CharacterData();
     private final ResourcesData resources = new ResourcesData();
     private final SkillsData skills = new SkillsData();
@@ -79,7 +81,8 @@ public class PlayerData {
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
-        tag.putInt("schemaVersion", 3);
+        tag.putInt("schemaVersion", 4);
+        tag.put("travel", travel.save());
         tag.put("attributes", attributes.save());
         tag.put("character", character.save());
         tag.put("resources", resources.save());
@@ -90,6 +93,8 @@ public class PlayerData {
     }
 
     public void load(CompoundTag tag) {
+        if (tag.contains("travel")) travel.load(tag.getCompound("travel"));
+        else if (tag.contains("schemaVersion")) travel.load(new CompoundTag());
         if (tag.contains("character")) {
             character.load(tag.getCompound("character"));
         }

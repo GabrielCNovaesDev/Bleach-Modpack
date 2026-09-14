@@ -50,6 +50,7 @@ public class ClientForgeEvents {
         }
 
         while (ModKeybinds.STATUS.consumeClick()) mc.setScreen(new com.bleachmod.client.gui.StatusScreen());
+        while (ModKeybinds.SENKAIMON.consumeClick()) mc.setScreen(new com.bleachmod.client.gui.SenkaimonScreen());
         while (ModKeybinds.WHEEL.consumeClick()) mc.setScreen(new com.bleachmod.client.gui.FormWheelScreen());
         while (ModKeybinds.JOURNAL.consumeClick()) {
             mc.setScreen(new JournalScreen());

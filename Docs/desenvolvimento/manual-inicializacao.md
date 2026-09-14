@@ -185,3 +185,7 @@ O projeto já pede 3 GB ao Gradle (`org.gradle.jvmargs=-Xmx3G` em `gradle.proper
 - Controles, missões e progressão: [manual do jogador](../jogador/manual-do-jogador.md)
 - Visão do repositório e escopo: [README da documentação](../README.md)
 - Plano de correções do MVP: [plano de implementação](../planejamento/plano-implementacao-mvp.md)
+
+## Soul Society e build 0.3.0
+
+Para instalar o mapa, colocar `level.dat` e `region` diretamente em `run/bleachmod-maps/soul_society/`, com o jogo fechado. A próxima abertura importa para cada save Bleach uma única vez. Consulte o [guia completo](soul-society-instalacao.md), incluindo compatibilidade 1.20.1, spawn, configurações e rollback. Sem mapa o jogo abre, mas a entrada fica bloqueada. Outputs de datagen da dimensão são versionados.

@@ -97,3 +97,7 @@ Quests e evolução têm superfícies distintas: uma **árvore de story** (tela 
 ## Implementação Bleach — tela de status
 
 A tela K distribui sete categorias em duas colunas, mostra rank sem sufixo de cap, custo do próximo nível e tooltip de efeito. O BP informativo é recalculado do snapshot local sincronizado. Compra continua sendo C2S e validada no servidor; a tela apenas desabilita o botão quando o saldo local é insuficiente.
+
+## Bleach 0.3.0 — tela Senkaimon
+
+H abre SenkaimonScreen. O servidor fornece destino, custo, cooldown e bloqueio; a tela não calcula autorização. Botão desabilitado durante preparação, feedback localizado pt_br/en_us e atualização periódica do catálogo. Sucesso fecha a tela; falha permite nova tentativa. Não altera o HUD existente.
