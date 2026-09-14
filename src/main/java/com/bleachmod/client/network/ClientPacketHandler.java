@@ -9,6 +9,8 @@ import com.bleachmod.common.network.s2c.ProgressionSyncS2C;
 import com.bleachmod.common.network.s2c.ResourceSyncS2C;
 import com.bleachmod.common.network.s2c.StoryToastS2C;
 import com.bleachmod.common.network.s2c.SyncQuestRegistryS2C;
+import com.bleachmod.common.network.s2c.OpenNpcQuestScreenS2C;
+import com.bleachmod.client.gui.NpcQuestScreen;
 import com.bleachmod.common.quest.QuestRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -50,6 +52,10 @@ public final class ClientPacketHandler {
         if (mc.player != null) {
             mc.player.displayClientMessage(Component.Serializer.fromJson(msg.json()), false);
         }
+    }
+
+    public static void handleOpenNpcQuestScreen(OpenNpcQuestScreenS2C msg) {
+        Minecraft.getInstance().setScreen(new NpcQuestScreen(msg.npcId(), msg.entityId()));
     }
 
     private static void apply(int playerId, CompoundTag nbt) {

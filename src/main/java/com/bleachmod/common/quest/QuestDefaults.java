@@ -40,6 +40,17 @@ public final class QuestDefaults {
         Path sideFolder = root.resolve("sidequests").resolve("training");
         Files.createDirectories(sideFolder);
         writeQuest(sideFolder.resolve("rukia_basic_training.json"), rukiaTraining());
+
+        Path npcFolder = root.resolve("sidequests").resolve("npc_test");
+        Files.createDirectories(npcFolder);
+        writeQuest(npcFolder.resolve("sado_yasutora_test.json"), npcKillQuest("sado_yasutora", "minecraft:zombie", 3));
+        writeQuest(npcFolder.resolve("ichigo_test.json"), npcKillQuest("ichigo", "bleachmod:hollow", 2));
+        writeQuest(npcFolder.resolve("orihime_test.json"), npcItemQuest("orihime", "minecraft:apple", 3));
+        writeQuest(npcFolder.resolve("uryuu_test.json"), npcKillQuest("uryuu", "minecraft:skeleton", 3));
+        writeQuest(npcFolder.resolve("rukia_test.json"), npcKillQuest("rukia", "minecraft:zombie", 3));
+        writeQuest(npcFolder.resolve("byakuya_test.json"), npcKillQuest("byakuya", "minecraft:spider", 4));
+        writeQuest(npcFolder.resolve("urahara_test.json"), npcItemQuest("urahara", "minecraft:paper", 4));
+        writeQuest(npcFolder.resolve("ulquiorra_test.json"), npcKillQuest("ulquiorra", "minecraft:enderman", 3));
     }
 
     private static void writeQuest(Path path, Quest quest) throws IOException {
@@ -110,6 +121,31 @@ public final class QuestDefaults {
         quest.setCategory("training");
         quest.getObjectives().add(new KillObjective("minecraft:zombie", 10, KillObjective.SpawnMode.NATURAL, KillObjective.CountMode.ANY_MATCHING));
         quest.getRewards().add(new TpsReward(150));
+        return quest;
+    }
+
+    private static Quest npcKillQuest(String npcId, String entityId, int count) {
+        Quest quest = npcQuest(npcId);
+        quest.getObjectives().add(new KillObjective(entityId, count,
+                KillObjective.SpawnMode.NATURAL, KillObjective.CountMode.ANY_MATCHING));
+        return quest;
+    }
+
+    private static Quest npcItemQuest(String npcId, String itemId, int count) {
+        Quest quest = npcQuest(npcId);
+        quest.getObjectives().add(new ItemObjective(itemId, count));
+        return quest;
+    }
+
+    private static Quest npcQuest(String npcId) {
+        Quest quest = new Quest();
+        quest.setStringId(npcId + "_npc_test");
+        quest.setType(QuestType.SIDEQUEST);
+        quest.setTitle("bleachmod.quest." + npcId + "_npc_test.name");
+        quest.setDescription("bleachmod.quest." + npcId + "_npc_test.desc");
+        quest.setCategory("npc_test");
+        quest.setQuestGiver(npcId);
+        quest.getRewards().add(new TpsReward(100));
         return quest;
     }
 }
