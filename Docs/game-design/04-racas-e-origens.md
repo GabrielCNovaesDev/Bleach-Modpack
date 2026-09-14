@@ -728,12 +728,6 @@ A alternativa em camadas provavelmente exigirá, no futuro, preservar `race` com
 
 Nenhuma mudança no código deve começar enquanto o módulo estiver `IDEALIZADO`.
 
-## Próximos passos
-
-1. Continuar o terceiro bloco detalhando Hollow, Quincy e Fullbringer;
-2. Comparar as quatro raças e fechar eventuais ajustes;
-3. Depois iniciar o quarto bloco sobre criação e continuidade.
-
 ## Terceiro bloco de decisões — diferenças, vantagens, limitações e convivência racial
 
 Este bloco define como Shinigami, Hollow, Quincy e Fullbringer permanecem diferentes durante a experiência de jogo sem transformar as quatro origens em jogos completamente separados.
@@ -1120,12 +1114,1900 @@ Esse mesmo princípio de **amplitude sem domínio universal** deverá ser preser
 
 - RAC-19 — consequências diferentes para purificação Shinigami e destruição Quincy de Hollows.
 
+## Aplicação do RAC-13 ao caminho Hollow
+
+O caminho Hollow aplica a assimetria qualitativa aprovada em RAC-13 sem abandonar a espinha dorsal compartilhada de gameplay.
+
+O jogador Hollow participa dos mesmos tipos gerais de ciclo do mod:
+
+```text
+problema, oportunidade ou ameaça
+    -> atividade, quest ou encontro
+    -> combate, exploração ou prova
+    -> progresso
+    -> treinamento ou preparação
+    -> nova possibilidade
+```
+
+A diferença está no contexto, nas ferramentas utilizadas e no significado da progressão.
+
+Enquanto o Shinigami possui formação institucional e desenvolve seu combate inicialmente através de armas e disciplinas, o Hollow inicia sua trajetória tendo o próprio corpo como principal ferramenta de sobrevivência e combate.
+
+---
+
+### H1 — O corpo como primeira arma
+
+**Estado: `DECIDIDO`**
+
+O Hollow recém-formado não recebe uma arma equivalente à shinai ou à Asauchi do caminho Shinigami.
+
+Seu próprio corpo é sua principal ferramenta inicial.
+
+A progressão inicial Hollow deverá apresentar e desenvolver capacidades raciais básicas antes de poderes canônicos específicos.
+
+Estrutura conceitual:
+
+```text
+passado como Plus
+    -> Hollow recém-formado
+    -> sobrevivência e adaptação
+    -> capacidades raciais Hollow
+    -> evolução
+    -> progressões posteriores
+```
+
+As técnicas, ataques e valores concretos pertencem ao módulo de habilidades e combate.
+
+A vantagem corporal inicial já aprovada continua sendo qualitativa e não significa superioridade permanente em todos os atributos.
+
+---
+
+### H2 — Fome e instinto não formam uma barra obrigatória permanente
+
+**Estado: `DECIDIDO`**
+
+Fome, instinto e necessidade de consumir outras almas são elementos importantes da fantasia Hollow.
+
+Entretanto, eles não serão transformados em uma segunda barra de sobrevivência que obrigue o jogador a interromper constantemente suas atividades para alimentar o personagem.
+
+Esses conceitos poderão aparecer através de:
+
+- prólogo racial;
+- acontecimentos narrativos;
+- quests;
+- determinados estágios evolutivos;
+- conflitos internos;
+- comportamento de NPCs e outros Hollows;
+- provas específicas de progressão.
+
+A intenção é preservar a identidade Hollow sem transformar sua experiência em manutenção constante.
+
+---
+
+### H3 — Grind participa da evolução, mas não a determina sozinho
+
+**Estado: `DECIDIDO`**
+
+O grind faz parte da progressão Hollow.
+
+Combater, sobreviver, praticar capacidades raciais e participar de atividades repetíveis podem contribuir para o desenvolvimento do personagem.
+
+Entretanto, derrotar ou consumir uma quantidade fixa de inimigos não deverá, sozinho, conceder automaticamente um grande estágio evolutivo.
+
+A evolução poderá combinar:
+
+```text
+prática / grind
++ progresso racial
++ requisitos de desenvolvimento
++ contexto
++ prova ou acontecimento apropriado
+```
+
+A combinação exata será definida nos módulos responsáveis por progressão, combate e transformações.
+
+### Princípio geral de grind
+
+Esta decisão também vale conceitualmente para todas as raças:
+
+> **Grind é uma parte válida da progressão, mas não deve substituir sozinho conquistas narrativas, provas ou requisitos de grandes marcos de poder.**
+
+Um jogador poderá deliberadamente treinar e grindar para ficar mais forte.
+
+O problema ocorre somente quando uma transformação ou poder importante pode ser conquistado exclusivamente através de repetição quantitativa sem contexto.
+
+---
+
+### H4 — Não existe uma Academia Hollow equivalente
+
+**Estado: `DECIDIDO`**
+
+O caminho Hollow não receberá uma instituição criada apenas para reproduzir a estrutura da Academia Shinigami.
+
+O aprendizado inicial surge principalmente através de:
+
+- sobrevivência;
+- acontecimentos;
+- alma-guia;
+- conflitos;
+- outros Hollows;
+- personagens encontrados durante a jornada;
+- necessidade de compreender a nova condição.
+
+Isso não significa ausência de orientação ou conteúdo.
+
+O caminho continua utilizando quests, progressão, Training Points, personagens e provas.
+
+A diferença está na fantasia:
+
+> o Shinigami é introduzido através de uma estrutura de formação; o Hollow aprende inicialmente porque precisa sobreviver e compreender aquilo em que se transformou.
+
+---
+
+### H5 — Hueco Mundo é um marco de progressão
+
+**Estado: `DECIDIDO`**
+
+O jogador Hollow não precisa começar sua experiência diretamente em Hueco Mundo.
+
+A origem continua partindo tecnicamente do Mundo Humano, conforme RAC-07 e RAC-08.
+
+O personagem começa compreendendo sua nova condição, enfrentando suas primeiras ameaças e desenvolvendo suas capacidades antes de alcançar Hueco Mundo.
+
+Estrutura conceitual:
+
+```text
+Mundo Humano
+    -> Hollow recém-formado
+    -> sobrevivência e aprendizado
+    -> progressão inicial
+    -> acesso a Hueco Mundo
+```
+
+A chegada a Hueco Mundo deve funcionar como um marco importante do caminho racial, sem significar que todo o conteúdo Hollow posterior ficará restrito àquela dimensão.
+
+---
+
+### RAC-21 — Território predominante, conteúdo multirracial
+
+**Estado: `DECIDIDO`**
+
+Nenhum grande território ou dimensão será tratado como conteúdo exclusivo de uma única raça.
+
+Cada local poderá possuir uma raça, sociedade ou facção predominante, mas jogadores de outras raças também precisam possuir razões coerentes para visitá-lo e participar de conteúdo relevante.
+
+Essa regra é necessária especialmente para:
+
+- multiplayer;
+- parties com raças diferentes;
+- campanhas compartilhadas;
+- exploração;
+- continuidade narrativa;
+- evitar que membros de uma party fiquem sem conteúdo.
+
+Exemplos conceituais:
+
+| Território | Conteúdo predominante | Possibilidades para outras raças |
+|---|---|---|
+| Mundo Humano | humanos, Fullbringers e acontecimentos compartilhados | ameaças, investigações, NPCs e atividades para todas as raças |
+| Soul Society | Shinigami | cooperação, infiltração, crises, contatos, operações, conflitos e campanhas |
+| Hueco Mundo | Hollow e Arrancar | expedições, invasões, resgates, investigação, guerra e alianças |
+| territórios Quincy | Quincy | confronto, infiltração, cooperação e acontecimentos de campanha |
+| regiões avançadas | contexto variável | conteúdo apropriado ao estágio e à campanha |
+
+Não é necessário que todas as raças tenham a mesma quantidade de conteúdo em todos os territórios.
+
+A regra é:
+
+> **entrar em um território associado a outra raça não pode significar deixar de ter gameplay relevante.**
+
+Em party, uma campanha poderá utilizar o mesmo acontecimento compartilhado, mas oferecer contexto, motivações, diálogos ou objetivos complementares coerentes com cada raça.
+
+As quests concretas pertencem aos módulos de campanhas e sistema de quests.
+
+---
+
+### H6 — Poderes Arrancar exigem estado compatível
+
+**Estado: `DECIDIDO`**
+
+A política de RAC-20 permanece válida para Hollows:
+
+o jogador conquista poderes canônicos reais através de questlines associadas aos personagens correspondentes.
+
+Entretanto, o personagem precisa possuir uma condição racial compatível para manifestar determinado poder.
+
+Um Hollow recém-formado não pode obter imediatamente uma Resurrección apenas por completar conteúdo relacionado a um Arrancar.
+
+Questlines de poderes Arrancar ficam disponíveis quando o personagem alcança um estado compatível.
+
+Exemplo conceitual:
+
+```text
+Hollow
+    -> evolução racial
+    -> Arrancarização
+    -> acesso à questline de Grimmjow
+    -> conquista de Pantera
+    -> progressão posterior
+    -> Resurrección
+```
+
+O poder conquistado continua sendo o poder canônico real.
+
+**Pantera é Pantera**, e não uma habilidade apenas inspirada em Grimmjow.
+
+A questline, os requisitos e o momento exato de acesso serão definidos em módulos posteriores.
+
+---
+
+### H7 — A evolução Hollow precede a Arrancarização
+
+**Estado: `DECIDIDO`**
+
+O jogador não seguirá uma rota direta:
+
+```text
+Hollow recém-formado
+    -> quest
+    -> Arrancar
+```
+
+A evolução Hollow é parte obrigatória da experiência racial.
+
+O personagem precisa viver e desenvolver sua condição Hollow antes de alcançar a possibilidade de Arrancarização.
+
+Essa decisão preserva a evolução como parte central da fantasia Hollow e diferencia o caminho de outras raças.
+
+Os requisitos numéricos e os acontecimentos específicos não são definidos neste módulo.
+
+---
+
+### H8 — Arrancarização pode ocorrer em diferentes estágios evolutivos
+
+**Estado: `DECIDIDO`**
+
+O jogador não será obrigado a alcançar Vasto Lorde antes de tornar-se Arrancar.
+
+A classe evolutiva Hollow e a condição Arrancar permanecem informações distintas.
+
+Estrutura conceitual:
+
+```text
+Hollow
+    -> Gillian
+        -> possibilidade de Arrancarização
+        -> ou continuar evoluindo
+
+    -> Adjuchas
+        -> possibilidade de Arrancarização
+        -> ou continuar evoluindo
+
+    -> Vasto Lorde
+        -> possibilidade de Arrancarização
+```
+
+Isso permite que a decisão de quando seguir pela Arrancarização tenha importância real.
+
+A existência de diferentes pontos de Arrancarização não significa que uma opção será simplesmente superior às outras.
+
+O módulo de transformações deverá definir vantagens, custos, requisitos e consequências capazes de tornar diferentes rotas válidas.
+
+Se uma rota for objetivamente superior em todos os aspectos, a escolha se tornará falsa e deverá ser revista.
+
+---
+
+## Identidade prática do caminho Hollow
+
+Após essas decisões, a direção qualitativa do Hollow pode ser resumida como:
+
+| Aspecto | Hollow |
+|---|---|
+| **Começo** | passado breve como Plus e formação como Hollow recém-formado |
+| **Primeira ferramenta de combate** | próprio corpo |
+| **Loop compartilhado** | problemas, confrontos, progresso, grind, provas e novas possibilidades |
+| **Identidade racial** | sobrevivência, adaptação e evolução |
+| **Vantagem inicial** | autossuficiência corporal qualitativa |
+| **Limitação inicial** | menor acesso a estruturas organizadas de treinamento e relações mais difíceis em determinados contextos |
+| **Aprendizado** | sobrevivência, acontecimentos, alma-guia, outros Hollows e personagens |
+| **Primeiro grande território racial** | Hueco Mundo, alcançado durante a progressão |
+| **Progressão racial** | Hollow → estágios evolutivos → possibilidade de Arrancarização |
+| **Poder canônico** | conquistado através de questline relacionada ao personagem correspondente quando o estado for compatível |
+| **Exemplo** | Arrancarização → Grimmjow → Pantera → progressão até Resurrección |
+| **Multiplayer** | pode participar de conteúdo em qualquer território; Hueco Mundo não é exclusivo de jogadores Hollow |
+| **Sensação** | sobreviver, evoluir e construir uma identidade a partir da própria condição Hollow |
+
+---
+
+## Pendência específica do caminho Hollow
+
+Ainda não foi decidido se alcançar **Vasto Lorde** deverá representar:
+
+- uma conquista excepcionalmente difícil e rara;
+- ou o estágio avançado natural para jogadores que decidirem permanecer evoluindo como Hollow.
+
+Essa decisão permanece `PENDENTE` e deverá ser tratada antes de considerar a identidade prática Hollow totalmente encerrada.
+
+## Aplicação do RAC-13 ao caminho Quincy
+
+O caminho Quincy utiliza a mesma espinha dorsal compartilhada de gameplay das demais raças, mas sua identidade prática gira principalmente em torno de:
+
+> **controle + precisão + conhecimento da tradição Quincy.**
+
+O jogador não começa como membro do Wandenreich nem como um Quincy completamente treinado.
+
+Sua origem parte de um humano com herança Quincy oculta, fragmentada ou pouco compreendida, que gradualmente aprende a perceber e manipular Reishi.
+
+Estrutura conceitual:
+
+```text
+humano
+    -> descoberta da herança Quincy
+    -> percepção e controle de Reishi
+    -> primeira arma espiritual
+    -> fundamentos Quincy
+    -> desenvolvimento racial
+    -> poderes canônicos específicos
+    -> possíveis relações com facções Quincy
+```
+
+---
+
+### Q1 — O primeiro fundamento Quincy é o controle de Reishi e a formação de um arco espiritual básico
+
+**Estado: `DECIDIDO`**
+
+O jogador Quincy não começa dominando plenamente suas capacidades raciais.
+
+Sua progressão inicial envolve:
+
+```text
+descoberta da herança
+    -> percepção de Reishi
+    -> manipulação básica
+    -> manifestação de arma espiritual
+```
+
+Como primeira arma racial, será utilizado um **arco espiritual Quincy básico**.
+
+Essa escolha é uma adaptação de game design baseada na identidade tradicional dos Quincy e não significa que todas as armas Quincy posteriores precisem ser arcos.
+
+O arco funciona principalmente como ferramenta de introdução aos fundamentos da raça.
+
+Posteriormente, poderes, armas e estilos associados a personagens canônicos poderão modificar significativamente a forma de combate.
+
+---
+
+### Q2 — Armas Quincy não dependem de munição convencional
+
+**Estado: `DECIDIDO`**
+
+Armas espirituais Quincy não exigirão flechas vanilla ou munição física convencional como requisito principal de funcionamento.
+
+Seus projéteis serão formados a partir dos recursos espirituais utilizados pelo sistema Quincy.
+
+Estrutura conceitual:
+
+```text
+recurso espiritual
+    -> formação da arma
+    -> formação do projétil
+    -> ataque
+```
+
+Custos, regeneração, atributos e funcionamento detalhado pertencem aos módulos de atributos, recursos e combate.
+
+---
+
+### Q3 — Reishi importa sem virar uma tarefa de coleta constante
+
+**Estado: `DECIDIDO`**
+
+A manipulação de Reishi é parte importante da identidade Quincy.
+
+Entretanto, o jogador não deverá precisar interromper constantemente seu gameplay para procurar ou coletar manualmente partículas espirituais.
+
+A interação com Reishi deve ocorrer de maneira integrada aos sistemas da raça.
+
+Diferentes ambientes poderão futuramente modificar:
+
+- eficiência;
+- regeneração;
+- disponibilidade de recursos;
+- vantagens específicas;
+- funcionamento de determinadas técnicas.
+
+Essas diferenças ambientais nunca deverão tornar um Quincy incapaz de jogar normalmente em uma dimensão específica.
+
+O ambiente influencia a raça, mas não funciona como permissão para utilizar seus sistemas básicos.
+
+---
+
+### Q4 — Grind Quincy representa treino, controle e prática
+
+**Estado: `DECIDIDO`**
+
+Assim como nas demais raças, grind faz parte da progressão Quincy.
+
+O jogador poderá desenvolver seu personagem através de:
+
+- combate;
+- prática com armas espirituais;
+- uso de técnicas;
+- controle de Reishi;
+- treinamentos;
+- Spiritual Points;
+- mastery.
+
+Esse grind contribui para o crescimento do personagem, mas não concede sozinho grandes marcos de poder.
+
+Transformações, liberações ou poderes narrativamente importantes continuam dependendo também de requisitos apropriados.
+
+---
+
+### Q5 — O Quincy começa sem instituição obrigatória
+
+**Estado: `DECIDIDO`**
+
+O jogador não começa automaticamente no Wandenreich nem em uma instituição equivalente à Academia Shinigami.
+
+Seu early game é mais pessoal e ligado à descoberta de sua própria herança.
+
+Estrutura conceitual:
+
+```text
+humano aparentemente comum
+    -> manifestações espirituais
+    -> descoberta da herança Quincy
+    -> orientação inicial
+    -> controle básico
+    -> desenvolvimento da tradição Quincy
+```
+
+A alma-guia definida anteriormente poderá auxiliar nesse período, especialmente preenchendo lacunas entre a descoberta inicial e o encontro com personagens capazes de ensinar ou aprofundar conhecimentos importantes.
+
+A alma-guia:
+
+- contextualiza;
+- orienta;
+- explica sistemas básicos;
+- ajuda a direcionar o jogador.
+
+Ela não substitui mentores, personagens canônicos ou acontecimentos importantes.
+
+---
+
+### Q6 — Fundamentos Quincy são separados de poderes canônicos específicos
+
+**Estado: `DECIDIDO`**
+
+Nem toda capacidade Quincy precisa ser adquirida através de uma questline relacionada a um personagem específico.
+
+Existe uma base racial compartilhada que o jogador desenvolve antes de escolher ou conquistar um poder canônico.
+
+Essa base poderá incluir, posteriormente:
+
+- manipulação de Reishi;
+- arma espiritual básica;
+- mobilidade;
+- técnicas raciais;
+- ferramentas e fundamentos Quincy.
+
+A definição exata dessas capacidades pertence aos módulos de habilidades e combate.
+
+Após possuir os fundamentos necessários, o jogador poderá buscar poderes associados a personagens canônicos.
+
+Exemplos:
+
+```text
+Bazz-B -> The Heat
+
+Äs Nödt -> The Fear
+
+Lille Barro -> The X-Axis
+```
+
+O poder conquistado continua sendo o poder canônico real e não uma versão apenas inspirada nele.
+
+---
+
+### Q7 — Schrift exige contexto apropriado
+
+**Estado: `DECIDIDO`**
+
+Schrift não será tratada como uma habilidade comum que pode ser adquirida imediatamente apenas ao encontrar um personagem.
+
+Por estar profundamente associada à estrutura Quincy avançada e ao Wandenreich, seu acesso deverá possuir contexto apropriado.
+
+Estrutura conceitual:
+
+```text
+Quincy independente
+    -> desenvolvimento racial
+    -> contato com acontecimentos ou estruturas Quincy avançadas
+    -> acesso ao caminho de determinado personagem
+    -> requisitos apropriados
+    -> conquista da Schrift
+```
+
+O personagem canônico associado ao poder continua sendo a principal referência da progressão.
+
+Entretanto, ele não precisa necessariamente funcionar como professor amigável.
+
+Sua participação poderá ocorrer através de:
+
+- rivalidade;
+- confronto;
+- prova;
+- cooperação temporária;
+- reconhecimento;
+- conflito narrativo.
+
+As quests específicas serão desenhadas posteriormente.
+
+---
+
+### Q8 — Wandenreich é afiliação, não evolução racial
+
+**Estado: `DECIDIDO`**
+
+Entrar ou se relacionar com o Wandenreich não transforma o jogador em uma nova raça.
+
+O personagem continua sendo Quincy.
+
+Wandenreich deve ser tratado principalmente através das camadas de:
+
+- afiliação;
+- posição;
+- reputação;
+- relações;
+- acesso a conteúdo.
+
+Um jogador Quincy poderá permanecer independente durante parte significativa de sua progressão.
+
+Também poderá existir conteúdo no qual ele se aproxime ou ingresse em estruturas do Wandenreich.
+
+Essa participação não precisa representar lealdade permanente.
+
+---
+
+### Q9 — Quincy participa de conteúdo em todos os grandes territórios
+
+**Estado: `DECIDIDO`**
+
+RAC-21 também se aplica integralmente ao caminho Quincy.
+
+O jogador não fica limitado ao Mundo Humano ou a territórios controlados por Quincy.
+
+Exemplos conceituais:
+
+```text
+Mundo Humano
+    -> origem e desenvolvimento inicial
+
+Soul Society
+    -> conflitos históricos, investigação, invasão, cooperação ou campanha
+
+Hueco Mundo
+    -> operações, guerra, investigação, confronto ou acontecimentos compartilhados
+
+territórios Quincy
+    -> conteúdo racial e institucional mais concentrado
+```
+
+Uma party com diferentes raças deve conseguir permanecer funcional durante essas transições.
+
+O contexto narrativo poderá mudar para cada jogador sem remover o gameplay de nenhum integrante.
+
+---
+
+### Q10 — Quincy não é uma classe obrigatoriamente focada em combate à distância
+
+**Estado: `DECIDIDO`**
+
+Embora o arco espiritual básico introduza o jogador ao caminho Quincy, a raça não será definida como uma classe fixa de arqueiro ou DPS ranged.
+
+O papel final do personagem depende de:
+
+- build;
+- técnicas;
+- Spiritual Points investidos;
+- poder canônico escolhido;
+- domínio;
+- transformações;
+- estilo do jogador.
+
+A raça fornece uma linguagem e uma identidade de combate.
+
+O poder canônico e a construção do personagem definem sua especialização.
+
+---
+
+### Q11 — Poderes canônicos utilizam uma progressão simples baseada em narrativa, Spiritual Points, mastery e marcos
+
+**Estado: `DECIDIDO`**
+
+A progressão ligada a personagens canônicos não será transformada em uma longa sequência de quests obrigatórias para cada técnica.
+
+O modelo principal será:
+
+```text
+quest ou acontecimento de aquisição
+    -> desbloqueio do caminho de poder
+    -> Spiritual Points para técnicas
+    -> mastery e uso
+    -> marco importante
+    -> novas técnicas e formas
+```
+
+A questline relacionada ao personagem canônico serve principalmente para justificar e autorizar narrativamente o acesso ao seu poder.
+
+Depois disso, grande parte da progressão ocorre através dos sistemas gerais do mod.
+
+### Spiritual Points
+
+Serão utilizados principalmente para:
+
+- comprar técnicas;
+- desenvolver capacidades;
+- desbloquear habilidades intermediárias;
+- melhorar o repertório disponível;
+- avançar dentro de caminhos já autorizados.
+
+### Mastery
+
+Representa domínio através do uso e da experiência.
+
+Mastery poderá funcionar como requisito adicional para impedir que um jogador acumule pontos e compre instantaneamente todo o desenvolvimento de um poder recém-adquirido.
+
+### Marcos narrativos
+
+Ficam reservados principalmente para conquistas significativas.
+
+Exemplos conceituais:
+
+- aquisição inicial de um poder canônico;
+- Schrift;
+- Shikai;
+- Bankai;
+- Arrancarização;
+- Resurrección;
+- Vollständig;
+- outras transformações ou liberações importantes.
+
+Spiritual Points poderão continuar sendo exigidos nesses momentos, mas não serão o único requisito.
+
+---
+
+## Aplicação do Q11 aos caminhos raciais
+
+Apesar de ter sido definido durante a discussão Quincy, o princípio de Q11 poderá ser aplicado posteriormente às demais raças.
+
+### Exemplo Shinigami
+
+```text
+quest relacionada a Byakuya
+    -> Senbonzakura
+    -> Spiritual Points para técnicas
+    -> mastery
+    -> prova ou requisito para Shikai
+    -> Spiritual Points para novas técnicas
+    -> progresso
+    -> marco de Bankai
+```
+
+### Exemplo Hollow / Arrancar
+
+```text
+progressão Hollow
+    -> Arrancarização
+    -> quest relacionada a Grimmjow
+    -> Pantera
+    -> Spiritual Points para técnicas
+    -> mastery
+    -> marco de Resurrección
+    -> técnicas avançadas
+```
+
+### Exemplo Quincy
+
+```text
+fundamentos Quincy
+    -> quest relacionada a Bazz-B
+    -> acesso ao caminho The Heat
+    -> Spiritual Points para técnicas
+    -> mastery
+    -> progressão Quincy avançada
+    -> marco de Vollständig
+```
+
+### Exemplo Fullbringer
+
+```text
+desenvolvimento Fullbringer
+    -> quest relacionada ao personagem
+    -> poder canônico correspondente
+    -> Spiritual Points
+    -> mastery
+    -> desenvolvimento avançado
+```
+
+Esses exemplos não definem quests, custos ou requisitos finais.
+
+Servem apenas para registrar a estrutura geral.
+
+---
+
+## Identidade prática do caminho Quincy
+
+| Aspecto | Quincy |
+|---|---|
+| **Começo** | humano com herança Quincy oculta ou fragmentada |
+| **Primeiro aprendizado** | percepção e manipulação de Reishi |
+| **Primeira arma** | arco espiritual básico |
+| **Identidade racial** | controle, precisão e conhecimento |
+| **Instituição inicial** | nenhuma obrigatória |
+| **Orientação inicial** | alma-guia, acontecimentos e futuros mentores |
+| **Grind** | treino, combate, controle, uso de técnicas e mastery |
+| **Fundamentos raciais** | aprendidos antes de poderes individuais |
+| **Poder canônico** | autorizado por quest ou acontecimento ligado ao personagem |
+| **Progressão de técnicas** | principalmente Spiritual Points + mastery |
+| **Grandes poderes** | exigem também marcos apropriados |
+| **Wandenreich** | afiliação e progressão social, não nova raça |
+| **Territórios** | conteúdo relevante em diferentes dimensões e regiões |
+| **Multiplayer** | nenhuma função obrigatória dentro da party |
+| **Sensação** | descobrir e dominar progressivamente uma tradição espiritual técnica |
+
+---
+
+## Estado atual do caminho Quincy
+
+As decisões Q1 até Q11 estão `DECIDIDAS`.
+
+O detalhamento de:
+
+- técnicas Quincy;
+- funcionamento numérico de Reishi;
+- custos de Spiritual Points;
+- mastery;
+- Schrift individuais;
+- Vollständig;
+- armas específicas;
+- quests de personagens;
+- relações com o Wandenreich;
+
+permanece reservado aos módulos correspondentes.
+
+O caminho Quincy está suficientemente definido neste módulo para permitir o avanço da discussão para a aplicação prática do RAC-13 ao caminho Fullbringer.
+
+## Aplicação do RAC-13 ao caminho Fullbringer
+
+O caminho Fullbringer utiliza a mesma espinha dorsal compartilhada das demais raças, mas sua identidade prática gira principalmente em torno de:
+
+> **vínculo + matéria + domínio de um poder individual.**
+
+O jogador começa como humano espiritualmente sensível e descobre gradualmente sua capacidade de interagir com a alma presente na matéria.
+
+A progressão inicial não entrega imediatamente um Fullbring canônico específico.
+
+Estrutura conceitual:
+
+```text
+humano espiritualmente sensível
+    -> descoberta das capacidades Fullbringer
+    -> manipulação básica da matéria
+    -> fundamentos raciais
+    -> grind + Spiritual Points + Mastery
+    -> busca por um Fullbring canônico
+    -> aquisição do poder
+    -> desenvolvimento e domínio
+```
+
+---
+
+### F1 — O Fullbringer começa aprendendo aplicações práticas da manipulação da matéria
+
+**Estado: `DECIDIDO`**
+
+O início Fullbringer não será baseado em selecionar imediatamente um poder canônico.
+
+O jogador primeiro aprende que consegue perceber e manipular a alma existente na matéria.
+
+Entretanto, esse conceito não será transformado em um sistema extremamente aberto no qual qualquer bloco do Minecraft possa ser livremente deformado, arremessado ou modificado.
+
+A manipulação básica deverá ser traduzida para aplicações simples e úteis de gameplay.
+
+Exemplos conceituais:
+
+```text
+alma do chão
+    -> impulso
+    -> salto ou movimentação aprimorada
+
+alma do ambiente
+    -> movimentação espiritual
+    -> Bringer Light
+
+interações específicas
+    -> aplicações contextuais da manipulação da matéria
+```
+
+As aplicações concretas serão definidas posteriormente no módulo de habilidades e combate.
+
+A intenção é preservar a identidade Fullbringer sem criar um sistema excessivamente complexo de alteração do mundo.
+
+---
+
+### F2 — Fundamentos Fullbringer são separados do Fullbring específico
+
+**Estado: `DECIDIDO`**
+
+Existem capacidades pertencentes à própria condição Fullbringer que podem ser desenvolvidas antes da aquisição de um poder canônico específico.
+
+Esses fundamentos poderão incluir posteriormente:
+
+- percepção da alma presente na matéria;
+- manipulação básica do ambiente;
+- Bringer Light;
+- movimentação;
+- técnicas raciais compartilhadas;
+- outras capacidades compatíveis com a raça.
+
+O detalhamento exato pertence aos módulos posteriores.
+
+Esses fundamentos permanecem independentes do Fullbring canônico escolhido posteriormente.
+
+---
+
+### F3 — Fullbrings jogáveis serão poderes canônicos
+
+**Estado: `DECIDIDO`**
+
+O jogador não criará livremente um Fullbring original através de qualquer objeto escolhido no Minecraft.
+
+A política de RAC-20 também se aplica aos Fullbringers.
+
+O jogador poderá conquistar Fullbrings pertencentes a personagens reais de Bleach através de conteúdo relacionado a esses personagens.
+
+Exemplos:
+
+```text
+Tsukishima -> Book of the End
+
+Jackie -> Dirty Boots
+
+Yukio -> Invaders Must Die
+
+Chad -> seus Fullbrings correspondentes
+```
+
+O poder recebido é o poder canônico real e não apenas uma habilidade inspirada nele.
+
+---
+
+### F4 — O vetor do Fullbring deve respeitar o poder canônico original
+
+**Estado: `DECIDIDO`**
+
+Quando um Fullbring possui um objeto ou vetor característico, esse elemento deve fazer parte da experiência jogável.
+
+Entretanto, nem todo Fullbring precisa ser representado por um item comum de inventário.
+
+O vetor deverá respeitar a natureza do poder original.
+
+Exemplos conceituais:
+
+```text
+Book of the End
+    -> objeto característico correspondente
+
+Dirty Boots
+    -> botas
+
+Invaders Must Die
+    -> dispositivo associado
+
+poderes de Chad
+    -> manifestação ligada ao próprio corpo
+```
+
+Portanto:
+
+> **objeto-vetor não significa obrigatoriamente item carregado na mão ou no inventário.**
+
+Ele poderá ser:
+
+- objeto;
+- equipamento;
+- roupa;
+- parte do corpo;
+- outro elemento apropriado ao Fullbring canônico.
+
+---
+
+### F5 — A progressão utiliza o modelo simples de aquisição + Spiritual Points + Mastery + marcos
+
+**Estado: `DECIDIDO`**
+
+O Fullbringer seguirá o mesmo princípio simplificado aprovado durante o caminho Quincy.
+
+Estrutura geral:
+
+```text
+quest ou acontecimento de aquisição
+    -> Fullbring canônico
+    -> Spiritual Points
+    -> técnicas
+    -> Mastery
+    -> desenvolvimento
+    -> marco importante
+    -> capacidades avançadas
+```
+
+Não será necessário criar uma quest diferente para cada técnica.
+
+A quest relacionada ao personagem canônico serve principalmente para justificar e autorizar a aquisição do Fullbring.
+
+Depois disso, a maior parte do crescimento retorna aos sistemas gerais do mod.
+
+---
+
+### F6 — O desenvolvimento completo do Fullbring depende fortemente de Mastery
+
+**Estado: `DECIDIDO`**
+
+O domínio do Fullbring não será tratado apenas como uma compra utilizando Spiritual Points.
+
+Mastery terá importância especial nesse caminho.
+
+Estrutura conceitual:
+
+```text
+Spiritual Points
++
+uso do poder
++
+Mastery
++
+requisito ou prova quando necessário
+=
+desenvolvimento avançado do Fullbring
+```
+
+A realização ou completude de um Fullbring deve refletir que o jogador aprendeu a dominar seu próprio poder.
+
+---
+
+### Princípio transversal de Mastery
+
+A decisão de F6 reforça uma regra aplicável às demais raças:
+
+> **quando um estágio representa domínio real de um poder já adquirido, Mastery deve possuir peso relevante na progressão.**
+
+Isso poderá ser refletido, quando fizer sentido, em:
+
+- domínio de Zanpakutō;
+- técnicas de Shikai;
+- progressão até Bankai;
+- poderes Hollow e Arrancar;
+- Resurrección;
+- técnicas Quincy;
+- Schrift;
+- Vollständig;
+- Fullbring;
+- outras formas avançadas.
+
+Isso não significa que todas as raças utilizarão exatamente os mesmos requisitos.
+
+Mastery representa domínio, e não uma moeda substituta para Spiritual Points.
+
+---
+
+### F7 — Xcution é afiliação, não condição racial
+
+**Estado: `DECIDIDO`**
+
+O jogador é Fullbringer independentemente de pertencer ou não à Xcution.
+
+Xcution deverá ser tratada através de:
+
+- afiliação;
+- relações;
+- reputação;
+- posição;
+- acesso a personagens;
+- acesso a conteúdo.
+
+O jogador poderá desenvolver parte significativa de sua trajetória como Fullbringer independente.
+
+Posteriormente, poderá entrar em contato, cooperar, confrontar ou se relacionar de outras maneiras com a Xcution.
+
+---
+
+### F8 — A ligação Hollow faz parte da natureza Fullbringer, mas não cria uma barra de corrupção
+
+**Estado: `DECIDIDO`**
+
+A conexão entre Fullbringers e Hollows será preservada narrativamente.
+
+Entretanto, essa ligação não será transformada automaticamente em:
+
+- corrupção;
+- fome Hollow;
+- transformação forçada;
+- porcentagem de influência Hollow;
+- necessidade de consumir almas.
+
+O caso de Chad demonstra que essa ligação pode se manifestar através da própria natureza do poder Fullbringer sem exigir que o usuário esteja se tornando um Hollow.
+
+Portanto:
+
+> **a origem ou natureza Hollow do Fullbring faz parte da identidade espiritual do poder, mas não significa evolução racial para Hollow.**
+
+Essa relação poderá influenciar:
+
+- narrativa;
+- diálogos;
+- reações;
+- locais;
+- treinamentos;
+- acontecimentos;
+- determinadas interações futuras.
+
+---
+
+### F9 — Grind intencional faz parte da progressão Fullbringer
+
+**Estado: `DECIDIDO`**
+
+O jogador deve poder deliberadamente dedicar tempo a grind e treinamento para desenvolver seu personagem.
+
+No caminho Fullbringer, isso poderá envolver:
+
+- combate;
+- uso repetido do Fullbring;
+- uso de fundamentos raciais;
+- atividades de treinamento;
+- inimigos relevantes;
+- conteúdo repetível;
+- obtenção de Spiritual Points;
+- desenvolvimento de Mastery.
+
+Estrutura conceitual:
+
+```text
+combate
++
+treinamento
++
+uso do poder
++
+atividades repetíveis
+    ->
+Spiritual Points
++
+Mastery
+    ->
+progressão
+```
+
+O grind não é apenas tolerado.
+
+Ele faz parte intencionalmente da experiência de RPG do mod.
+
+Entretanto, grind quantitativo sozinho não concede automaticamente grandes marcos narrativos ou transformações.
+
+---
+
+### Princípio transversal de grind
+
+F9 reforça a decisão geral válida para todas as raças:
+
+> **todas as raças devem possuir formas intencionais e úteis de grind.**
+
+O jogador deve conseguir pensar:
+
+> “vou treinar um pouco para ficar mais forte.”
+
+E realmente obter progresso através disso.
+
+O grind poderá alimentar:
+
+- Spiritual Points;
+- Mastery;
+- recursos;
+- treinamento;
+- preparação;
+- desenvolvimento de técnicas.
+
+Grandes marcos poderão exigir também contexto, provas, condições ou acontecimentos.
+
+---
+
+### F10 — Mundo Humano concentra conteúdo Fullbringer, mas não o limita
+
+**Estado: `DECIDIDO`**
+
+O Mundo Humano deverá possuir grande importância para o caminho Fullbringer.
+
+Isso não significa que jogadores Fullbringer ficam sem conteúdo quando a campanha avança para outros territórios.
+
+RAC-21 permanece integralmente válido.
+
+O jogador poderá participar de conteúdo em:
+
+- Mundo Humano;
+- Soul Society;
+- Hueco Mundo;
+- territórios Quincy;
+- regiões avançadas;
+- outras dimensões e locais de campanha.
+
+O contexto e a quantidade de conteúdo poderão variar.
+
+A regra permanece:
+
+> **uma mudança de território não pode transformar uma raça em espectadora.**
+
+---
+
+### F11 — Fullbringer não possui função fixa de classe
+
+**Estado: `DECIDIDO`**
+
+A raça Fullbringer não será definida como:
+
+- melee;
+- suporte;
+- ranged;
+- tank;
+- controle;
+- qualquer outra função obrigatória.
+
+Os Fullbrings canônicos possuem características muito diferentes entre si.
+
+Portanto, o papel do personagem depende principalmente de:
+
+- Fullbring escolhido;
+- build;
+- Spiritual Points;
+- técnicas;
+- Mastery;
+- estilo de jogo.
+
+A raça fornece fundamentos compartilhados.
+
+O poder individual define grande parte de sua especialização.
+
+---
+
+### F12 — Não existe objeto pessoal obrigatório no prólogo
+
+**Estado: `DECIDIDO`**
+
+O jogador não precisa selecionar um objeto sentimental no início da campanha para definir seu Fullbring.
+
+Isso criaria complexidade desnecessária e entraria em conflito com a decisão de utilizar poderes canônicos.
+
+O prólogo ensina inicialmente:
+
+```text
+sensibilidade espiritual
+    -> percepção da matéria
+    -> manipulação básica
+    -> fundamentos Fullbringer
+```
+
+O vetor específico surge apenas quando o jogador conquista um Fullbring canônico.
+
+Exemplo:
+
+```text
+Fullbringer básico
+    -> fundamentos
+    -> busca pelo poder de Tsukishima
+    -> quest ou acontecimento de aquisição
+    -> vetor correspondente
+    -> Book of the End
+```
+
+Quando o poder utilizar um vetor não convencional, como o próprio corpo, sua representação seguirá o funcionamento daquele Fullbring específico.
+
+---
+
+### F13 — Um Fullbring canônico principal por vez
+
+**Estado: `DECIDIDO`**
+
+O jogador poderá conhecer e explorar diferentes possibilidades antes de conquistar seu Fullbring principal.
+
+Ele poderá:
+
+- conhecer personagens;
+- descobrir poderes disponíveis;
+- iniciar introduções;
+- avaliar caminhos;
+- decidir qual Fullbring deseja perseguir.
+
+Entretanto, depois da aquisição, o personagem manterá apenas **um Fullbring canônico principal ativo por vez**.
+
+Isso evita combinações como:
+
+```text
+Book of the End
++
+Dirty Boots
++
+Invaders Must Die
++
+poderes de Chad
+```
+
+no mesmo personagem.
+
+A intenção é preservar:
+
+- identidade;
+- valor da escolha;
+- coerência;
+- especialização;
+- balanceamento.
+
+---
+
+### Troca de Fullbring
+
+Trocar o Fullbring principal não deverá funcionar como uma simples troca de loadout.
+
+Entretanto, também não é necessário transformar a primeira escolha em uma decisão absolutamente irreversível.
+
+A troca poderá existir através de um processo especial.
+
+Os detalhes ficam para módulos posteriores.
+
+Poderão ser considerados futuramente elementos como:
+
+- quest;
+- custo;
+- perda ou adaptação de Mastery;
+- Spiritual Points;
+- requisitos narrativos;
+- outras consequências apropriadas.
+
+A regra neste módulo é apenas:
+
+> **a troca pode existir, mas não é instantânea nem livre.**
+
+---
+
+### Fundamentos permanecem independentes do Fullbring escolhido
+
+Mesmo que o jogador venha a trocar seu Fullbring principal, suas capacidades raciais fundamentais continuam pertencendo ao personagem.
+
+Estrutura conceitual:
+
+```text
+Fullbringer
+│
+├── fundamentos raciais
+│   ├── manipulação básica da matéria
+│   ├── movimentação
+│   ├── Bringer Light
+│   └── outras capacidades compartilhadas
+│
+└── Fullbring canônico principal
+    ├── Book of the End
+    ├── Dirty Boots
+    ├── Invaders Must Die
+    ├── caminhos associados a Chad
+    └── outros Fullbrings canônicos
+```
+
+Os exemplos representam alternativas, e não poderes simultâneos.
+
+---
+
+## Estrutura prática do caminho Fullbringer
+
+A progressão racial pode ser resumida conceitualmente como:
+
+```text
+Humano
+    ↓
+descoberta da condição Fullbringer
+    ↓
+manipulação básica da matéria
+    ↓
+fundamentos raciais
+    ↓
+Bringer Light e outras capacidades
+    ↓
+grind
++
+Spiritual Points
++
+Mastery
+    ↓
+contato com personagens e caminhos canônicos
+    ↓
+escolha de um Fullbring
+    ↓
+quest ou acontecimento de aquisição
+    ↓
+Fullbring + vetor apropriado
+    ↓
+Spiritual Points
++
+grind
++
+Mastery
+    ↓
+desenvolvimento
+    ↓
+Fullbring completo / domínio avançado
+```
+
+Essa estrutura representa a lógica geral e não define custos, técnicas ou quests concretas.
+
+---
+
+## Identidade prática do caminho Fullbringer
+
+| Aspecto | Fullbringer |
+|---|---|
+| **Começo** | humano espiritualmente sensível |
+| **Descoberta** | capacidade de interagir com a alma da matéria |
+| **Fundamento inicial** | manipulação simples do ambiente e movimentação |
+| **Identidade racial** | vínculo, matéria e domínio individual |
+| **Objeto pessoal inicial** | não obrigatório |
+| **Fundamentos raciais** | independentes do Fullbring escolhido |
+| **Poder específico** | Fullbring real de personagem canônico |
+| **Vetor** | respeita o poder original; pode ser objeto, equipamento, corpo ou outro elemento |
+| **Progressão** | Spiritual Points + grind + Mastery |
+| **Grande marco** | desenvolvimento/completude do Fullbring |
+| **Organização** | Xcution opcional e contextual |
+| **Ligação Hollow** | parte da natureza do poder, não corrupção automática |
+| **Território predominante** | Mundo Humano |
+| **Outros territórios** | continuam oferecendo gameplay relevante |
+| **Party** | nenhuma função fixa obrigatória |
+| **Especialização** | determinada principalmente pelo Fullbring e pela build |
+| **Poder principal** | um Fullbring canônico por vez |
+| **Troca de poder** | possível futuramente através de processo especial |
+| **Sensação** | descobrir, escolher e dominar progressivamente um poder extremamente particular |
+
+---
+
+## Estado atual do caminho Fullbringer
+
+As decisões F1 até F13 estão `DECIDIDAS`.
+
+O detalhamento de:
+
+- aplicações concretas da manipulação da matéria;
+- Bringer Light;
+- técnicas compartilhadas;
+- Fullbrings individuais;
+- objetos-vetores;
+- custos de Spiritual Points;
+- velocidade de Mastery;
+- atividades de grind;
+- requisitos para completar cada Fullbring;
+- funcionamento da troca de Fullbring;
+- Xcution;
+- quests de aquisição;
+
+permanece reservado aos módulos correspondentes.
+
+O caminho Fullbringer está suficientemente definido neste módulo para permitir a comparação final entre as quatro raças.
+
 ### AINDA ABERTO NESTE BLOCO
 
-- aplicação prática da assimetria ao caminho Hollow;
-- aplicação prática da assimetria ao caminho Quincy;
-- aplicação prática da assimetria ao caminho Fullbringer;
 - refinamentos necessários após comparar os quatro caminhos;
 - implicações adicionais de convivência que só se tornem visíveis após essa comparação.
 
 O módulo `04-racas-e-origens.md` permanece `IDEALIZADO` até que este terceiro bloco seja concluído e o quarto bloco — criação e continuidade — seja decidido.
+
+## Fechamento da comparação entre as quatro raças
+
+A comparação entre Shinigami, Hollow, Quincy e Fullbringer confirmou que as quatro raças podem compartilhar a mesma espinha dorsal de gameplay sem precisar possuir sistemas simétricos.
+
+Cada caminho deve permanecer reconhecível através de sua própria fantasia, progressão e relação com o mundo.
+
+Resumo conceitual:
+
+| Raça | Identidade predominante |
+|---|---|
+| **Shinigami** | formação, amplitude e disciplinas |
+| **Hollow** | sobrevivência, corpo e evolução |
+| **Quincy** | controle, precisão e tradição técnica |
+| **Fullbringer** | vínculo, matéria e domínio individual |
+
+---
+
+### RAC-22 — Equivalência de experiência, não simetria de conteúdo
+
+**Estado: `DECIDIDO`**
+
+As raças não precisam possuir:
+
+- o mesmo número de transformações;
+- a mesma quantidade de técnicas;
+- a mesma quantidade de instituições;
+- a mesma quantidade de personagens;
+- a mesma duração de campanhas raciais;
+- estruturas de progressão equivalentes em quantidade.
+
+O objetivo é oferecer caminhos completos, interessantes e coerentes, e não produzir igualdade numérica artificial.
+
+A quantidade de conteúdo também poderá refletir aquilo que existe na própria obra.
+
+Se Bleach apresenta mais personagens, instituições, técnicas ou acontecimentos relacionados aos Shinigami, é natural que o caminho Shinigami possua maior quantidade absoluta de conteúdo.
+
+Isso não será considerado um problema por si só.
+
+A regra é:
+
+> **qualidade, identidade e completude são mais importantes que igualdade quantitativa entre as raças.**
+
+Não serão criados sistemas ou conteúdos artificiais apenas para igualar tabelas.
+
+---
+
+### RAC-23 — Um poder canônico principal por vez
+
+**Estado: `DECIDIDO`**
+
+A filosofia definida inicialmente para Fullbringer será aplicada às quatro raças.
+
+O personagem mantém:
+
+```text
+fundamentos raciais
++
+disciplinas e capacidades gerais
++
+um poder canônico principal
+```
+
+Exemplos:
+
+```text
+Shinigami
++ fundamentos Shinigami
++ Senbonzakura
+```
+
+```text
+Hollow / Arrancar
++ fundamentos Hollow / Arrancar
++ Pantera
+```
+
+```text
+Quincy
++ fundamentos Quincy
++ The Heat
+```
+
+```text
+Fullbringer
++ fundamentos Fullbringer
++ Book of the End
+```
+
+O jogador poderá conhecer outros personagens e caminhos antes ou depois de sua escolha.
+
+Entretanto, não poderá utilizar simultaneamente múltiplas linhas canônicas principais incompatíveis.
+
+Exemplos que não devem ocorrer como combinação normal:
+
+```text
+Senbonzakura + Nozarashi + Hyorinmaru
+```
+
+```text
+Pantera + Murciélago + Arrogante
+```
+
+```text
+The Heat + The Fear + The X-Axis
+```
+
+```text
+Book of the End + Dirty Boots + Invaders Must Die
+```
+
+Isso preserva:
+
+- identidade do personagem;
+- valor da escolha;
+- especialização;
+- balanceamento;
+- reconhecimento entre jogadores;
+- importância das builds.
+
+---
+
+### Troca de poder canônico principal
+
+A escolha de um poder principal não precisa ser absolutamente irreversível.
+
+Entretanto, a troca não funcionará como mudança instantânea de loadout.
+
+Ela deverá utilizar futuramente um processo especial.
+
+Poderão existir elementos como:
+
+- quest;
+- custo;
+- consequências;
+- perda ou adaptação de Mastery;
+- requisitos narrativos;
+- Spiritual Points;
+- outros mecanismos apropriados.
+
+Os detalhes não pertencem a este módulo.
+
+Fundamentos raciais continuam pertencendo ao personagem independentemente da troca de poder principal.
+
+---
+
+### RAC-24 — Grind intencional é parte das quatro raças
+
+**Estado: `DECIDIDO`**
+
+Grind é uma parte intencional da experiência de RPG do mod.
+
+Todas as raças deverão possuir atividades através das quais o jogador possa deliberadamente dedicar tempo ao treinamento e obter progresso real.
+
+Exemplos gerais:
+
+- combate;
+- treinamento;
+- uso de técnicas;
+- atividades repetíveis;
+- inimigos apropriados;
+- locais especiais de treinamento;
+- prática de disciplinas;
+- prática do poder principal.
+
+O grind poderá gerar ou desenvolver elementos como:
+
+- Spiritual Points;
+- Mastery;
+- recursos;
+- preparação;
+- desenvolvimento de técnicas;
+- crescimento geral.
+
+O jogador deve poder pensar:
+
+> **“vou treinar por um tempo para ficar mais forte.”**
+
+E essa decisão deve realmente produzir progresso.
+
+Entretanto:
+
+> **grind quantitativo sozinho não concede automaticamente grandes marcos narrativos ou transformações.**
+
+---
+
+### RAC-25 — Mastery é um princípio transversal
+
+**Estado: `DECIDIDO`**
+
+Mastery representa domínio através do uso, prática e experiência.
+
+Ela não é uma moeda alternativa aos Spiritual Points.
+
+Quando uma progressão representa o domínio real de um poder já adquirido, Mastery deverá possuir importância relevante.
+
+Poderá ser utilizada, quando fizer sentido, em progressões envolvendo:
+
+- Zanpakutō;
+- Shikai;
+- Bankai;
+- capacidades Hollow;
+- evolução racial;
+- poderes Arrancar;
+- Resurrección;
+- técnicas Quincy;
+- Schrift;
+- Vollständig;
+- Fullbring;
+- outras técnicas e formas avançadas.
+
+A regra conceitual geral passa a ser:
+
+```text
+Spiritual Points
++
+grind
++
+Mastery
++
+requisitos narrativos ou contextuais quando necessários
+=
+progressão
+```
+
+Nem todo desbloqueio exigirá todos esses elementos.
+
+A combinação depende do peso e da natureza da conquista.
+
+---
+
+# H9 — Vasto Lorde como evolução racial avançada especial
+
+**Estado: `DECIDIDO`**
+
+Vasto Lorde será tratado mecanicamente dentro dos sistemas de evolução e transformação, mas não funcionará como uma transformação temporária ativável.
+
+Uma vez conquistado, representa um novo estado permanente da evolução Hollow.
+
+Estrutura conceitual:
+
+```text
+Hollow
+    ↓
+Gillian
+    ↓
+Adjuchas
+    ↓
+rota avançada especial
+    ↓
+Vasto Lorde
+```
+
+O personagem não alterna livremente entre Adjuchas e Vasto Lorde depois da evolução.
+
+---
+
+## Vasto Lorde não é uma progressão automática
+
+Chegar ao estágio Adjuchas não garante automaticamente evolução para Vasto Lorde.
+
+O estágio deverá representar uma conquista avançada e exigente.
+
+Estrutura conceitual:
+
+```text
+ser Adjuchas
++
+permanecer na linha evolutiva Hollow
++
+grind significativo
++
+Mastery racial elevada
++
+requisitos específicos
++
+prova ou acontecimento de evolução
+=
+Vasto Lorde
+```
+
+Os requisitos concretos serão definidos no módulo responsável por transformações e Mastery.
+
+---
+
+## Raridade através de dificuldade, não de sorte
+
+Vasto Lorde deverá ser uma conquista rara dentro do contexto do jogo.
+
+Entretanto, essa raridade não será criada principalmente através de RNG arbitrário.
+
+A filosofia será:
+
+> **difícil e exigente, mas alcançável de maneira determinística por quem cumprir os requisitos.**
+
+O jogador que investir na rota e realizar todas as exigências deverá conseguir alcançar Vasto Lorde.
+
+A raridade surge do esforço necessário.
+
+---
+
+## Relação entre Vasto Lorde e Arrancarização
+
+Conforme H8, Arrancarização poderá ocorrer em diferentes estágios da progressão Hollow.
+
+Estrutura geral:
+
+```text
+Hollow
+    ↓
+Gillian
+    ├── Arrancarização
+    │
+    └── continuar evoluindo
+            ↓
+        Adjuchas
+            ├── Arrancarização
+            │
+            └── continuar evoluindo
+                    ↓
+                Vasto Lorde
+                    ↓
+                Arrancarização
+```
+
+Se o jogador realizar a Arrancarização antes de alcançar Vasto Lorde, ele deixa a linha normal de evolução Hollow naquele ponto.
+
+Um Arrancar originado de Adjuchas não continua posteriormente a evolução racial normal até Vasto Lorde.
+
+Portanto, permanecer como Hollow para buscar Vasto Lorde representa uma escolha real de progressão.
+
+---
+
+## Vasto Lorde como conquista de prestígio
+
+Alcançar Vasto Lorde deverá comunicar que o jogador investiu significativamente no desenvolvimento de seu caminho Hollow.
+
+Especialmente em multiplayer, esse estado deve possuir valor de reconhecimento.
+
+Isso não significa que Vasto Lorde será automaticamente superior a qualquer personagem de outra raça.
+
+Seu poder final continua dependendo de:
+
+- build;
+- atributos;
+- técnicas;
+- Mastery;
+- poder principal;
+- progressão geral;
+- balanceamento.
+
+A conquista é avançada, mas não representa invencibilidade.
+
+---
+
+# Estrutura transversal consolidada
+
+Após RAC-22 até RAC-25, a estrutura geral das quatro raças pode ser representada como:
+
+```text
+ORIGEM RACIAL
+      ↓
+FUNDAMENTOS
+      ↓
+GRIND / TREINAMENTO
+      ↓
+SPIRITUAL POINTS
++
+MASTERY
+      ↓
+PODER CANÔNICO PRINCIPAL
+      ↓
+TÉCNICAS
+      ↓
+MARCOS DE PODER
+      ↓
+FORMAS / DOMÍNIO AVANÇADO
+```
+
+Cada raça interpreta essa estrutura de maneira diferente.
+
+---
+
+## Shinigami
+
+```text
+formação
+→ fundamentos
+→ Asauchi
+→ poder canônico principal
+→ Shikai
+→ domínio
+→ Bankai
+```
+
+---
+
+## Hollow
+
+```text
+sobrevivência
+→ capacidades raciais
+→ evolução
+→ Gillian
+→ Adjuchas
+→ Arrancarização ou busca por Vasto Lorde
+→ poder canônico
+→ Resurrección
+```
+
+---
+
+## Quincy
+
+```text
+descoberta da herança
+→ Reishi
+→ arma espiritual
+→ fundamentos
+→ poder canônico / Schrift
+→ domínio
+→ formas avançadas
+```
+
+---
+
+## Fullbringer
+
+```text
+descoberta
+→ manipulação da matéria
+→ fundamentos
+→ Fullbring canônico
+→ domínio
+→ Fullbring completo
+```
+
+As estruturas representam identidade e sequência conceitual.
+
+Não representam custos, números ou duração final.
+
+---
+
+# Conclusão do Módulo 04
+
+As quatro raças iniciais possuem agora:
+
+- origem definida;
+- identidade própria;
+- filosofia de progressão;
+- relação com fundamentos raciais;
+- política de poderes canônicos;
+- relação com grind;
+- relação com Mastery;
+- relação com territórios;
+- funcionamento conceitual em multiplayer;
+- política de afiliação;
+- princípio de escolha de poder principal;
+- direção para grandes marcos raciais.
+
+Questões como:
+
+- custos;
+- atributos;
+- valores numéricos;
+- velocidade de progressão;
+- técnicas específicas;
+- requisitos exatos de Mastery;
+- requisitos concretos para Vasto Lorde;
+- condições específicas de transformações;
+- quests individuais;
+- balanceamento;
+
+não representam lacunas deste módulo.
+
+Elas foram conscientemente delegadas aos módulos responsáveis.
+
+### Estado do módulo
+
+**Módulo 04 — Raças e Origens: `ESPECIFICADO`**
+
+As decisões atuais fornecem contratos suficientes para os módulos posteriores.
+
+Alterações futuras ainda poderão ocorrer caso testes, integração ou desenvolvimento revelem conflitos importantes.
+
+---
+
+## Próximos passos
+
+Com o Módulo 04 especificado, o desenvolvimento conceitual segue para:
+
+### Módulo 05 — Atributos e Recursos
+
+Esse módulo deverá definir a base quantitativa compartilhada do personagem, incluindo posteriormente questões como:
+
+- vida;
+- poder espiritual;
+- recursos de combate;
+- atributos fundamentais;
+- regeneração;
+- custos;
+- relação entre atributos e técnicas;
+- relação com as diferentes raças;
+- Spiritual Points;
+- separação entre atributo, recurso, Mastery e progressão.
