@@ -36,7 +36,7 @@ public final class JournalScreen extends Screen {
         next=addRenderableWidget(Button.builder(Component.literal(">"),b->{page++;refresh();}).bounds(split-38,top+154,30,20).build());
         int y=top+panelH+4,bw=(panelW-12)/4;
         start=addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.start"),b->{
-            if(quest()!=null)NetworkHandler.sendToServer(new QuestActionC2S(QuestActionC2S.Action.START,selected));
+            if(quest()!=null)NetworkHandler.sendToServer(new QuestActionC2S(QuestActionC2S.Action.START,selected,-1));
         }).bounds(left,y,bw,20).build());
         claim=addRenderableWidget(Button.builder(Component.translatable("screen.bleachmod.journal.claim"),b->claim())
             .bounds(left+bw+4,y,bw,20).build());
@@ -79,7 +79,7 @@ public final class JournalScreen extends Screen {
         boolean valid=q!=null&&d!=null;
         QuestProgress p=valid?d.getPlayerQuestData().getProgress(selected):null;
         boolean compatible=p==null||p.matchesDefinition(q);
-        start.active=valid&&compatible&&QuestAvailabilityChecker.isAvailable(d,selected);
+        start.active=valid&&compatible&&q.getQuestGiver().isBlank()&&QuestAvailabilityChecker.isAvailable(d,selected);
         claim.active=valid&&compatible&&d.getPlayerQuestData().isCompleted(selected)&&pending(d,q);
         track.active=valid&&d.getPlayerQuestData().isAccepted(selected);
         track.setMessage(Component.translatable(valid&&selected.equals(d.getPlayerQuestData().getTrackedQuestId())?"screen.bleachmod.untrack":"screen.bleachmod.journal.track"));

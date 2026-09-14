@@ -15,7 +15,11 @@ public final class ModCreativeTabs {
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .title(Component.translatable("itemGroup.bleachmod"))
             .icon(() -> ModItems.ASAUCHI.get().getDefaultInstance())
-            .displayItems((params, output) -> output.accept(ModItems.ASAUCHI.get()))
+            .displayItems((params, output) -> {
+                output.accept(ModItems.ASAUCHI.get());
+                output.accept(ModItems.HOLLOW_SPAWN_EGG.get());
+                ModItems.npcSpawnEggs().values().forEach(egg -> output.accept(egg.get()));
+            })
             .build());
 
     private ModCreativeTabs() {

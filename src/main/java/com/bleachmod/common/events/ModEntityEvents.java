@@ -2,6 +2,7 @@ package com.bleachmod.common.events;
 
 import com.bleachmod.Reference;
 import com.bleachmod.entity.HollowEntity;
+import com.bleachmod.entity.QuestNpcEntity;
 import com.bleachmod.registry.ModEntities;
 
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -22,5 +23,7 @@ public class ModEntityEvents {
                 ModEntities.HOLLOW.get(),
                 HollowEntity.createAttributes().build()
         );
+        ModEntities.questNpcs().values().forEach(type ->
+                event.put(type.get(), QuestNpcEntity.createAttributes().build()));
     }
 }

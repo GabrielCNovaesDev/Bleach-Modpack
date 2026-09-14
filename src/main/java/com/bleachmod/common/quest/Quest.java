@@ -22,6 +22,7 @@ public class Quest {
         json.addProperty("version", version);
         json.addProperty("repeatable", repeatable);
         json.addProperty("parallel", parallelObjectives);
+        if (!questGiver.isBlank()) json.addProperty("quest_giver", questGiver);
         JsonArray objectivesJson = new JsonArray(), rewardsJson = new JsonArray();
         objectives.forEach(o -> objectivesJson.add(o.toJson()));
         rewards.forEach(r -> rewardsJson.add(r.toJson()));
@@ -35,6 +36,7 @@ public class Quest {
     private String title = "";
     private String description = "";
     private String category = "";
+    private String questGiver = "";
     private boolean parallelObjectives;
     private final List<QuestObjective> objectives = new ArrayList<>();
     private final List<QuestReward> rewards = new ArrayList<>();
@@ -87,6 +89,14 @@ public class Quest {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getQuestGiver() {
+        return questGiver;
+    }
+
+    public void setQuestGiver(String questGiver) {
+        this.questGiver = questGiver == null ? "" : questGiver;
     }
 
     public boolean isParallelObjectives() {
@@ -145,6 +155,9 @@ public class Quest {
         json.addProperty("type", type.name());
         json.addProperty("description", description);
         json.addProperty("category", category);
+        if (!questGiver.isBlank()) {
+            json.addProperty("quest_giver", questGiver);
+        }
         json.addProperty("parallel_objectives", parallelObjectives);
         if (!prerequisites.getConditions().isEmpty()) {
             json.add("prerequisites", prerequisites.toJson());
