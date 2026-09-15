@@ -4,6 +4,7 @@ import com.bleachmod.Reference;
 import com.bleachmod.common.network.c2s.ClaimQuestRewardC2S;
 import com.bleachmod.common.network.c2s.ConfirmCharacterC2S;
 import com.bleachmod.common.network.c2s.ExecuteActionC2S;
+import com.bleachmod.common.network.c2s.ExecuteTechniqueC2S;
 import com.bleachmod.common.network.c2s.QuestActionC2S;
 import com.bleachmod.common.network.c2s.SelectFormC2S;
 import com.bleachmod.common.network.c2s.SetTrackedQuestC2S;
@@ -47,6 +48,7 @@ public final class NetworkHandler {
         CHANNEL.registerMessage(id++, SelectFormC2S.class, SelectFormC2S::encode, SelectFormC2S::decode, SelectFormC2S::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(id++, UpdateStatC2S.class, UpdateStatC2S::encode, UpdateStatC2S::decode, UpdateStatC2S::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(id++, ExecuteActionC2S.class, ExecuteActionC2S::encode, ExecuteActionC2S::decode, ExecuteActionC2S::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(id++, ExecuteTechniqueC2S.class, ExecuteTechniqueC2S::encode, ExecuteTechniqueC2S::decode, ExecuteTechniqueC2S::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(id++, UpdateSkillC2S.class, UpdateSkillC2S::encode, UpdateSkillC2S::decode, UpdateSkillC2S::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(id++, ConfirmCharacterC2S.class, ConfirmCharacterC2S::encode, ConfirmCharacterC2S::decode, ConfirmCharacterC2S::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(id++, PlayerSyncS2C.class, PlayerSyncS2C::encode, PlayerSyncS2C::decode, PlayerSyncS2C::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));

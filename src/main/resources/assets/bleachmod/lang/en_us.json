@@ -87,8 +87,12 @@
   "attribute.bleachmod.control.desc": "Progressively reduces ongoing form drain.",
   "key.bleachmod.status": "Open character",
   "key.bleachmod.wheel": "Select transformation",
+  "key.bleachmod.flame_burst": "Technique: Flame Burst",
   "hud.bleachmod.target": "Target: %s",
   "screen.bleachmod.purchase_remaining": "Balance after purchase: %s SP",
   "screen.bleachmod.wheel_chain": "Activate the previous form or reach the mastery needed for free transformation.",
-  "screen.bleachmod.insufficient_points": "Not enough spirit points."
+  "screen.bleachmod.insufficient_points": "Not enough spirit points.",
+  "message.bleachmod.technique.flame_burst": "Flame Burst executed.",
+  "message.bleachmod.technique.no_reiatsu": "Not enough reiatsu (%s).",
+  "message.bleachmod.technique.cooldown": "Technique on cooldown: %ss."
 }

@@ -42,6 +42,13 @@ public final class ModKeybinds {
 
     public static final KeyMapping STATUS = new KeyMapping("key.bleachmod.status", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
     public static final KeyMapping WHEEL = new KeyMapping("key.bleachmod.wheel", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, CATEGORY);
+    public static final KeyMapping FLAME_BURST = new KeyMapping(
+            "key.bleachmod.flame_burst",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_X,
+            CATEGORY
+    );
 
     private ModKeybinds() {
     }

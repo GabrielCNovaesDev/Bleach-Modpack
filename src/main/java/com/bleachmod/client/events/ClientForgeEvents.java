@@ -8,6 +8,7 @@ import com.bleachmod.common.data.PlayerCapability;
 import com.bleachmod.common.evolution.TransformationsHelper;
 import com.bleachmod.common.network.NetworkHandler;
 import com.bleachmod.common.network.c2s.ExecuteActionC2S;
+import com.bleachmod.common.network.c2s.ExecuteTechniqueC2S;
 import com.bleachmod.common.network.c2s.SelectFormC2S;
 import com.bleachmod.common.network.c2s.UpdateStatC2S;
 import net.minecraft.client.Minecraft;
@@ -65,6 +66,9 @@ public class ClientForgeEvents {
         }
         while (ModKeybinds.DESCEND.consumeClick()) {
             NetworkHandler.sendToServer(new ExecuteActionC2S(ExecuteActionC2S.ActionType.FORCE_DESCEND));
+        }
+        while (ModKeybinds.FLAME_BURST.consumeClick()) {
+            NetworkHandler.sendToServer(new ExecuteTechniqueC2S("flame_burst"));
         }
 
         boolean charging = ModKeybinds.CHARGE.isDown();

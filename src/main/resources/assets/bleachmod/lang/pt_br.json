@@ -87,8 +87,12 @@
   "attribute.bleachmod.control.desc": "Reduz progressivamente o consumo contínuo das formas.",
   "key.bleachmod.status": "Abrir personagem",
   "key.bleachmod.wheel": "Selecionar transformação",
+  "key.bleachmod.flame_burst": "Técnica: Explosão de chamas",
   "hud.bleachmod.target": "Alvo: %s",
   "screen.bleachmod.purchase_remaining": "Saldo após a compra: %s PE",
   "screen.bleachmod.wheel_chain": "Ative a forma anterior ou alcance o domínio para transformação livre.",
-  "screen.bleachmod.insufficient_points": "Pontos espirituais insuficientes."
+  "screen.bleachmod.insufficient_points": "Pontos espirituais insuficientes.",
+  "message.bleachmod.technique.flame_burst": "Explosão de chamas executada.",
+  "message.bleachmod.technique.no_reiatsu": "Reiatsu insuficiente (%s).",
+  "message.bleachmod.technique.cooldown": "Técnica em recarga: %ss."
 }

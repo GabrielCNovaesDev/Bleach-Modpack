@@ -33,6 +33,8 @@ public class TickHandler {
                 return;
             }
 
+            data.getStatus().tickTransientState();
+
             float previousEnergy = data.getResources().getCurrentReiatsu();
             int previousCharge = data.getResources().getActionCharge();
             FormData active = TransformationsHelper.getActiveFormData(data);
