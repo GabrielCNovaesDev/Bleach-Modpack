@@ -140,6 +140,14 @@ public final class MvpRegressionTest {
             Quest q=quest();q.setRepeatable(true);
             yes(QuestParser.parseQuest(q.toJson(),null).isRepeatable());
         });
+        test("quest giver survives JSON roundtrip",()->{
+            Quest q=quest();q.setQuestGiver("rukia");
+            eq("rukia",QuestParser.parseQuest(q.toJson(),null).getQuestGiver());
+        });
+        test("invalid quest giver is rejected",()->{
+            JsonObject q=quest().toJson();q.addProperty("quest_giver","Rukia Kuchiki");
+            rejects(()->QuestParser.parseQuest(q,null));
+        });
         test("selection is revalidated after descending",()->{
             FormRegistry.replaceFromNetwork(forms().toString());
             PlayerData d=player();d.getSkills().setSkillLevel("zanpakuto",2);

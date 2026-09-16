@@ -41,6 +41,13 @@ public final class QuestParser {
         if (json.has("category")) {
             quest.setCategory(json.get("category").getAsString());
         }
+        if (json.has("quest_giver")) {
+            String questGiver = json.get("quest_giver").getAsString();
+            if (!questGiver.matches("[a-z0-9_]{1,64}")) {
+                throw new IllegalArgumentException("Invalid quest giver: " + questGiver);
+            }
+            quest.setQuestGiver(questGiver);
+        }
         if (json.has("parallel_objectives")) {
             quest.setParallelObjectives(json.get("parallel_objectives").getAsBoolean());
         }
