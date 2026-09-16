@@ -1947,22 +1947,1874 @@ Não deverão ser fechados prematuramente apenas para preencher números.
 
 ---
 
-# 69. Próximo ponto de continuidade
+# M06-07 — Estrutura Shinigami
 
-O próximo bloco do Módulo 06 é:
+## Estado do bloco
 
-## M06-07 — Estrutura Shinigami
+**Status:** ESPECIFICADO EM NÍVEL ESTRUTURAL
 
-Deverá aplicar a arquitetura universal já definida a elementos como:
+Este bloco define a estrutura de habilidades e combate do caminho Shinigami dentro do Módulo 06.
+
+O objetivo não é catalogar neste momento todas as técnicas existentes em Bleach, mas estabelecer uma arquitetura capaz de receber posteriormente esse conteúdo sem exigir reformulação dos sistemas fundamentais.
+
+A estrutura Shinigami é baseada em quatro grandes campos de formação:
 
 - Zanjutsu;
 - Hakuda;
 - Hohō;
-- Kidō;
-- técnicas gerais;
-- repertórios associados a diferentes praticantes;
-- aquisição e treinamento;
-- interação com Zanpakutō sem antecipar indevidamente o M07;
-- identidade própria do caminho Shinigami.
+- Kidō.
 
-O M06-07 deverá preservar todas as decisões anteriores e não reabrir conceitos já fechados sem que um conflito real seja identificado.
+Essas disciplinas compartilham os sistemas universais já definidos no M06, mas não precisam possuir a mesma quantidade de conteúdo, a mesma progressão concreta ou o mesmo comportamento.
+
+---
+
+# 1. Princípio de implementação incremental
+
+## M06-P04 — DECIDIDO — Complexidade incremental
+
+Os sistemas do mod devem ser projetados para permitir aprofundamento futuro, mas sua primeira implementação não precisa conter toda a profundidade prevista pela arquitetura.
+
+A primeira versão deve priorizar:
+
+- funcionamento sólido;
+- identidade reconhecível;
+- diversão;
+- legibilidade;
+- possibilidade de expansão futura.
+
+Uma implementação simples não será considerada provisória ou inadequada apenas por possuir menos profundidade.
+
+O objetivo é:
+
+```text
+V1
+→ simples
+→ funcional
+→ divertida
+→ coerente
+→ extensível
+
+versões posteriores
+→ refinamentos
+→ novas técnicas
+→ novas interações
+→ maior profundidade
+```
+
+Não será necessário desenvolver todas as nuances possíveis antes de validar o núcleo do combate.
+
+---
+
+## M06-P05 — DECIDIDO — Escopo inicial das disciplinas
+
+Zanjutsu, Hakuda, Hohō e Kidō poderão possuir arquiteturas que suportem repertórios, aplicações contextuais e interações mais avançadas do que aquelas presentes em suas primeiras implementações.
+
+A V1 deverá entregar um núcleo suficientemente interessante de cada disciplina sem exigir imediatamente:
+
+- todo repertório canônico;
+- todas as variações de estilo;
+- todas as técnicas contextuais imaginadas;
+- todas as interações avançadas entre disciplinas.
+
+A expansão deverá aproveitar a mesma arquitetura sempre que possível.
+
+---
+
+# 2. Identidade geral do caminho Shinigami
+
+## M06-07A — DECIDIDO — Formação ampla sem classes permanentes
+
+Zanjutsu, Hakuda, Hohō e Kidō constituem campos gerais de formação Shinigami.
+
+Eles não serão tratados como classes mutuamente exclusivas.
+
+Um jogador poderá concentrar sua progressão inicialmente em determinada disciplina sem perder permanentemente acesso às demais.
+
+Exemplo:
+
+```text
+Jogador A
+→ foco inicial em Zanjutsu
+
+Jogador B
+→ foco inicial em Kidō + Hohō
+
+Jogador C
+→ foco inicial em Hakuda
+
+todos continuam capazes de desenvolver
+outras disciplinas posteriormente
+```
+
+A escolha principal será:
+
+> no que o personagem investirá primeiro?
+
+e não:
+
+> qual disciplina ficará permanentemente bloqueada?
+
+---
+
+## M06-07B — DECIDIDO — REVISADO — Proficiência das disciplinas
+
+As disciplinas possuirão uma progressão geral de **Proficiência**.
+
+Essa decisão substitui propostas anteriores de utilizar apenas técnicas + Mastery ou de criar sistemas separados de Rank.
+
+A Proficiência responde:
+
+> Qual é o desenvolvimento geral do personagem nessa disciplina?
+
+Exemplo conceitual:
+
+```text
+Zanjutsu
+Proficiência X
+
+Hakuda
+Proficiência Y
+
+Hohō
+Proficiência Z
+
+Kidō
+Proficiência W
+```
+
+A escala numérica definitiva ainda não foi estabelecida.
+
+---
+
+## M06-07B.1 — DECIDIDO — Proficiência ≠ atributos ≠ Mastery
+
+Cada camada possui responsabilidade própria.
+
+```text
+ATRIBUTOS
+→ capacidade fundamental do personagem
+
+PROFICIÊNCIA
+→ desenvolvimento geral em uma disciplina
+
+TÉCNICAS
+→ conhecimentos e ações efetivamente aprendidos
+
+MASTERY
+→ domínio individual de uma técnica específica
+```
+
+Exemplo:
+
+Um jogador pode possuir grande Proficiência de Zanjutsu e aprender uma nova técnica.
+
+Nesse momento:
+
+```text
+Zanjutsu
+→ Proficiência alta
+
+nova técnica
+→ Mastery baixa
+```
+
+O personagem é um espadachim experiente, mas ainda precisa dominar aquela nova execução.
+
+---
+
+## M06-07B.2 — DECIDIDO — Sem segundo nível individual
+
+Técnicas individuais não possuirão simultaneamente:
+
+```text
+Level
++
+Mastery
+```
+
+Após uma técnica ser adquirida, sua progressão individual será representada pela Mastery.
+
+Evitar:
+
+```text
+Cero Level 27
+Cero Mastery 53
+```
+
+ou:
+
+```text
+Técnica de Zanjutsu Level 18
+Mastery 71
+```
+
+Esse tipo de duplicação foi descartado.
+
+---
+
+# 3. Como a Proficiência progride
+
+## M06-07G — DECIDIDO — Progressão orgânica
+
+A Proficiência será desenvolvida através de:
+
+- utilização válida da disciplina;
+- treinamento;
+- técnicas relacionadas;
+- combate relevante;
+- desafios apropriados.
+
+Não será criada uma moeda separada utilizada para comprar Proficiência.
+
+Fluxo conceitual:
+
+```text
+prática legítima
++
+treinamento
++
+uso real
+↓
+progresso da disciplina
+↓
+Proficiência aumenta
+```
+
+---
+
+## M06-07H — DECIDIDO — Progressão moderada
+
+A progressão deverá exigir investimento real, mas não deverá depender de grind excessivo.
+
+O objetivo é permitir que Proficiência e Mastery cresçam naturalmente enquanto o jogador:
+
+- avança a storyline;
+- enfrenta inimigos;
+- realiza quests;
+- treina;
+- utiliza seu repertório.
+
+Não é desejado exigir horas de repetição desconectadas do restante do jogo apenas para alcançar um marco necessário.
+
+---
+
+## M06-07I — DECIDIDO — Progressão simultânea
+
+Uma utilização legítima de determinada técnica poderá desenvolver simultaneamente:
+
+```text
+Proficiência da disciplina
++
+Mastery da técnica utilizada
+```
+
+As progressões não são redundantes.
+
+Uma mede experiência geral naquele campo.
+
+A outra mede domínio específico daquela execução.
+
+---
+
+## M06-07J — DECIDIDO — Anti-farm contextual
+
+O sistema deverá reduzir ou impedir progressão através de:
+
+- ações AFK;
+- alvos completamente irrelevantes;
+- repetição artificial;
+- spam sem contexto;
+- loops criados apenas para gerar progresso.
+
+Entretanto, essas verificações deverão permanecer majoritariamente internas.
+
+O jogador comum deverá compreender uma regra simples:
+
+> praticar legitimamente a disciplina faz o personagem evoluir.
+
+---
+
+# 4. Aquisição das disciplinas e das técnicas
+
+## M06-03C — DECIDIDO — REFINADO — Papel dos mestres
+
+Mentores não funcionarão como lojas de habilidades.
+
+Também não será necessário encontrar um NPC diferente ou retornar ao mesmo NPC para aprender individualmente toda técnica existente.
+
+Mentores poderão ensinar:
+
+- uma disciplina;
+- seus fundamentos;
+- um repertório especializado;
+- uma técnica específica;
+- um conceito necessário para progressão.
+
+A granularidade dependerá da importância do conteúdo.
+
+---
+
+## M06-03D — DECIDIDO — REFINADO — Desenvolvimento autônomo
+
+Depois que o personagem receber formação suficiente em determinada disciplina, parte de seu repertório poderá ser desenvolvida através da própria progressão.
+
+Modelo:
+
+```text
+encontra mestre
+↓
+aprende fundamentos
+↓
+disciplina desbloqueada
+↓
+Proficiência cresce
+↓
+novas técnicas gerais tornam-se disponíveis
+↓
+personagem continua evoluindo sem retornar
+ao mestre para cada capacidade
+```
+
+Isso evita transformar a progressão em uma sequência constante de viagens burocráticas entre NPCs.
+
+---
+
+## M06-07K — DECIDIDO — Técnicas especiais continuam especiais
+
+Nem toda capacidade será adquirida automaticamente através de Proficiência.
+
+Técnicas específicas poderão exigir:
+
+- mentor;
+- treinamento especial;
+- evento;
+- quest;
+- descoberta;
+- condição narrativa;
+- conhecimento anterior;
+- outra forma coerente de aquisição.
+
+A regra geral será progressão natural.
+
+Exceções existirão quando agregarem valor.
+
+---
+
+# 5. Repertórios especializados
+
+Um repertório especializado representa uma maneira particular de aplicar uma disciplina.
+
+Pode estar associado a:
+
+- treinamento específico;
+- escola;
+- personagem;
+- mestre;
+- organização;
+- tradição;
+- aplicação avançada.
+
+Ele não constitui uma nova classe.
+
+---
+
+## M06-07C — DECIDIDO — Formação geral e especialização
+
+A progressão Shinigami possuirá uma base relativamente ampla de formação, enquanto conhecimentos intermediários, avançados ou especializados poderão estar distribuídos pelo mundo.
+
+Mestres, instituições e organizações orientam a progressão sem aprisionar permanentemente o jogador a um único estilo.
+
+---
+
+## M06-07J.1 — DECIDIDO — Mestres podem ensinar repertórios
+
+Um treinamento especializado poderá desbloquear conhecimento suficiente para desenvolver múltiplas técnicas relacionadas.
+
+Exemplo:
+
+```text
+treinamento com mestre especializado
+↓
+repertório conhecido
+↓
+Técnica A passa a ser desenvolvível
+Técnica B passa a ser desenvolvível
+Técnica C exige maior Proficiência
+```
+
+Não é necessário:
+
+```text
+NPC → Técnica A
+
+volta ao NPC → Técnica B
+
+volta ao NPC → Técnica C
+```
+
+quando isso não acrescentar nada à experiência.
+
+---
+
+## M06-07T — DECIDIDO — Repertório não é classe
+
+Aprender um repertório especializado não impede o personagem de posteriormente aprender outro repertório compatível.
+
+O estilo final surge da combinação de conhecimentos desenvolvidos pelo próprio jogador.
+
+---
+
+## M06-07T.1 — DECIDIDO — Sem Proficiência adicional para repertórios
+
+Repertórios especializados não possuirão, por padrão, uma segunda progressão de Proficiência.
+
+Modelo:
+
+```text
+Zanjutsu
+→ Proficiência geral
+
+Repertório especializado
+→ conhecido ou não conhecido
+
+Técnicas desse repertório
+→ Mastery individual
+```
+
+Evitar:
+
+```text
+Zanjutsu Proficiência
++
+Repertório A Proficiência
++
+Técnica X Mastery
+```
+
+sem necessidade real.
+
+---
+
+# 6. Visualização da progressão
+
+## M06-07L — DECIDIDO — Lista/repertório em vez de Skill Tree
+
+Uma Skill Tree tradicional não será utilizada como estrutura universal de aquisição.
+
+A proposta de Skill Tree foi analisada e posteriormente descartada.
+
+O motivo principal é que técnicas não serão simplesmente compradas através de um menu.
+
+A visualização futura deverá funcionar mais como um **repertório da disciplina**, podendo mostrar estados como:
+
+```text
+APRENDIDO
+✓ Técnica A
+  Mastery ...
+
+DISPONÍVEL PARA DESENVOLVIMENTO
+○ Técnica B
+
+REQUER CONHECIMENTO ESPECIAL
+◇ Técnica C
+
+BLOQUEADO
+🔒 Técnica D
+
+NÃO DESCOBERTO
+???
+```
+
+A interface definitiva pertence ao M14.
+
+---
+
+# 7. Técnicas híbridas
+
+## M06-07D — DECIDIDO
+
+Uma técnica poderá combinar fundamentos de múltiplas disciplinas.
+
+Exemplo conceitual:
+
+```text
+Hakuda
++
+Kidō
+↓
+técnica híbrida
+```
+
+A técnica híbrida continua sendo uma capacidade individual.
+
+Não é necessário criar:
+
+- uma quinta disciplina;
+- uma Proficiência híbrida;
+- outra árvore de progressão.
+
+Ela poderá simplesmente exigir desenvolvimento apropriado nas disciplinas relacionadas.
+
+---
+
+# 8. Zanjutsu
+
+## Identidade
+
+Zanjutsu representa desenvolvimento geral no combate com espada.
+
+Ele não representa automaticamente o poder específico da Zanpakutō.
+
+Distinção fundamental:
+
+```text
+ZANJUTSU
+→ como o personagem luta com a espada
+
+ZANPAKUTŌ
+→ o que aquela espada/poder específico consegue fazer
+```
+
+---
+
+## M06-07E — DECIDIDO — Zanjutsu ≠ poder da Zanpakutō
+
+Técnicas oriundas diretamente da habilidade específica de uma Zanpakutō pertencem ao conjunto do poder principal.
+
+Elas não serão tratadas como técnicas gerais de Zanjutsu apenas porque são executadas utilizando uma espada.
+
+---
+
+## M06-07N — DECIDIDO — Fontes de Proficiência de Zanjutsu
+
+A Proficiência de Zanjutsu poderá crescer através de:
+
+- combate armado válido;
+- utilização legítima de técnicas de Zanjutsu;
+- treinamentos apropriados;
+- desafios relacionados.
+
+Kills poderão ajudar a determinar relevância de um combate, mas não serão a única ou principal medida de progresso.
+
+Participação válida importa mais do que o último golpe.
+
+---
+
+## M06-07O — DECIDIDO — Mastery e Proficiência simultâneas
+
+Utilizar validamente uma técnica de Zanjutsu poderá desenvolver:
+
+```text
+Mastery da técnica
++
+Proficiência geral de Zanjutsu
+```
+
+---
+
+## M06-07P — DECIDIDO — Anti-farm
+
+Combater repetidamente alvos completamente irrelevantes, atacar objetos indefinidamente ou executar loops artificiais não deverá constituir estratégia eficiente de progressão.
+
+---
+
+## M06-07Q — DECIDIDO — Fundamentos evoluem
+
+Nem toda melhoria no combate de espada precisa constituir uma técnica individual.
+
+A Proficiência poderá ampliar ou refinar elementos fundamentais, como:
+
+- sequências;
+- finalizadores;
+- transições;
+- possibilidades contextuais;
+- fluidez geral do moveset.
+
+Isso não significa conceder grandes multiplicadores automáticos de dano.
+
+---
+
+## M06-07R — DECIDIDO — Técnicas gerais por progressão
+
+Parte das técnicas gerais poderá tornar-se disponível através de marcos de Proficiência.
+
+Dependendo da importância da capacidade:
+
+```text
+marco alcançado
+→ fundamento incorporado automaticamente
+```
+
+ou:
+
+```text
+marco alcançado
+→ técnica disponível para treinamento
+→ processo simples de desenvolvimento
+→ técnica adquirida
+```
+
+A granularidade não será obrigatoriamente igual para todo conteúdo.
+
+---
+
+## M06-07S — DECIDIDO — Proficiência como preparo
+
+Determinados mestres, técnicas ou repertórios poderão exigir desenvolvimento mínimo de Zanjutsu.
+
+Proficiência suficiente representa preparo.
+
+Ela não concede automaticamente conhecimento especializado.
+
+---
+
+## M06-07U — DECIDIDO — Zanjutsu e Zanpakutō independentes
+
+Alta Proficiência de Zanjutsu não concede automaticamente:
+
+- Shikai;
+- Bankai;
+- técnicas específicas da Zanpakutō;
+- Mastery dessas técnicas.
+
+Essas progressões permanecem separadas.
+
+---
+
+# 9. Zanpakutō como poder vinculado
+
+## M06-07V — DECIDIDO — Uma Zanpakutō vinculada
+
+Cada personagem Shinigami possuirá uma identidade de Zanpakutō principal vinculada.
+
+Essa identidade determina qual conjunto canônico de poder pertence àquele personagem.
+
+A regra normal será:
+
+```text
+1 personagem
+↓
+1 Zanpakutō principal
+```
+
+O jogador não colecionará Zanpakutō para alternar poderes livremente.
+
+---
+
+## M06-07W — DECIDIDO — Espada como portadora técnica
+
+A Zanpakutō será representada por um item/espada que carrega tecnicamente sua identidade.
+
+Esse item poderá permitir ao sistema identificar:
+
+- modelo;
+- nome;
+- poder;
+- técnicas;
+- liberações;
+- estados;
+- propriedades relacionadas.
+
+Entretanto, a identidade não dependerá exclusivamente da posse física do item.
+
+O personagem também possuirá registro de seu vínculo.
+
+Conceitualmente:
+
+```text
+PLAYER
+bound_zanpakuto = ryujin_jakka
+
+ITEM
+zanpakuto_id = ryujin_jakka
+```
+
+Os dois elementos trabalham em conjunto.
+
+---
+
+## M06-07X — DECIDIDO — Exclusividade do vínculo
+
+Empunhar uma Zanpakutō incompatível não transfere automaticamente seu poder.
+
+Exemplo:
+
+```text
+Jogador
+→ vinculado a Senbonzakura
+
+pega item de Ryūjin Jakka
+↓
+não passa a possuir Ryūjin Jakka
+```
+
+Trocar de item no inventário não substitui o poder principal do personagem.
+
+---
+
+## M06-07Y — DECIDIDO — Zanpakutō não é loot comum
+
+A Zanpakutō vinculada não será tratada como uma espada comum cuja:
+
+- perda;
+- morte;
+- roubo;
+- duplicação;
+- transferência;
+
+passa automaticamente seu poder para outra pessoa.
+
+O vínculo real permanece associado ao personagem.
+
+A implementação deverá ser resiliente a problemas de inventário e multiplayer.
+
+---
+
+## M06-07Z — DECIDIDO EM PRINCÍPIO — Relação adaptada com a Zanpakutō
+
+O relacionamento entre Shinigami e Zanpakutō continuará sendo parte importante da fantasia do caminho.
+
+Entretanto, ele será adaptado às necessidades do mod.
+
+Não será necessário reproduzir literalmente todas as formas de interação mostradas na obra.
+
+O jogo poderá representar essa relação através de:
+
+- quests;
+- treinamentos;
+- desafios;
+- eventos;
+- mundo interior;
+- meditação;
+- outras abstrações apropriadas.
+
+Os detalhes pertencem ao M07.
+
+---
+
+## PENDENTE PARA M07
+
+O M06 não fechará:
+
+- como a Zanpakutō é atribuída;
+- como ocorre o vínculo inicial;
+- como seu nome é revelado;
+- como Shikai é conquistada;
+- como técnicas da Shikai progridem;
+- como Bankai é conquistada;
+- como o domínio das liberações funciona;
+- quais requisitos existem entre essas etapas.
+
+Esses elementos pertencem ao módulo de formas e poderes superiores.
+
+---
+
+# 10. Hakuda
+
+## Identidade
+
+Hakuda representa o desenvolvimento do corpo como instrumento de combate.
+
+Ele compartilha a infraestrutura universal de combate, mas não será tratado simplesmente como “Zanjutsu sem espada”.
+
+---
+
+## M06-07HA — DECIDIDO — Proficiência de Hakuda
+
+Hakuda utilizará a mesma arquitetura geral:
+
+```text
+Proficiência de Hakuda
++
+técnicas de Hakuda
++
+Mastery individual
+```
+
+Sua Proficiência poderá crescer através de:
+
+- combate corporal válido;
+- técnicas de Hakuda;
+- treinamentos;
+- desafios apropriados.
+
+---
+
+## M06-07HB — DECIDIDO — Moveset corporal
+
+A evolução de Hakuda poderá modificar de maneira significativa o moveset desarmado.
+
+Exemplos:
+
+- sequências de socos;
+- chutes;
+- finalizadores;
+- ataques contextuais;
+- entradas;
+- respostas após Dodge.
+
+Nem todo movimento corporal será tratado como técnica individual.
+
+---
+
+## M06-07HC — DECIDIDO — Fundamento versus técnica
+
+Movimentos que constituem partes naturais do combate corporal permanecerão como fundamentos.
+
+Capacidades suficientemente distintas poderão tornar-se técnicas individuais.
+
+Uma técnica individual poderá possuir:
+
+- aquisição;
+- custo;
+- Recovery;
+- Cooldown;
+- requisitos;
+- Mastery;
+- efeitos próprios.
+
+---
+
+# 11. Hakuda e estado da Zanpakutō
+
+## M06-07HD — DECIDIDO EM PRINCÍPIO — Empunhar/embainhar
+
+A Zanpakutō poderá possuir estados de:
+
+```text
+empunhada
+↕
+embainhada
+```
+
+Essa alteração não exige mudar manualmente de slot ou manipular o inventário vanilla.
+
+Seu objetivo é permitir transição natural entre combate armado e corporal.
+
+O controle exato será definido posteriormente.
+
+---
+
+## M06-07HE — DECIDIDO EM PRINCÍPIO — Moveset por estado
+
+Como regra fundamental:
+
+```text
+Zanpakutō empunhada
+→ moveset armado/Zanjutsu
+
+Zanpakutō embainhada
+→ moveset corporal/Hakuda
+```
+
+Isso afeta principalmente ataques fundamentais.
+
+---
+
+## M06-07HF — DECIDIDO — Técnicas podem atravessar a fronteira
+
+Hakuda não será rigidamente proibido enquanto uma arma estiver empunhada.
+
+Uma técnica individual poderá declarar:
+
+```text
+requer combate desarmado
+```
+
+ou:
+
+```text
+permitida armado/desarmado
+```
+
+quando apropriado.
+
+Isso possibilita estilos híbridos sem eliminar a identidade dos movesets fundamentais.
+
+---
+
+# 12. Stamina e Hakuda
+
+## M06-07HG — DECIDIDO EM PRINCÍPIO
+
+Hakuda possui relação natural com Stamina.
+
+Entretanto:
+
+```text
+soco básico
+chute básico
+sequência fundamental
+```
+
+não deverão consumir grandes quantidades apenas por serem ataques corporais.
+
+Stamina deverá possuir peso principalmente em:
+
+- técnicas físicas exigentes;
+- combos especiais;
+- projeções;
+- movimentos explosivos;
+- ações de alto esforço.
+
+---
+
+# 13. Técnicas híbridas de Hakuda
+
+## M06-07HH — DECIDIDO
+
+Técnicas que misturam Hakuda com outra disciplina poderão exigir desenvolvimento relevante em ambas.
+
+Ter alta Proficiência em apenas uma disciplina não concede automaticamente uma técnica híbrida importante.
+
+---
+
+# 14. Repertórios especializados de Hakuda
+
+## M06-07HI — DECIDIDO
+
+Hakuda poderá possuir repertórios especializados ensinados por mestres ou outras fontes apropriadas.
+
+Esses repertórios representam aplicações particulares da disciplina.
+
+Eles não constituem classes permanentes.
+
+---
+
+# 15. Técnicas de combo em Hakuda
+
+## M06-07HJ — DECIDIDO — Combos como técnicas
+
+Hakuda poderá possuir técnicas que representam sequências completas de golpes.
+
+Exemplo:
+
+```text
+ativa Técnica X
+↓
+soco
+↓
+chute
+↓
+avanço
+↓
+novo impacto
+↓
+finalizador
+```
+
+A sequência inteira constitui uma única técnica.
+
+Cada soco ou chute não precisa ser uma skill diferente.
+
+---
+
+## M06-07HK — DECIDIDO — Combos não substituem combate fundamental
+
+Mesmo com técnicas de combo, o jogador continuará possuindo um moveset corporal funcional.
+
+Hakuda não deverá se transformar em:
+
+```text
+pressiona skill
+↓
+personagem luta sozinho
+↓
+espera próximo cooldown
+```
+
+Técnicas complementam o combate fundamental.
+
+---
+
+## M06-07HL — DECIDIDO EM PRINCÍPIO — Comprometimento dos combos
+
+Técnicas de combo poderão variar em:
+
+- duração;
+- mobilidade;
+- cancelamento;
+- Recovery;
+- Stamina;
+- controle;
+- risco.
+
+Combos mais longos ou fortes poderão exigir maior comprometimento.
+
+---
+
+# 16. Hohō
+
+## M06-07HO-A — DECIDIDO — Hohō é uma disciplina
+
+Hohō representa formação geral em movimentação e deslocamento avançado Shinigami.
+
+Ele não será reduzido exclusivamente ao Shunpo.
+
+---
+
+## M06-07HO-B — DECIDIDO — Shunpo como técnica fundamental
+
+Shunpo será uma capacidade fundamental aprendida dentro de Hohō.
+
+Ele possuirá Mastery própria.
+
+Distinção:
+
+```text
+Hohō Proficiência
+→ experiência geral de movimentação Shinigami
+
+Shunpo Mastery
+→ domínio específico do Shunpo
+```
+
+---
+
+## M06-07HO-C — DECIDIDO EM PRINCÍPIO — Acesso relativamente inicial ao Shunpo
+
+Shunpo deverá ser adquirido em uma etapa relativamente inicial do desenvolvimento de Hohō, pois constitui parte importante da identidade Shinigami.
+
+Aplicações mais sofisticadas permanecem posteriores.
+
+Nenhum marco numérico está definido.
+
+---
+
+## M06-07HO-D — DECIDIDO — Progressão relevante
+
+Hohō poderá progredir através de:
+
+- Shunpo utilizado de maneira relevante;
+- mobilidade aplicada ao combate;
+- perseguição/evasão relevante;
+- treinamentos;
+- técnicas avançadas.
+
+Simplesmente percorrer longas distâncias ou repetir Shunpo sem contexto não deverá constituir método eficiente de progressão.
+
+---
+
+## M06-07HO-E — DECIDIDO — Fundamento versus técnica
+
+Direções e pequenas variações naturais de movimentação não serão transformadas em skills individuais.
+
+Evitar:
+
+```text
+Shunpo esquerda
+Shunpo direita
+Shunpo trás
+Shunpo frente
+```
+
+como quatro habilidades independentes.
+
+Aplicações suficientemente distintas poderão existir como técnicas próprias.
+
+---
+
+## M06-07HO-F — DECIDIDO — Dodge ≠ Hohō
+
+Dodge universal e Hohō permanecerão sistemas separados.
+
+```text
+Dodge
+→ reposicionamento defensivo básico
+→ universal
+→ Stamina
+
+Shunpo
+→ mobilidade avançada
+→ aprendida
+→ Hohō
+```
+
+Mesmo usuários avançados de Hohō continuam possuindo Dodge.
+
+---
+
+# 17. Evolução do Shunpo
+
+## M06-07HO-G — DECIDIDO
+
+Mastery de Shunpo poderá melhorar moderadamente propriedades da própria técnica.
+
+Possibilidades incluem:
+
+- eficiência;
+- execução;
+- controle;
+- Recovery;
+- distância dentro de limites;
+- velocidade dentro de limites.
+
+Entretanto:
+
+> Mastery melhora Shunpo; ela não concede automaticamente novas técnicas de Hohō.
+
+Exemplo:
+
+```text
+Mastery alta de Shunpo
+→ Shunpo melhor
+
+não automaticamente:
+→ Utsusemi
+→ técnicas contextuais especiais
+→ novas aplicações avançadas
+```
+
+Esses elementos permanecem capacidades independentes.
+
+---
+
+## M06-07HO-H — DECIDIDO — V1 simplificada
+
+A primeira implementação de Shunpo poderá ser relativamente simples.
+
+Modelo inicial aceitável:
+
+```text
+input dedicado
++
+direção
++
+deslocamento rápido
++
+custo
++
+Recovery
++
+Cooldown apropriado
+```
+
+Sua Mastery inicialmente poderá modificar apenas alguns parâmetros.
+
+A arquitetura deverá permitir aprofundamento posterior.
+
+---
+
+# 18. Kidō
+
+## Identidade
+
+Kidō representa o campo geral das artes espirituais Shinigami.
+
+Sua estrutura principal será:
+
+```text
+KIDŌ
+│
+├── Hadō
+├── Bakudō
+├── Kaidō
+└── técnicas especiais/não convencionais
+```
+
+Essas categorias não precisam possuir mecânicas idênticas.
+
+---
+
+## M06-07KI-A — DECIDIDO — Proficiência única
+
+Kidō possuirá uma única Proficiência geral.
+
+Não serão criadas, por padrão:
+
+```text
+Proficiência de Kidō
++
+Proficiência de Hadō
++
+Proficiência de Bakudō
++
+Proficiência de Kaidō
+```
+
+Hadō, Bakudō e Kaidō representam categorias/conhecimentos dentro da disciplina.
+
+---
+
+## M06-07KI-B — DECIDIDO — Mastery individual
+
+Cada Kidō suficientemente distinto será uma técnica individual e possuirá sua própria Mastery.
+
+---
+
+## M06-07KI-C — DECIDIDO — Repertório por Proficiência
+
+Grande parte do repertório geral poderá ser disponibilizada através do desenvolvimento da Proficiência de Kidō.
+
+Não será necessário retornar a um instrutor para cada feitiço.
+
+Kidō especiais poderão continuar exigindo aquisição própria.
+
+---
+
+# 19. Numeração de Kidō
+
+## M06-07KI-D — DECIDIDO — REFINADO
+
+A numeração canônica será preservada quando aplicável.
+
+Ela serve como importante referência de:
+
+- identidade;
+- dificuldade;
+- complexidade;
+- progressão.
+
+Entretanto:
+
+```text
+Hadō #4
+≠
+Proficiência obrigatória 4
+
+Hadō #90
+≠
+Proficiência obrigatória 90
+```
+
+Os requisitos serão definidos pelo design do mod.
+
+Em geral, Kidō de numeração elevada tenderão a exigir maior desenvolvimento, sem existir conversão matemática obrigatória.
+
+---
+
+# 20. Kidō de nível baixo não se torna automaticamente inútil
+
+## M06-07KI-H — DECIDIDO
+
+Kidō de numeração menor poderá continuar útil para personagens avançados.
+
+Sua relevância poderá permanecer através de:
+
+- custo;
+- velocidade;
+- função;
+- Mastery;
+- atributos;
+- aplicação tática.
+
+Desbloquear Kidō de numeração maior não deverá necessariamente transformar todos os anteriores em versões obsoletas.
+
+---
+
+# 21. Execução e encantamento
+
+## M06-07KI-E — DECIDIDO — REVISADO
+
+Kidō poderá possuir diferentes modelos de execução.
+
+Possibilidades:
+
+```text
+cast imediato
+
+preparação
+
+quick cast
+versus
+encantamento completo
+
+canalização
+
+execução específica
+```
+
+Nenhum modelo será obrigatório para toda a disciplina.
+
+---
+
+## Quick Cast × Encantamento
+
+Quando apropriado, uma técnica poderá utilizar:
+
+```text
+TAP
+→ execução rápida
+→ encantamento omitido/reduzido
+→ menor eficácia
+
+HOLD
+→ personagem realiza encantamento
+→ maior preparação
+→ versão mais completa
+```
+
+O jogador não precisará:
+
+- falar no microfone;
+- recitar pessoalmente;
+- digitar encantamentos;
+- memorizar textos.
+
+A recitação pertence ao personagem.
+
+Pode ser representada por:
+
+- texto;
+- animação;
+- efeitos;
+- áudio;
+- tempo de preparação.
+
+Essa estrutura não é apenas uma simplificação da V1; poderá permanecer como solução definitiva.
+
+---
+
+## M06-07KI-F — DECIDIDO — Mastery e encantamento
+
+Mastery poderá melhorar a capacidade de utilizar determinado Kidō de forma abreviada.
+
+Entretanto, Mastery elevada não elimina automaticamente a utilidade de uma execução completa quando esta fizer parte da técnica.
+
+---
+
+# 22. Recursos e atributos de Kidō
+
+## M06-07KI-G — DECIDIDO
+
+Energia Espiritual será o recurso primário esperado para a maior parte dos Kidō.
+
+Outros elementos poderão variar conforme a técnica.
+
+Atributos podem contribuir de formas diferentes.
+
+Exemplo conceitual:
+
+```text
+Potência
+→ capacidade ofensiva quando aplicável
+
+Reserva
+→ quantidade de energia disponível
+
+Controle
+→ precisão / eficiência / estabilidade
+
+Mastery
+→ domínio do Kidō específico
+```
+
+As fórmulas permanecem pendentes.
+
+---
+
+# 23. Hadō
+
+Hadō representa principalmente a vertente ofensiva de Kidō.
+
+Ele não deverá ser reduzido a uma sequência linear de:
+
+```text
+projétil pequeno
+↓
+projétil médio
+↓
+projétil grande
+```
+
+Diferentes Hadō poderão possuir funções distintas em:
+
+- alcance;
+- área;
+- velocidade;
+- pressão;
+- dano;
+- comportamento;
+- preparação;
+- custo.
+
+O sistema de quick cast versus encantamento provavelmente terá grande utilidade em Hadō, mas continua dependente da técnica.
+
+---
+
+# 24. Bakudō
+
+## M06-07KI-I — DECIDIDO — Identidade ampla
+
+Bakudō não será tratado simplesmente como categoria de stun.
+
+Poderá incluir funções como:
+
+- contenção;
+- controle;
+- barreiras;
+- defesa;
+- selamento;
+- rastreamento;
+- utilidade;
+- suporte.
+
+Cada técnica preservará sua própria identidade.
+
+---
+
+## M06-07KI-J — DECIDIDO — Controle balanceado
+
+Bakudō poderá produzir controle forte.
+
+Entretanto, técnicas que retiram capacidade de resposta do alvo deverão respeitar:
+
+- duração apropriada;
+- anti-stunlock;
+- resistência relevante;
+- regras próprias da técnica;
+- balanceamento PvP/PvE.
+
+Controle deve gerar vantagem e oportunidade.
+
+Não deve remover indefinidamente o direito de resposta do adversário.
+
+---
+
+## M06-07KI-N — DECIDIDO — Sem carregamento artificial
+
+Bakudō não será obrigado a possuir:
+
+```text
+tap = versão fraca
+hold = versão forte
+```
+
+Barreiras, contenções, defesas ou capacidades utilitárias poderão ser ativadas diretamente através de um único input quando isso produzir a melhor adaptação.
+
+Uma barreira poderá simplesmente:
+
+```text
+input
+↓
+consumo de Energia
+↓
+barreira criada
+↓
+Cooldown
+```
+
+Preparação, encantamento ou canalização só serão adicionados quando fizerem sentido para aquela técnica.
+
+---
+
+# 25. Kaidō
+
+## M06-07KI-K — DECIDIDO — Formação especializada
+
+Kaidō utiliza a base geral de Kidō, mas conhecimento de cura deverá exigir formação especializada.
+
+Alta Proficiência em Kidō não significa automaticamente saber curar.
+
+Exemplo:
+
+```text
+Kidō desenvolvido
++
+treinamento específico de Kaidō
+↓
+capacidade de utilizar cura
+```
+
+Não será criada obrigatoriamente uma segunda Proficiência exclusiva de Kaidō.
+
+---
+
+## M06-07KI-L — DECIDIDO EM PRINCÍPIO — Canalização
+
+O comportamento fundamental de Kaidō poderá utilizar canalização.
+
+Modelo conceitual:
+
+```text
+ativa/segura técnica
+↓
+canalização começa
+↓
+Energia Espiritual é consumida
+↓
+Vida do alvo é restaurada
+↓
+input é liberado
+↓
+canalização termina
+```
+
+Técnicas específicas poderão posteriormente possuir comportamentos diferentes.
+
+---
+
+## M06-07KI-M — DECIDIDO — Vida como função primária
+
+A função primária de Kaidō será recuperação de Vida.
+
+Kaidō básico não restaurará automaticamente:
+
+- Vida;
+- Stamina;
+- Energia Espiritual;
+- todas as condições negativas;
+
+ao mesmo tempo.
+
+Efeitos adicionais dependerão de capacidades específicas.
+
+Isso evita loops ou excesso de funções concentradas numa única técnica.
+
+---
+
+# 26. Kidō de suporte
+
+Não será criada uma categoria universal adicional denominada:
+
+```text
+Support Kidō
+```
+
+Grande parte das funções de suporte poderá permanecer dentro de Bakudō ou Kaidō conforme sua natureza.
+
+Kidō que não se encaixem adequadamente nessas categorias poderão ser tratados individualmente como técnicas especiais.
+
+---
+
+# 27. Kidō especiais
+
+Técnicas avançadas ou formas excepcionais de utilizar Kidō poderão futuramente incluir mecanismos próprios.
+
+Exemplos conceituais:
+
+- formas avançadas de encantamento;
+- utilização simultânea;
+- técnicas proibidas;
+- execuções excepcionais;
+- conhecimentos especiais.
+
+Esses elementos não precisam estar presentes na primeira versão.
+
+**Status:** BACKLOG / CONTEÚDO FUTURO
+
+A arquitetura atual deverá apenas evitar impedir sua implementação posterior.
+
+---
+
+# 28. Estrutura Shinigami consolidada
+
+```text
+                         SHINIGAMI
+                             │
+             ┌───────────────┼───────────────┐
+             │               │               │
+        DISCIPLINAS      ZANPAKUTŌ       ATRIBUTOS
+             │               │
+   ┌─────────┼─────────┐     └── poder principal
+   │         │         │
+Zanjutsu   Hakuda    Hohō     Kidō
+   │         │         │        │
+   └─────────┴─────────┴────────┘
+             │
+        PROFICIÊNCIA
+             │
+             ↓
+     REPERTÓRIO / TÉCNICAS
+             │
+             ↓
+          MASTERY
+```
+
+Mais precisamente:
+
+```text
+ZANJUTSU
+→ combate com espada
+
+HAKUDA
+→ combate corporal
+
+HOHŌ
+→ movimentação avançada
+
+KIDŌ
+→ artes espirituais
+
+ZANPAKUTŌ
+→ poder individual principal
+```
+
+Essas camadas podem interagir, mas não serão fundidas em um único sistema.
+
+---
+
+# 29. Relação entre disciplinas
+
+Um Shinigami poderá construir seu próprio estilo combinando diferentes desenvolvimentos.
+
+Exemplo:
+
+```text
+Zanjutsu alto
++
+Hohō alto
++
+Kidō moderado
++
+Hakuda baixo
+```
+
+ou:
+
+```text
+Hakuda alto
++
+Hohō alto
++
+Kidō especializado
++
+Zanjutsu moderado
+```
+
+A progressão não exige simetria entre as quatro disciplinas.
+
+O personagem se diferencia principalmente pelo que decidiu desenvolver primeiro e pelo repertório que efetivamente adquiriu.
+
+---
+
+# 30. Relação entre disciplina, técnica e Mastery
+
+Regra consolidada:
+
+```text
+DISCIPLINA
+→ área geral de formação
+
+PROFICIÊNCIA
+→ experiência geral naquela área
+
+TÉCNICA
+→ capacidade específica aprendida
+
+MASTERY
+→ domínio individual daquela capacidade
+```
+
+Nenhum desses elementos deverá substituir os demais.
+
+---
+
+# 31. Regra de granularidade
+
+Não haverá uma obrigação universal para decidir que toda ação precisa ser uma técnica.
+
+A pergunta será:
+
+> Esta ação possui identidade suficiente para justificar aquisição e Mastery próprias?
+
+Se não:
+
+```text
+fundamento / moveset
+```
+
+Se sim:
+
+```text
+técnica individual
+```
+
+Essa regra se aplica a todas as disciplinas.
+
+---
+
+# 32. Primeira versão recomendada
+
+A arquitetura permite uma primeira implementação relativamente enxuta.
+
+## Zanjutsu V1
+
+Pode começar com:
+
+- moveset armado funcional;
+- sequência básica;
+- finalizador;
+- bloqueio;
+- Proficiência;
+- pequeno conjunto de técnicas;
+- Mastery dessas técnicas.
+
+## Hakuda V1
+
+Pode começar com:
+
+- moveset desarmado;
+- socos e chutes;
+- sequência corporal;
+- finalizador;
+- algumas técnicas de combo;
+- Proficiência;
+- Mastery.
+
+## Hohō V1
+
+Pode começar com:
+
+- Proficiência;
+- Shunpo;
+- movimentação direcional;
+- custo;
+- Recovery;
+- Cooldown;
+- Mastery de Shunpo.
+
+## Kidō V1
+
+Pode começar com:
+
+- Proficiência;
+- pequeno conjunto de Hadō;
+- pequeno conjunto de Bakudō;
+- sistema básico de encantamento quando necessário;
+- pequena implementação de Kaidō caso esteja no escopo inicial;
+- Mastery individual.
+
+A V1 não precisa demonstrar todo o potencial da arquitetura para validá-la.
+
+---
+
+# 33. Decisões revisadas ou superadas
+
+Para evitar conflitos futuros, ficam explicitamente registradas as propostas abandonadas.
+
+## SUPERADO — Desenvolvimento apenas por atributos + técnicas + Mastery
+
+Foi considerada insuficiente por não fornecer um indicador geral claro de desenvolvimento em cada disciplina.
+
+**Substituído por:**
+
+```text
+atributos
++
+Proficiência da disciplina
++
+técnicas
++
+Mastery
+```
+
+---
+
+## SUPERADO — Níveis/Ranks separados de disciplina
+
+Foi analisado um sistema de Ranks.
+
+Posteriormente, concluiu-se que a **Proficiência direta da disciplina** oferece uma progressão mais simples e suficientemente clara.
+
+Rank poderá existir futuramente apenas como rótulo visual derivado da Proficiência caso seja útil, não como uma segunda progressão obrigatória.
+
+---
+
+## SUPERADO — Skill Tree como estrutura de progressão
+
+Foi analisada a utilização de Skill Trees.
+
+A proposta foi descartada porque técnicas não serão adquiridas principalmente através de compra em menu.
+
+**Substituído por:**
+
+> repertório/lista da disciplina.
+
+---
+
+## SUPERADO — NPC individual para toda técnica
+
+A ideia de exigir mentor para cada habilidade foi considerada excessivamente burocrática para o tamanho potencial do repertório de Bleach.
+
+**Substituído por:**
+
+- formação inicial;
+- progressão por Proficiência;
+- desenvolvimento autônomo;
+- mestres para repertórios e técnicas quando apropriado.
+
+---
+
+## SUPERADO — Tap/Hold obrigatório para todo Kidō
+
+O modelo:
+
+```text
+tap = versão rápida
+hold = versão completa
+```
+
+continua disponível e importante, mas não será obrigatório.
+
+Cada Kidō utiliza apenas as formas de execução que realmente agreguem valor.
+
+---
+
+# 34. Pendências deliberadas
+
+Ainda não serão fechados:
+
+- escala máxima das Proficiências;
+- velocidade de progressão;
+- marcos exatos de desbloqueio;
+- catálogo completo de técnicas;
+- valores de custo;
+- valores de dano;
+- duração de Recovery;
+- duração de Cooldown;
+- fórmulas;
+- repertórios canônicos completos;
+- todos os mestres;
+- todos os métodos especiais de aquisição;
+- detalhes de UI;
+- detalhes de Shikai e Bankai;
+- progressão das técnicas específicas da Zanpakutō;
+- balanceamento final PvE/PvP.
+
+Esses elementos dependem de conteúdo, protótipo, playtest e módulos posteriores.
+
+---
+
+# 35. Auditoria final do M06-07
+
+Após revisão das decisões do bloco Shinigami:
+
+**Não foram identificadas contradições estruturais impeditivas.**
+
+A arquitetura possui responsabilidades claras:
+
+```text
+Atributos
+→ capacidade fundamental
+
+Proficiência
+→ desenvolvimento geral
+
+Repertório
+→ conhecimentos disponíveis
+
+Técnicas
+→ capacidades específicas
+
+Mastery
+→ domínio individual
+
+Zanpakutō
+→ poder principal vinculado
+
+M07
+→ formas e grandes liberações
+```
+
+Também não existe dependência obrigatória de Skill Tree, progressão baseada exclusivamente em NPCs ou grind excessivo.
+
+A estrutura suporta uma primeira versão simples e expansão posterior sem exigir redesenho completo.
+
+## Resultado da auditoria
+
+**M06-07 — Estrutura Shinigami: APROVADO EM NÍVEL ESTRUTURAL**
+
+O próximo bloco do Módulo 06 é:
+
+# M06-08 — Hollow / Arrancar
