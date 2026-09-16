@@ -27,3 +27,5 @@ src/generated
 # Files from Forge MDK
 forge*changelog.txt
 /run-gametest/
+Docs/game-design/00-handoff2.0.md
+Docs/planejamento/plano-migracao-documentacao-2026-09-11.md

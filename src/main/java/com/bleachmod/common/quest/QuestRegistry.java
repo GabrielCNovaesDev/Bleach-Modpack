@@ -102,6 +102,10 @@ public final class QuestRegistry {
     public static Quest getQuest(String key) { return state().quests().get(key); }
     public static Saga getSaga(String key) { return state().sagas().get(key); }
     public static Collection<Quest> allQuests() { return state().quests().values(); }
+    public static List<Quest> questsForNpc(String npcId) {
+        if (npcId == null || npcId.isBlank()) return List.of();
+        return state().quests().values().stream().filter(q -> npcId.equals(q.getQuestGiver())).toList();
+    }
     public static Collection<Saga> allSagas() { return state().sagas().values(); }
     public static List<String> sagaQuestKeys(String id) { return state().order().getOrDefault(id,List.of()); }
 }
