@@ -4,11 +4,11 @@
 
 - Branch: `Feature-Bankais-Poderes`
 
-- Gate atual: planejamento do kit Ryūjin Jakka concluído; próxima entrega é F1 base — Ignição
+- Gate atual: F1 base e F1 Bankai implementadas; Dash recebeu dano de contato e visual de rotação/trilha intensificada
 
-- Próxima tarefa: implementar e testar exclusivamente a F1 base
+- Próxima tarefa: homologar o Dash melhorado e corrigir a preservação de cooldown durante transformação
 
-- Última atualização: 2026-09-15
+- Última atualização: 2026-09-16
 
 ## Gates
 
@@ -21,14 +21,14 @@
 | Técnica piloto | IMPLEMENTADA | `flame_burst` |
 | Servidor autoritativo | IMPLEMENTADO | `ExecuteTechniqueC2S` + `TechniqueService` |
 | Kit Ryūjin Jakka | ESPECIFICADO | `pwr-spec-02-kit-ryujin-jakka.md` recebido e `06-plano-kit-ryujin-jakka.md` |
-| F1 base — Ignição | PLANEJADA | Próxima entrega |
-| F1 Bankai — Dash de chamas | PENDENTE | — |
+| F1 base — Ignição | IMPLEMENTADA | `TechniqueService` + `CombatEvents`; homologação visual concluída pelo usuário |
+| F1 Bankai — Dash de chamas | IMPLEMENTADA / EM HOMOLOGAÇÃO | `TechniqueService.tickFlameDash`; movimento, partículas e dano de contato |
 | F2 base — Rajada curta | PENDENTE | — |
 | F2 Bankai — Leque de fogo | PENDENTE | — |
 | Bloco `spirit_flame` | PENDENTE | Deve preceder F3/F4 base |
 | F3/F4 base e Bankai | PENDENTE | — |
 | Sincronização multiplayer | PARCIAL | feedback e efeitos emitidos pelo servidor; falta teste com dois clientes |
-| Build/compileJava | BLOQUEADO PELO AMBIENTE | Falha ao obter `bootstraplauncher:1.1.2` por handshake TLS no Maven Forge |
+| Build/compileJava | APROVADO NO SNAPSHOT | `BUILD SUCCESSFUL`; 36 cenários de regressão aprovados; validar oficialmente com Java 17 |
 | GameTests | PENDENTE | — |
 | Teste visual | PENDENTE | — |
 
@@ -54,6 +54,20 @@
 
 - Estado: implementado no snapshot; build tentou iniciar, mas falhou antes do `compileJava` ao resolver `cpw.mods:bootstraplauncher:1.1.2` por erro TLS no Maven Forge.
 
+### 2026-09-16 — Dash de chamas: contato e visual Riptide
+
+- O Dash continua autoritativo no servidor e usa somente a direção de visão do jogador.
+
+- Cada ativação pode atingir cada entidade viva no máximo uma vez; o alvo precisa estar no volume percorrido pelo jogador.
+
+- Dano provisório: 4 pontos por entidade, mais 2 segundos de fogo.
+
+- O efeito visual usa `startAutoSpinAttack`, trilha densa de `FLAME`, `SOUL_FIRE_FLAME` e `LAVA`, além do som de Blaze.
+
+- Colisão com blocos continua interrompendo o movimento.
+
+- Estado: código implementado; build e teste manual da nova colisão ainda pendentes.
+
 ## Decisões fechadas em 2026-09-15
 
 1. O kit terá quatro slots, F1–F4, com variantes base e Bankai.
@@ -68,7 +82,7 @@
 
 ## Decisões ainda pendentes
 
-1. Definir regra de dano entre aliados e jogadores em grupo.
+1. Definir regra de dano entre aliados e jogadores em grupo; a versão atual atinge qualquer entidade viva no contato.
 
 1. Definir os valores finais de dano, custo e alcance de cada técnica.
 

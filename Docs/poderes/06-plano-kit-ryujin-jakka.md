@@ -36,7 +36,7 @@ Antes da implementação, será necessário verificar o item usado para represen
 
 ### Entrega 2 — F1 Bankai: Dash de chamas
 
-O dash usará a direção de visão do jogador, duração curta e trilha de partículas em espiral. O servidor deverá verificar colisão com blocos antes de aplicar o impulso total. A habilidade terá custo fixo e cooldown médio.
+O dash usa a direção de visão do jogador, duração curta e trilha intensificada de partículas. O servidor verifica colisão com blocos antes de aplicar cada deslocamento. Entidades vivas no volume percorrido recebem dano de contato uma única vez por ativação, com fogo curto. A habilidade usa a rotação automática nativa do Minecraft como aproximação visual do Riptide, sem introduzir GeckoLib nesta etapa. O custo é fixo e o cooldown é médio.
 
 A invulnerabilidade a knockback externo não será implementada na primeira versão, salvo se o teste demonstrar um problema claro.
 
@@ -113,6 +113,8 @@ O servidor sempre decide:
 - se o cooldown terminou;
 
 - quais entidades estão na área;
+
+- quais entidades já foram atingidas durante a ativação atual do Dash;
 
 - quais blocos podem receber `spirit_flame`;
 

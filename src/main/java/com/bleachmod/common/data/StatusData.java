@@ -2,12 +2,17 @@ package com.bleachmod.common.data;
 
 import net.minecraft.nbt.CompoundTag;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 public class StatusData {
     private long lastActionTick = Long.MIN_VALUE;
     private int flameBurstCooldownTicks;
     private int techniqueSlot1CooldownTicks;
     private int flameDashTicks;
     private boolean ignitionActive;
+    private final Set<UUID> flameDashHitEntities = new HashSet<>();
 
     public boolean allowAction(long tick) {
         if (lastActionTick != Long.MIN_VALUE && tick >= lastActionTick && tick - lastActionTick < 4) return false;
@@ -66,6 +71,18 @@ public class StatusData {
         flameDashTicks = Math.max(0, ticks);
     }
 
+    public void beginFlameDash() {
+        flameDashHitEntities.clear();
+    }
+
+    public boolean markFlameDashHit(UUID entityId) {
+        return flameDashHitEntities.add(entityId);
+    }
+
+    public void clearFlameDashHits() {
+        flameDashHitEntities.clear();
+    }
+
     public void tickTransientState() {
         if (flameBurstCooldownTicks > 0) {
             flameBurstCooldownTicks--;
@@ -81,6 +98,7 @@ public class StatusData {
         flameDashTicks = 0;
         ignitionActive = false;
         actionCharging = false;
+        flameDashHitEntities.clear();
     }
 
     public CompoundTag save() {
@@ -97,7 +115,10 @@ public class StatusData {
         if (tag.contains("actionCharging")) {
             actionCharging = tag.getBoolean("actionCharging");
         }
-        // Cooldowns are intentionally transient and are not loaded from NBT.
+        // Cooldowns and contact targets are intentionally transient and are not loaded from NBT.
         flameBurstCooldownTicks = 0;
+        techniqueSlot1CooldownTicks = 0;
+        flameDashTicks = 0;
+        flameDashHitEntities.clear();
     }
 }

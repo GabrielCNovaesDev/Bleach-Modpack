@@ -32,6 +32,8 @@ public final class TechniqueService {
     public static final int FLAME_DASH_COOLDOWN_TICKS = 100;
     public static final int FLAME_DASH_DURATION_TICKS = 5;
     public static final double FLAME_DASH_SPEED = 1.15D;
+    public static final float FLAME_DASH_CONTACT_DAMAGE = 4.0F;
+    public static final int FLAME_DASH_CONTACT_FIRE_SECONDS = 2;
 
     private TechniqueService() {
     }
@@ -84,8 +86,10 @@ public final class TechniqueService {
         }
 
         data.getStatus().setIgnitionActive(false);
+        data.getStatus().beginFlameDash();
         data.getStatus().setTechniqueSlot1CooldownTicks(FLAME_DASH_COOLDOWN_TICKS);
         data.getStatus().setFlameDashTicks(FLAME_DASH_DURATION_TICKS);
+        player.startAutoSpinAttack(FLAME_DASH_DURATION_TICKS);
         spawnDashBurst(player.serverLevel(), player);
         sendFeedback(player, Component.translatable("message.bleachmod.technique.flame_dash"));
         syncResources(player, data);
@@ -118,23 +122,51 @@ public final class TechniqueService {
         }
         if (!player.isAlive() || player.isSpectator()
                 || !Reference.FORM_BANKAI.equalsIgnoreCase(data.getCharacter().getActiveForm())) {
-            data.getStatus().setFlameDashTicks(0);
-            player.setDeltaMovement(Vec3.ZERO);
+            stopFlameDash(player, data);
             return;
         }
 
         Vec3 direction = player.getLookAngle().normalize();
         Vec3 displacement = direction.scale(FLAME_DASH_SPEED);
-        if (!player.level().noCollision(player, player.getBoundingBox().move(displacement))) {
-            data.getStatus().setFlameDashTicks(0);
-            player.setDeltaMovement(Vec3.ZERO);
+        AABB currentBox = player.getBoundingBox();
+        AABB sweptBox = currentBox.expandTowards(displacement).inflate(0.18D);
+        applyFlameDashContactDamage(player, data, sweptBox);
+
+        if (!player.level().noCollision(player, currentBox.move(displacement))) {
+            stopFlameDash(player, data);
             return;
         }
         player.setDeltaMovement(displacement);
         player.hurtMarked = true;
-        player.serverLevel().sendParticles(ParticleTypes.FLAME, player.getX(), player.getY() + 0.8D,
-                player.getZ(), 10, 0.35D, 0.35D, 0.35D, 0.04D);
+        spawnDashTrail(player.serverLevel(), player, direction);
         data.getStatus().setFlameDashTicks(data.getStatus().getFlameDashTicks() - 1);
+        if (data.getStatus().getFlameDashTicks() <= 0) {
+            player.setDeltaMovement(Vec3.ZERO);
+            data.getStatus().clearFlameDashHits();
+        }
+    }
+
+    private static void applyFlameDashContactDamage(ServerPlayer player, PlayerData data, AABB sweptBox) {
+        ServerLevel level = player.serverLevel();
+        DamageSource source = player.damageSources().playerAttack(player);
+        for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, sweptBox,
+                entity -> entity != player && entity.isAlive())) {
+            if (!data.getStatus().markFlameDashHit(target.getUUID())) {
+                continue;
+            }
+            target.hurt(source, FLAME_DASH_CONTACT_DAMAGE);
+            target.setSecondsOnFire(FLAME_DASH_CONTACT_FIRE_SECONDS);
+            level.sendParticles(ParticleTypes.FLAME, target.getX(), target.getY() + target.getBbHeight() * 0.5D,
+                    target.getZ(), 14, 0.3D, 0.4D, 0.3D, 0.03D);
+            level.playSound(null, target.blockPosition(), SoundEvents.FIRECHARGE_USE,
+                    player.getSoundSource(), 0.5F, 1.25F);
+        }
+    }
+
+    private static void stopFlameDash(ServerPlayer player, PlayerData data) {
+        data.getStatus().setFlameDashTicks(0);
+        data.getStatus().clearFlameDashHits();
+        player.setDeltaMovement(Vec3.ZERO);
     }
 
     public static boolean isIgnitionActive(PlayerData data) {
@@ -166,9 +198,26 @@ public final class TechniqueService {
 
     private static void spawnDashBurst(ServerLevel level, ServerPlayer player) {
         level.sendParticles(ParticleTypes.FLAME, player.getX(), player.getY() + 0.8D,
-                player.getZ(), 24, 0.5D, 0.4D, 0.5D, 0.08D);
+                player.getZ(), 42, 0.65D, 0.55D, 0.65D, 0.12D);
+        level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, player.getX(), player.getY() + 0.8D,
+                player.getZ(), 16, 0.45D, 0.45D, 0.45D, 0.08D);
+        level.sendParticles(ParticleTypes.LAVA, player.getX(), player.getY() + 0.8D,
+                player.getZ(), 10, 0.5D, 0.35D, 0.5D, 0.04D);
         level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT,
-                player.getSoundSource(), 0.8F, 1.15F);
+                player.getSoundSource(), 0.95F, 1.15F);
+    }
+
+    private static void spawnDashTrail(ServerLevel level, ServerPlayer player, Vec3 direction) {
+        Vec3 back = direction.scale(-0.65D);
+        double x = player.getX() + back.x;
+        double y = player.getY() + 0.8D;
+        double z = player.getZ() + back.z;
+        level.sendParticles(ParticleTypes.FLAME, x, y, z, 18,
+                0.45D, 0.45D, 0.45D, 0.09D);
+        level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 5,
+                0.28D, 0.28D, 0.28D, 0.06D);
+        level.sendParticles(ParticleTypes.LAVA, x, y, z, 2,
+                0.2D, 0.2D, 0.2D, 0.02D);
     }
 
     public static void executeFlameBurst(ServerPlayer player, PlayerData data) {
