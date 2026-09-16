@@ -5,6 +5,9 @@ import net.minecraft.nbt.CompoundTag;
 public class StatusData {
     private long lastActionTick = Long.MIN_VALUE;
     private int flameBurstCooldownTicks;
+    private int techniqueSlot1CooldownTicks;
+    private int flameDashTicks;
+    private boolean ignitionActive;
 
     public boolean allowAction(long tick) {
         if (lastActionTick != Long.MIN_VALUE && tick >= lastActionTick && tick - lastActionTick < 4) return false;
@@ -39,14 +42,44 @@ public class StatusData {
         flameBurstCooldownTicks = Math.max(0, ticks);
     }
 
+    public boolean isIgnitionActive() {
+        return ignitionActive;
+    }
+
+    public void setIgnitionActive(boolean active) {
+        ignitionActive = active;
+    }
+
+    public int getTechniqueSlot1CooldownTicks() {
+        return techniqueSlot1CooldownTicks;
+    }
+
+    public void setTechniqueSlot1CooldownTicks(int ticks) {
+        techniqueSlot1CooldownTicks = Math.max(0, ticks);
+    }
+
+    public int getFlameDashTicks() {
+        return flameDashTicks;
+    }
+
+    public void setFlameDashTicks(int ticks) {
+        flameDashTicks = Math.max(0, ticks);
+    }
+
     public void tickTransientState() {
         if (flameBurstCooldownTicks > 0) {
             flameBurstCooldownTicks--;
+        }
+        if (techniqueSlot1CooldownTicks > 0) {
+            techniqueSlot1CooldownTicks--;
         }
     }
 
     public void clearTransientState() {
         flameBurstCooldownTicks = 0;
+        techniqueSlot1CooldownTicks = 0;
+        flameDashTicks = 0;
+        ignitionActive = false;
         actionCharging = false;
     }
 

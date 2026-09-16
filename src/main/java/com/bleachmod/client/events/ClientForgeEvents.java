@@ -9,6 +9,7 @@ import com.bleachmod.common.evolution.TransformationsHelper;
 import com.bleachmod.common.network.NetworkHandler;
 import com.bleachmod.common.network.c2s.ExecuteActionC2S;
 import com.bleachmod.common.network.c2s.ExecuteTechniqueC2S;
+import com.bleachmod.common.network.c2s.ExecuteTechniqueSlotC2S;
 import com.bleachmod.common.network.c2s.SelectFormC2S;
 import com.bleachmod.common.network.c2s.UpdateStatC2S;
 import net.minecraft.client.Minecraft;
@@ -69,6 +70,18 @@ public class ClientForgeEvents {
         }
         while (ModKeybinds.FLAME_BURST.consumeClick()) {
             NetworkHandler.sendToServer(new ExecuteTechniqueC2S("flame_burst"));
+        }
+        while (ModKeybinds.TECHNIQUE_SLOT_1.consumeClick()) {
+            NetworkHandler.sendToServer(new ExecuteTechniqueSlotC2S(1));
+        }
+        while (ModKeybinds.TECHNIQUE_SLOT_2.consumeClick()) {
+            NetworkHandler.sendToServer(new ExecuteTechniqueSlotC2S(2));
+        }
+        while (ModKeybinds.TECHNIQUE_SLOT_3.consumeClick()) {
+            NetworkHandler.sendToServer(new ExecuteTechniqueSlotC2S(3));
+        }
+        while (ModKeybinds.TECHNIQUE_SLOT_4.consumeClick()) {
+            NetworkHandler.sendToServer(new ExecuteTechniqueSlotC2S(4));
         }
 
         boolean charging = ModKeybinds.CHARGE.isDown();

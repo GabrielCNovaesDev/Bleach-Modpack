@@ -32,6 +32,10 @@ public final class BleachClient {
         event.register(ModKeybinds.CYCLE_FORM);
         event.register(ModKeybinds.DESCEND);
         event.register(ModKeybinds.FLAME_BURST);
+        event.register(ModKeybinds.TECHNIQUE_SLOT_1);
+        event.register(ModKeybinds.TECHNIQUE_SLOT_2);
+        event.register(ModKeybinds.TECHNIQUE_SLOT_3);
+        event.register(ModKeybinds.TECHNIQUE_SLOT_4);
     }
 
     private static void registerOverlays(RegisterGuiOverlaysEvent event) {

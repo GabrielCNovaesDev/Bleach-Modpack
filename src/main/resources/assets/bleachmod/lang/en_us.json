@@ -88,11 +88,21 @@
   "key.bleachmod.status": "Open character",
   "key.bleachmod.wheel": "Select transformation",
   "key.bleachmod.flame_burst": "Technique: Flame Burst",
+  "key.bleachmod.technique_slot_1": "Technique H: Ignition",
+  "key.bleachmod.technique_slot_2": "Technique N: Slot 2",
+  "key.bleachmod.technique_slot_3": "Technique B: Slot 3",
+  "key.bleachmod.technique_slot_4": "Technique C: Slot 4",
   "hud.bleachmod.target": "Target: %s",
   "screen.bleachmod.purchase_remaining": "Balance after purchase: %s SP",
   "screen.bleachmod.wheel_chain": "Activate the previous form or reach the mastery needed for free transformation.",
   "screen.bleachmod.insufficient_points": "Not enough spirit points.",
   "message.bleachmod.technique.flame_burst": "Flame Burst executed.",
   "message.bleachmod.technique.no_reiatsu": "Not enough reiatsu (%s).",
-  "message.bleachmod.technique.cooldown": "Technique on cooldown: %ss."
+  "message.bleachmod.technique.cooldown": "Technique on cooldown: %ss.",
+  "message.bleachmod.technique.unavailable": "This technique is not available in the current form.",
+  "message.bleachmod.technique.ignition.on": "Ignition activated.",
+  "message.bleachmod.technique.ignition.off": "Ignition deactivated.",
+  "message.bleachmod.technique.ignition.empty": "Ignition ended: reiatsu depleted.",
+  "message.bleachmod.technique.ignition.requires_asauchi": "Ignition requires the Zanpakuto in your main hand.",
+  "message.bleachmod.technique.flame_dash": "Flame Dash executed."
 }

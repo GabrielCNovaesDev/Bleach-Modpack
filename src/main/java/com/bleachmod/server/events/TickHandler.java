@@ -7,6 +7,7 @@ import com.bleachmod.common.data.PlayerCapability;
 import com.bleachmod.common.evolution.FormData;
 import com.bleachmod.common.evolution.TransformationsHelper;
 import com.bleachmod.common.network.SyncHelper;
+import com.bleachmod.common.technique.TechniqueService;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
@@ -37,6 +38,8 @@ public class TickHandler {
 
             float previousEnergy = data.getResources().getCurrentReiatsu();
             int previousCharge = data.getResources().getActionCharge();
+            TechniqueService.tickIgnition(player, data);
+            TechniqueService.tickFlameDash(player, data);
             FormData active = TransformationsHelper.getActiveFormData(data);
             float drain = active == null ? 0.0F : CombatBalance.formDrain((float) active.getEnergyDrain(),
                     data.getAttributes().level(AttributeData.CONTROL));
