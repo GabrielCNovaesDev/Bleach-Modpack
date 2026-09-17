@@ -80,8 +80,8 @@ public final class TechniqueService {
     }
 
     private static void executeFlameBarrage(ServerPlayer player, PlayerData data) {
-        if (!player.getMainHandItem().is(ModItems.ASAUCHI.get())) {
-            sendFeedback(player, Component.translatable("message.bleachmod.technique.barrage.requires_asauchi"));
+        if (!isRyujinJakkaEquipped(player)) {
+            sendFeedback(player, Component.translatable("message.bleachmod.technique.requires_ryujin_jakka"));
             return;
         }
         if (data.getStatus().getTechniqueSlot2CooldownTicks() > 0) {
@@ -154,9 +154,9 @@ public final class TechniqueService {
     }
 
     private static void executeIgnition(ServerPlayer player, PlayerData data) {
-        if (!player.getMainHandItem().is(ModItems.ASAUCHI.get())) {
+        if (!isRyujinJakkaEquipped(player)) {
             data.getStatus().setIgnitionActive(false);
-            sendFeedback(player, Component.translatable("message.bleachmod.technique.ignition.requires_asauchi"));
+            sendFeedback(player, Component.translatable("message.bleachmod.technique.requires_ryujin_jakka"));
             return;
         }
 
@@ -172,6 +172,10 @@ public final class TechniqueService {
     }
 
     private static void executeFlameDash(ServerPlayer player, PlayerData data) {
+        if (!isRyujinJakkaEquipped(player)) {
+            sendFeedback(player, Component.translatable("message.bleachmod.technique.requires_ryujin_jakka"));
+            return;
+        }
         if (data.getStatus().getTechniqueSlot1CooldownTicks() > 0) {
             sendFeedback(player, Component.translatable("message.bleachmod.technique.cooldown",
                     formatSeconds(data.getStatus().getTechniqueSlot1CooldownTicks())));
@@ -197,7 +201,7 @@ public final class TechniqueService {
         if (!data.getStatus().isIgnitionActive()) {
             return;
         }
-        if (!player.getMainHandItem().is(ModItems.ASAUCHI.get())
+        if (!isRyujinJakkaEquipped(player)
                 || Reference.FORM_BANKAI.equalsIgnoreCase(data.getCharacter().getActiveForm())) {
             data.getStatus().setIgnitionActive(false);
             sendFeedback(player, Component.translatable("message.bleachmod.technique.ignition.off"));
@@ -219,6 +223,7 @@ public final class TechniqueService {
             return;
         }
         if (!player.isAlive() || player.isSpectator()
+                || !isRyujinJakkaEquipped(player)
                 || !Reference.FORM_BANKAI.equalsIgnoreCase(data.getCharacter().getActiveForm())) {
             stopFlameDash(player, data);
             return;
@@ -267,6 +272,10 @@ public final class TechniqueService {
         player.setDeltaMovement(Vec3.ZERO);
     }
 
+    public static boolean isRyujinJakkaEquipped(ServerPlayer player) {
+        return player.getMainHandItem().is(ModItems.RYUJIN_JAKKA.get());
+    }
+
     public static boolean isIgnitionActive(PlayerData data) {
         return data.getStatus().isIgnitionActive();
     }
@@ -276,7 +285,7 @@ public final class TechniqueService {
     }
 
     public static void applyIgnitionHit(ServerPlayer player, PlayerData data, LivingEntity target) {
-        if (!isIgnitionActive(data) || !player.getMainHandItem().is(ModItems.ASAUCHI.get())) {
+        if (!isIgnitionActive(data) || !isRyujinJakkaEquipped(player)) {
             return;
         }
         target.setSecondsOnFire(IGNITION_FIRE_SECONDS);

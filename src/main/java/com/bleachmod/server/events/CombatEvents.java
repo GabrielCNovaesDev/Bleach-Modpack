@@ -24,11 +24,15 @@ public final class CombatEvents {
             PlayerCapability.get(player).ifPresent(data->{
                 if(!data.getStatus().hasCreatedCharacter())return;
                 float formBonus=CombatBalance.formDamageBonus(data.getCharacter().getActiveForm());
-                if (player.getMainHandItem().is(ModItems.ASAUCHI.get())) {
+                if (isZanjutsuWeapon(player)) {
+                    float ignitionBonus = TechniqueService.isRyujinJakkaEquipped(player)
+                            ? TechniqueService.ignitionDamageBonus(data) : 0.0F;
                     event.setAmount(CombatBalance.outgoingDamage(event.getAmount(),
                         data.getAttributes().level(AttributeData.ZANJUTSU),
-                        formBonus + TechniqueService.ignitionDamageBonus(data)));
-                    TechniqueService.applyIgnitionHit(player, data, event.getEntity());
+                        formBonus + ignitionBonus));
+                    if (TechniqueService.isRyujinJakkaEquipped(player)) {
+                        TechniqueService.applyIgnitionHit(player, data, event.getEntity());
+                    }
                 } else if (player.getMainHandItem().isEmpty()) {
                     event.setAmount(CombatBalance.outgoingDamage(event.getAmount(),
                         data.getAttributes().level(AttributeData.HAKUDA), formBonus));
@@ -62,7 +66,12 @@ public final class CombatEvents {
         return source.is(DamageTypes.PLAYER_ATTACK) && source.getDirectEntity() == source.getEntity();
     }
 
+    private static boolean isZanjutsuWeapon(ServerPlayer player) {
+        return player.getMainHandItem().is(ModItems.ASAUCHI.get())
+                || player.getMainHandItem().is(ModItems.RYUJIN_JAKKA.get());
+    }
+
     private static boolean isSupportedMeleeWeapon(ServerPlayer player) {
-        return player.getMainHandItem().isEmpty() || player.getMainHandItem().is(ModItems.ASAUCHI.get());
+        return player.getMainHandItem().isEmpty() || isZanjutsuWeapon(player);
     }
 }

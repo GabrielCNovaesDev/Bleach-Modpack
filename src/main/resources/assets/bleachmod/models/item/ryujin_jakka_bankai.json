@@ -1,21 +1,7 @@
 {
     "parent": "bleachmod:item/katana_handheld",
     "textures": {
-      "layer0": "bleachmod:item/asauchi"
-    },
-    "overrides": [
-      {
-        "predicate": {
-          "bleachmod:form": 1
-        },
-        "model": "bleachmod:item/ryujin_jakka_shikai"
-      },
-      {
-        "predicate": {
-          "bleachmod:form": 2
-        },
-        "model": "bleachmod:item/ryujin_jakka_bankai"
-      }
-    ]
+      "layer0": "bleachmod:item/asauchi_bankai"
+    }
   }
   

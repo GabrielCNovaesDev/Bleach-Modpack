@@ -1,6 +1,7 @@
 {
   "itemGroup.bleachmod": "Bleach",
   "item.bleachmod.asauchi": "Asauchi",
+  "item.bleachmod.ryujin_jakka": "Ryujin Jakka",
   "entity.bleachmod.npc_sado_yasutora": "Yasutora Sado",
   "entity.bleachmod.npc_ichigo": "Ichigo Kurosaki",
   "entity.bleachmod.npc_orihime": "Orihime Inoue",
@@ -139,7 +140,7 @@
   "message.bleachmod.technique.ignition.on": "Ignition activated.",
   "message.bleachmod.technique.ignition.off": "Ignition deactivated.",
   "message.bleachmod.technique.ignition.empty": "Ignition ended: reiatsu depleted.",
-  "message.bleachmod.technique.ignition.requires_asauchi": "Ignition requires the Zanpakuto in your main hand.",
+  "message.bleachmod.technique.requires_ryujin_jakka": "This technique requires Ryujin Jakka in your main hand.",
   "message.bleachmod.technique.flame_dash": "Flame Dash executed.",
   "message.bleachmod.technique.flame_barrage": "Short flame barrage executed.",
   "message.bleachmod.technique.barrage.requires_asauchi": "The short barrage requires the Zanpakuto in the main hand."

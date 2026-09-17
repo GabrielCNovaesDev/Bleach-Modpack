@@ -1,6 +1,7 @@
 {
   "itemGroup.bleachmod": "Bleach",
   "item.bleachmod.asauchi": "Asauchi",
+  "item.bleachmod.ryujin_jakka": "Ryūjin Jakka",
   "entity.bleachmod.npc_sado_yasutora": "Yasutora Sado",
   "entity.bleachmod.npc_ichigo": "Ichigo Kurosaki",
   "entity.bleachmod.npc_orihime": "Orihime Inoue",
@@ -139,7 +140,7 @@
   "message.bleachmod.technique.ignition.on": "Ignição ativada.",
   "message.bleachmod.technique.ignition.off": "Ignição desativada.",
   "message.bleachmod.technique.ignition.empty": "A Ignição foi desligada: reiatsu esgotada.",
-  "message.bleachmod.technique.ignition.requires_asauchi": "A Ignição exige a Zanpakutō na mão principal.",
+  "message.bleachmod.technique.requires_ryujin_jakka": "Esta técnica exige a Ryūjin Jakka na mão principal.",
   "message.bleachmod.technique.flame_dash": "Dash de chamas executado.",
   "message.bleachmod.technique.flame_barrage": "Rajada curta de chamas executada.",
   "message.bleachmod.technique.barrage.requires_asauchi": "A Rajada curta exige a Zanpakutō na mão principal."
