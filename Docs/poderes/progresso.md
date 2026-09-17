@@ -4,9 +4,9 @@
 
 - Branch: `Feature-Bankais-Poderes`
 
-- Gate atual: F1 base e F1 Bankai implementadas; Dash recebeu dano de contato e visual de rotação/trilha intensificada
+- Gate atual: F1 base e F1 Bankai homologadas; F2 base implementada e aguardando homologação
 
-- Próxima tarefa: homologar o Dash melhorado e corrigir a preservação de cooldown durante transformação
+- Próxima tarefa: compilar e homologar exclusivamente a F2 base — Rajada curta
 
 - Última atualização: 2026-09-16
 
@@ -22,13 +22,13 @@
 | Servidor autoritativo | IMPLEMENTADO | `ExecuteTechniqueC2S` + `TechniqueService` |
 | Kit Ryūjin Jakka | ESPECIFICADO | `pwr-spec-02-kit-ryujin-jakka.md` recebido e `06-plano-kit-ryujin-jakka.md` |
 | F1 base — Ignição | IMPLEMENTADA | `TechniqueService` + `CombatEvents`; homologação visual concluída pelo usuário |
-| F1 Bankai — Dash de chamas | IMPLEMENTADA / EM HOMOLOGAÇÃO | `TechniqueService.tickFlameDash`; movimento, partículas e dano de contato |
-| F2 base — Rajada curta | PENDENTE | — |
+| F1 Bankai — Dash de chamas | HOMOLOGADA | `TechniqueService.tickFlameDash`; múltiplos alvos, dano único por alvo, alcance, colisão e cancelamentos verificados em jogo |
+| F2 base — Rajada curta | IMPLEMENTADA — NÃO HOMOLOGADA | `TechniqueService.executeFlameBarrage`; cone server-side, fogo e partículas de superfície sem alteração de blocos |
 | F2 Bankai — Leque de fogo | PENDENTE | — |
 | Bloco `spirit_flame` | PENDENTE | Deve preceder F3/F4 base |
 | F3/F4 base e Bankai | PENDENTE | — |
-| Sincronização multiplayer | PARCIAL | feedback e efeitos emitidos pelo servidor; falta teste com dois clientes |
-| Build/compileJava | APROVADO NO SNAPSHOT | `BUILD SUCCESSFUL`; 36 cenários de regressão aprovados; validar oficialmente com Java 17 |
+| Sincronização multiplayer | PARCIAL | efeitos server-side verificados; teste formal com dois clientes ainda pendente |
+| Build/compileJava | APROVADO NO SNAPSHOT | `BUILD SUCCESSFUL`; build e testes executados após a atualização do Dash |
 | GameTests | PENDENTE | — |
 | Teste visual | PENDENTE | — |
 
@@ -62,11 +62,33 @@
 
 - Dano provisório: 4 pontos por entidade, mais 2 segundos de fogo.
 
+- Duração ampliada para 16 ticks a 1,25 bloco/tick, com distância teórica aproximada de 20 blocos quando não há colisão.
+
 - O efeito visual usa `startAutoSpinAttack`, trilha densa de `FLAME`, `SOUL_FIRE_FLAME` e `LAVA`, além do som de Blaze.
 
 - Colisão com blocos continua interrompendo o movimento.
 
-- Estado: código implementado; build e teste manual da nova colisão ainda pendentes.
+- Testes manuais aprovados: múltiplos alvos, um dano por alvo, distância aproximada, colisão com terreno e parede, perda da Bankai, morte durante o Dash e custo cobrado uma única vez.
+
+- Limitação conhecida: no chão, a direção horizontal pode fazer o Dash encerrar ou prender no primeiro bloco do terreno; o uso aéreo oferece mira mais eficiente. O polimento da movimentação terrestre fica deliberadamente fora deste ciclo.
+
+- Estado: HOMOLOGADO em jogo; polimento futuro aberto, sem bloquear o avanço para F2.
+
+### 2026-09-16 — F2 base: Rajada curta de chamas
+
+- Slot: 2, tecla N; o cliente envia somente o número do slot.
+
+- Disponível em forma Selada ou Shikai; recusada durante Bankai, que permanece reservada para a variante evoluída do slot.
+
+- Requer Asauchi na mão principal, custa 15 de reiatsu e possui cooldown próprio de 4 segundos.
+
+- Cone calculado exclusivamente no servidor, com alcance de 3 blocos e abertura total de 60 graus.
+
+- Cada entidade viva dentro do cone recebe 4 pontos de dano e fica em chamas por 3 segundos.
+
+- Partículas de chama são projetadas sobre a superfície do terreno para indicar o cone; nenhum bloco é colocado, substituído ou alterado.
+
+- Estado: implementação concluída; compilação e homologação manual pendentes.
 
 ## Decisões fechadas em 2026-09-15
 
@@ -95,9 +117,11 @@
 | ID | Risco | Impacto | Mitigação | Estado |
 | --- | --- | --- | --- | --- |
 | PWR-001 | Dano em área atingir aliados ou outros jogadores sem regra definida. | Alto | Definir regra antes da F3 Bankai. | Aberto |
-| PWR-002 | Assinatura de API de dano ou partículas divergir no Forge local. | Alto | Executar `./gradlew build` e corrigir compilação. | Aberto |
+| PWR-002 | Assinatura de API de dano ou partículas divergir no Forge local. | Alto | Executar `./gradlew build` e corrigir compilação. | Controlado — build aprovado |
 | PWR-003 | Cooldown não possuir feedback visual contínuo. | Médio | Adicionar HUD após validar o serviço. | Aberto |
 | PWR-004 | Efeitos públicos não serem percebidos por observadores. | Médio | Testar dois clientes e adicionar pacote público se necessário. | Aberto |
-| PWR-005 | Técnica estar documentada como aceita antes do teste no jogo. | Médio | Manter estado como implementado/não homologado. | Controlado |
+| PWR-005 | Técnica estar documentada como aceita antes do teste no jogo. | Médio | Manter estado como implementado/não homologado. | Controlado — F1 homologada |
 | PWR-006 | `spirit_flame` permanecer após reinício ou sobrescrever bloco do jogador. | Alto | `SavedData`, limpeza no boot e remoção condicional. | Aberto |
 | PWR-007 | Cooldown base ser resetado ao entrar em Bankai. | Alto | Estado indexado pelo slot. | Planejado |
+
+| PWR-008 | Dash no chão prender no primeiro bloco do terreno e dificultar a mira horizontal. | Médio | Manter como limitação conhecida; polir movimento terrestre antes de uma futura revisão de F1. | Aberto, não bloqueante |

@@ -10,6 +10,7 @@ public class StatusData {
     private long lastActionTick = Long.MIN_VALUE;
     private int flameBurstCooldownTicks;
     private int techniqueSlot1CooldownTicks;
+    private int techniqueSlot2CooldownTicks;
     private int flameDashTicks;
     private boolean ignitionActive;
     private final Set<UUID> flameDashHitEntities = new HashSet<>();
@@ -63,6 +64,14 @@ public class StatusData {
         techniqueSlot1CooldownTicks = Math.max(0, ticks);
     }
 
+    public int getTechniqueSlot2CooldownTicks() {
+        return techniqueSlot2CooldownTicks;
+    }
+
+    public void setTechniqueSlot2CooldownTicks(int ticks) {
+        techniqueSlot2CooldownTicks = Math.max(0, ticks);
+    }
+
     public int getFlameDashTicks() {
         return flameDashTicks;
     }
@@ -90,11 +99,15 @@ public class StatusData {
         if (techniqueSlot1CooldownTicks > 0) {
             techniqueSlot1CooldownTicks--;
         }
+        if (techniqueSlot2CooldownTicks > 0) {
+            techniqueSlot2CooldownTicks--;
+        }
     }
 
     public void clearTransientState() {
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
+        techniqueSlot2CooldownTicks = 0;
         flameDashTicks = 0;
         ignitionActive = false;
         actionCharging = false;
@@ -118,6 +131,7 @@ public class StatusData {
         // Cooldowns and contact targets are intentionally transient and are not loaded from NBT.
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
+        techniqueSlot2CooldownTicks = 0;
         flameDashTicks = 0;
         flameDashHitEntities.clear();
     }

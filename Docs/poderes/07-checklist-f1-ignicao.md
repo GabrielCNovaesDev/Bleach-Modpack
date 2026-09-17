@@ -1,36 +1,38 @@
-# Checklist da próxima entrega — F1 base: Ignição
+# Checklist de homologação — F1 base: Ignição e F1 Bankai: Dash de chamas
 
 ## Objetivo
 
-Criar a primeira técnica do kit Ryūjin Jakka. A técnica será um toggle que funciona em Selada ou Shikai e não funciona com Bankai ativo, porque nesse estado o slot F1 será resolvido para o Dash de chamas.
+Registrar a homologação da primeira técnica do kit Ryūjin Jakka. A Ignição funciona em Selada ou Shikai e não funciona com Bankai ativo, porque nesse estado o slot F1 é resolvido para o Dash de chamas.
+
+O Dash de chamas também foi homologado em jogo, incluindo múltiplos alvos, dano único por alvo, alcance, colisão e cancelamentos. A mira no chão permanece como limitação conhecida e não bloqueante.
 
 ## Comportamento obrigatório
 
-- [ ] Ativação e desativação pelo slot F1.
+- [x] Ativação e desativação pelo slot F1.
 
-- [ ] Servidor resolve a variante pela forma ativa.
+- [x] Servidor resolve a variante pela forma ativa.
 
-- [ ] Exige personagem criado e jogador vivo.
+- [x] Exige personagem criado e jogador vivo.
 
-- [ ] Exige Asauchi/Zanpakutō do mod na mão principal.
+- [x] Exige Asauchi/Zanpakutō do mod na mão principal.
 
-- [ ] Não aceita qualquer espada vanilla.
+- [x] Não aceita qualquer espada vanilla.
 
-- [ ] Aplica bônus de dano em Zanjutsu enquanto ativa.
+- [x] Aplica bônus de dano em Zanjutsu enquanto ativa.
 
-- [ ] Golpes corpo a corpo aplicam fogo curto ao alvo.
+- [x] Golpes corpo a corpo aplicam fogo curto ao alvo.
 
-- [ ] Possui drain contínuo pequeno de reiatsu.
+- [x] Possui drain contínuo pequeno de reiatsu.
 
-- [ ] Desliga sozinha quando a reiatsu chega a zero.
+- [x] Desliga sozinha quando a reiatsu chega a zero.
 
-- [ ] Possui partículas esparsas nos golpes.
+- [x] Possui partículas esparsas nos golpes.
 
-- [ ] Possui glint visual vermelho no item ou alternativa equivalente compatível com a renderização atual.
+- [x] Possui glint visual vermelho no item ou alternativa equivalente compatível com a renderização atual.
 
-- [ ] Não cria bloco.
+- [x] Não cria bloco.
 
-- [ ] Não possui animação óssea.
+- [x] Não possui animação óssea.
 
 ## Questões técnicas para verificar antes de editar
 
@@ -76,4 +78,4 @@ Criar a primeira técnica do kit Ryūjin Jakka. A técnica será um toggle que f
 
 ## Critério de conclusão
 
-A entrega só passa quando compilar com Java 17, funcionar em cliente de desenvolvimento e tiver os comportamentos obrigatórios verificados manualmente. O progresso e o manual do jogador devem ser atualizados na mesma entrega.
+A entrega F1 passa com a compilação aprovada, funcionamento em cliente de desenvolvimento e comportamentos obrigatórios verificados manualmente. O Dash também teve múltiplos alvos, um dano por alvo, distância, colisão, cancelamentos e custo único verificados. A homologação multiplayer formal permanece como etapa adicional de sincronização, não como bloqueio da F2 base.

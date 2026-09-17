@@ -125,7 +125,7 @@
   "key.bleachmod.wheel": "Selecionar transformação",
   "key.bleachmod.flame_burst": "Técnica: Explosão de chamas",
   "key.bleachmod.technique_slot_1": "Técnica H: Ignição",
-  "key.bleachmod.technique_slot_2": "Técnica N: Slot 2",
+  "key.bleachmod.technique_slot_2": "Técnica N: Rajada curta",
   "key.bleachmod.technique_slot_3": "Técnica B: Slot 3",
   "key.bleachmod.technique_slot_4": "Técnica C: Slot 4",
   "hud.bleachmod.target": "Alvo: %s",
@@ -140,5 +140,7 @@
   "message.bleachmod.technique.ignition.off": "Ignição desativada.",
   "message.bleachmod.technique.ignition.empty": "A Ignição foi desligada: reiatsu esgotada.",
   "message.bleachmod.technique.ignition.requires_asauchi": "A Ignição exige a Zanpakutō na mão principal.",
-  "message.bleachmod.technique.flame_dash": "Dash de chamas executado."
+  "message.bleachmod.technique.flame_dash": "Dash de chamas executado.",
+  "message.bleachmod.technique.flame_barrage": "Rajada curta de chamas executada.",
+  "message.bleachmod.technique.barrage.requires_asauchi": "A Rajada curta exige a Zanpakutō na mão principal."
 }

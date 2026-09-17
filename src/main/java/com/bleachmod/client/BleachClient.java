@@ -4,9 +4,9 @@ import com.bleachmod.Reference;
 import com.bleachmod.client.input.ModKeybinds;
 import com.bleachmod.common.data.PlayerCapability;
 import com.bleachmod.init.ModItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -50,7 +50,12 @@ public final class BleachClient {
     }
 
     private static void registerItemProperties() {
-        ItemProperties.register(ModItems.ASAUCHI.get(), Reference.id("form"), (stack, level, entity, seed) -> {
+        registerFormProperty(ModItems.ASAUCHI.get());
+        registerFormProperty(ModItems.RYUJIN_JAKKA.get());
+    }
+
+    private static void registerFormProperty(Item item) {
+        ItemProperties.register(item, Reference.id("form"), (stack, level, entity, seed) -> {
             Player player = entity instanceof Player holder ? holder : null;
             if (player == null) {
                 return 0.0F;

@@ -6,6 +6,7 @@ import com.bleachmod.common.network.NetworkHandler;
 import com.bleachmod.common.network.s2c.ActionFeedbackS2C;
 import com.bleachmod.common.network.s2c.ResourceSyncS2C;
 import com.bleachmod.init.ModItems;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -13,11 +14,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public final class TechniqueService {
     public static final int SLOT_1 = 1;
+    public static final int SLOT_2 = 2;
     public static final String FLAME_BURST_ID = "flame_burst";
     public static final float FLAME_BURST_COST = 20.0F;
     public static final int FLAME_BURST_COOLDOWN_TICKS = 15 * 20;
@@ -30,10 +33,18 @@ public final class TechniqueService {
 
     public static final float FLAME_DASH_COST = 20.0F;
     public static final int FLAME_DASH_COOLDOWN_TICKS = 100;
-    public static final int FLAME_DASH_DURATION_TICKS = 5;
-    public static final double FLAME_DASH_SPEED = 1.15D;
+    /** Approximately 20 blocks when the full dash completes without collision. */
+    public static final int FLAME_DASH_DURATION_TICKS = 16;
+    public static final double FLAME_DASH_SPEED = 1.25D;
     public static final float FLAME_DASH_CONTACT_DAMAGE = 4.0F;
     public static final int FLAME_DASH_CONTACT_FIRE_SECONDS = 2;
+
+    public static final float FLAME_BARRAGE_COST = 15.0F;
+    public static final int FLAME_BARRAGE_COOLDOWN_TICKS = 4 * 20;
+    public static final double FLAME_BARRAGE_RANGE = 3.0D;
+    public static final double FLAME_BARRAGE_HALF_ANGLE_RADIANS = Math.PI / 6.0D;
+    public static final float FLAME_BARRAGE_DAMAGE = 4.0F;
+    public static final int FLAME_BARRAGE_FIRE_SECONDS = 3;
 
     private TechniqueService() {
     }
@@ -41,6 +52,8 @@ public final class TechniqueService {
     public static void executeSlot(ServerPlayer player, PlayerData data, int slot) {
         if (slot == SLOT_1) {
             executeSlotOne(player, data);
+        } else if (slot == SLOT_2) {
+            executeSlotTwo(player, data);
         }
     }
 
@@ -52,6 +65,91 @@ public final class TechniqueService {
             executeFlameDash(player, data);
         } else {
             executeIgnition(player, data);
+        }
+    }
+
+    private static void executeSlotTwo(ServerPlayer player, PlayerData data) {
+        if (!data.getStatus().hasCreatedCharacter() || !player.isAlive() || player.isSpectator()) {
+            return;
+        }
+        if (Reference.FORM_BANKAI.equalsIgnoreCase(data.getCharacter().getActiveForm())) {
+            sendFeedback(player, Component.translatable("message.bleachmod.technique.unavailable"));
+            return;
+        }
+        executeFlameBarrage(player, data);
+    }
+
+    private static void executeFlameBarrage(ServerPlayer player, PlayerData data) {
+        if (!player.getMainHandItem().is(ModItems.ASAUCHI.get())) {
+            sendFeedback(player, Component.translatable("message.bleachmod.technique.barrage.requires_asauchi"));
+            return;
+        }
+        if (data.getStatus().getTechniqueSlot2CooldownTicks() > 0) {
+            sendFeedback(player, Component.translatable("message.bleachmod.technique.cooldown",
+                    formatSeconds(data.getStatus().getTechniqueSlot2CooldownTicks())));
+            return;
+        }
+        if (!data.getResources().consumeReiatsu(FLAME_BARRAGE_COST)) {
+            sendFeedback(player, Component.translatable("message.bleachmod.technique.no_reiatsu",
+                    (int) FLAME_BARRAGE_COST));
+            return;
+        }
+
+        data.getStatus().setTechniqueSlot2CooldownTicks(FLAME_BARRAGE_COOLDOWN_TICKS);
+        applyFlameBarrage(player);
+        sendFeedback(player, Component.translatable("message.bleachmod.technique.flame_barrage"));
+        syncResources(player, data);
+    }
+
+    private static void applyFlameBarrage(ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        Vec3 origin = player.getEyePosition();
+        Vec3 direction = player.getLookAngle().normalize();
+        double minimumDot = Math.cos(FLAME_BARRAGE_HALF_ANGLE_RADIANS);
+        DamageSource source = player.damageSources().playerAttack(player);
+        AABB area = player.getBoundingBox().inflate(FLAME_BARRAGE_RANGE);
+
+        for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area,
+                entity -> entity != player && entity.isAlive())) {
+            Vec3 toTarget = target.getEyePosition().subtract(origin);
+            double distance = toTarget.length();
+            if (distance > FLAME_BARRAGE_RANGE || distance == 0.0D
+                    || toTarget.normalize().dot(direction) < minimumDot) {
+                continue;
+            }
+            target.hurt(source, FLAME_BARRAGE_DAMAGE);
+            target.setSecondsOnFire(FLAME_BARRAGE_FIRE_SECONDS);
+            spawnBarrageImpact(level, target);
+        }
+
+        spawnBarrageSurface(level, player, direction);
+        level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT,
+                player.getSoundSource(), 0.7F, 1.3F);
+    }
+
+    private static void spawnBarrageImpact(ServerLevel level, LivingEntity target) {
+        level.sendParticles(ParticleTypes.FLAME, target.getX(), target.getY() + 0.15D, target.getZ(),
+                12, 0.3D, 0.08D, 0.3D, 0.03D);
+        level.sendParticles(ParticleTypes.SMOKE, target.getX(), target.getY() + 0.4D, target.getZ(),
+                4, 0.18D, 0.12D, 0.18D, 0.01D);
+    }
+
+    private static void spawnBarrageSurface(ServerLevel level, ServerPlayer player, Vec3 direction) {
+        Vec3 horizontal = new Vec3(direction.x, 0.0D, direction.z);
+        if (horizontal.lengthSqr() < 0.0001D) {
+            return;
+        }
+        horizontal = horizontal.normalize();
+        Vec3 side = new Vec3(-horizontal.z, 0.0D, horizontal.x);
+        for (int step = 1; step <= 3; step++) {
+            double halfWidth = step * Math.tan(FLAME_BARRAGE_HALF_ANGLE_RADIANS);
+            for (int sideStep = -1; sideStep <= 1; sideStep++) {
+                Vec3 point = player.position().add(horizontal.scale(step)).add(side.scale(sideStep * halfWidth));
+                BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                        BlockPos.containing(point.x, player.getY(), point.z));
+                level.sendParticles(ParticleTypes.FLAME, surface.getX() + 0.5D, surface.getY() + 0.15D,
+                        surface.getZ() + 0.5D, 3, 0.18D, 0.08D, 0.18D, 0.02D);
+            }
         }
     }
 

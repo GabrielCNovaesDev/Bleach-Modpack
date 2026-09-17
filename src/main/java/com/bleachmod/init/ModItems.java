@@ -20,6 +20,16 @@ public final class ModItems {
     public static final RegistryObject<Item> ASAUCHI = ITEMS.register("asauchi",
             () -> new SwordItem(Tiers.IRON, 3, -2.4F, new Item.Properties().stacksTo(1)));
 
+    /**
+     * Zanpakuto exclusiva do conjunto de poderes Ryujin Jakka.
+     *
+     * Nesta primeira entrega ela usa os mesmos atributos de combate da Asauchi.
+     * A identidade do item será usada pelo servidor para autorizar as técnicas
+     * Ryujin Jakka em uma entrega posterior.
+     */
+    public static final RegistryObject<Item> RYUJIN_JAKKA = ITEMS.register("ryujin_jakka",
+            () -> new SwordItem(Tiers.IRON, 3, -2.4F, new Item.Properties().stacksTo(1)));
+
     public static final RegistryObject<Item> HOLLOW_SPAWN_EGG =
             ITEMS.register(
                     "hollow_spawn_egg",
@@ -37,7 +47,7 @@ public final class ModItems {
     public static final RegistryObject<Item> NPC_URYUU_SPAWN_EGG = npcEgg("uryuu", ModEntities.NPC_URYUU, 0xE8E8E8, 0x37638A);
     public static final RegistryObject<Item> NPC_RUKIA_SPAWN_EGG = npcEgg("rukia", ModEntities.NPC_RUKIA, 0x181818, 0xE2D6C8);
     public static final RegistryObject<Item> NPC_BYAKUYA_SPAWN_EGG = npcEgg("byakuya", ModEntities.NPC_BYAKUYA, 0x241E2D, 0xF1E7DD);
-    public static final RegistryObject<Item> NPC_URAHARA_SPAWN_EGG = npcEgg("urahara", ModEntities.NPC_URAHARA, 0x506644, 0xD4C79C);
+    public static final RegistryObject<Item> NPC_URAHARA_SPAWN_EGG = npcEgg("urahara", ModEntities.NPC_URAHARA, 0x506644, 0xD4A17C);
     public static final RegistryObject<Item> NPC_ULQUIORRA_SPAWN_EGG = npcEgg("ulquiorra", ModEntities.NPC_ULQUIORRA, 0xE8E5DB, 0x315B4D);
 
     private static RegistryObject<Item> npcEgg(String npcId,

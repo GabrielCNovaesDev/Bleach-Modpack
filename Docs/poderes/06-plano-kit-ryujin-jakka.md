@@ -160,4 +160,6 @@ Uma entrega só será considerada pronta quando:
 
 ## Próxima ação
 
-A próxima implementação será exclusivamente a **F1 base — Ignição**. Nenhum código de `spirit_flame`, F3 ou F4 será criado nessa etapa.
+As entregas F1 base — Ignição e F1 Bankai — Dash de chamas foram implementadas e homologadas em jogo. O Dash possui como limitação conhecida uma mira menos eficiente quando executado no chão, pois pode encerrar ao encontrar o primeiro bloco do terreno; esse polimento fica registrado para um ciclo futuro e não bloqueia a progressão.
+
+A implementação da **F2 base — Rajada curta** foi iniciada com cone server-side de 3 blocos e 60 graus, dano de 4 pontos, fogo por 3 segundos e partículas de superfície sem alteração de blocos. A etapa atual é compilar e homologar essa implementação. Nenhum código de `spirit_flame`, F3 ou F4 será criado antes da homologação da F2.

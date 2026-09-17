@@ -32,16 +32,16 @@ Todos podem ser remapeados em Opções → Controles → Bleach.
 | Shift+R | Transformação instantânea, se mastery da forma atingir o limiar |
 | V | Retornar um estágio |
 | X | Executar a técnica piloto Flame Burst / Explosão de chamas |
-| H | Slot 1: Ignição fora do Bankai; Dash de chamas durante Bankai |
-| N | Slot 2, reservado para a próxima técnica |
-| B | Slot 3, reservado para a próxima técnica |
-| C | Slot 4, reservado para a próxima técnica |
+| H | Slot F1: Ignição em Selada/Shikai ou Dash de chamas em Bankai |
+| N | Slot F2: Rajada curta de chamas em Selada/Shikai |
 
 A técnica Flame Burst não exige Bankai ativo. Ela custa 20 de reiatsu, possui cooldown de 15 segundos e causa dano em uma área curta ao redor do jogador. O dano base provisório é 6 pontos. A tecla X é remapeável.
 
-Com Bankai ativo, a tecla H executa o Dash de chamas. Ele custa 20 de reiatsu, possui cooldown de 5 segundos e impulsiona o jogador na direção da câmera durante poucos ticks. O servidor verifica colisão com blocos e causa 4 pontos de dano, além de 2 segundos de fogo, a cada entidade viva atravessada uma única vez durante aquela ativação. O movimento usa a rotação automática nativa do Minecraft e uma trilha intensificada de chamas, lava e fogo azul. A regra de aliados/PvP ainda não foi fechada; nesta versão, qualquer entidade viva atingida pode receber dano.
-
 Selecionar uma forma não a ativa. O HUD distingue forma ativa e alvo. A técnica piloto ainda não possui animação óssea nem slot no radial.
+
+### Rajada curta de chamas — F2
+
+A Rajada curta usa o slot N e exige Asauchi na mão principal. Funciona em Selada ou Shikai, custa 15 de reiatsu, possui cooldown de 4 segundos e calcula no servidor um cone de 3 blocos com abertura de 60 graus. Entidades no cone recebem dano curto e ficam em chamas por 3 segundos. Partículas de chama aparecem sobre a superfície do terreno apenas como indicação visual; a técnica não altera blocos. Durante Bankai, o slot N permanece reservado para a futura variante F2 Bankai.
 
 ## 3. Diário e interface
 
@@ -202,7 +202,7 @@ Faça backup antes de adaptar os JSONs de um mundo existente. A nova economia n�
 
 ## 10. Limites atuais
 
-Sem mob Hollow próprio, outras raças, dimensões, party, NPCs complexos ou técnicas ativas adicionais. A técnica piloto Flame Burst existe como primeiro protótipo de ação, mas ainda não possui homologação visual, GameTest dedicado, indicador de cooldown ou animação óssea. Sem respec. Transparência/orientação dos assets e inspeção visual final devem acompanhar o estado real no plano de implementação.
+Sem mob Hollow próprio, outras raças, dimensões, party ou NPCs complexos. Flame Burst, F1 Ignição, F1 Bankai Dash e F2 base Rajada curta estão implementados; a F2 ainda aguarda homologação visual. Não há GameTests dedicados para as técnicas, indicador contínuo de cooldown ou animação óssea. Sem respec. Transparência/orientação dos assets e inspeção visual final devem acompanhar o estado real no plano de implementação.
 
 ## 11. Manutenção
 
