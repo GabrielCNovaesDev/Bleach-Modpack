@@ -116,6 +116,13 @@ public class StatusData {
         flameDashHitEntities.clear();
     }
 
+    /** Clears only technique cooldown timers; used by the permission-gated dev command. */
+    public void clearTechniqueCooldowns() {
+        flameBurstCooldownTicks = 0;
+        techniqueSlot1CooldownTicks = 0;
+        techniqueSlot2CooldownTicks = 0;
+    }
+
     public void tickTransientState() {
         if (flameBurstCooldownTicks > 0) {
             flameBurstCooldownTicks--;
