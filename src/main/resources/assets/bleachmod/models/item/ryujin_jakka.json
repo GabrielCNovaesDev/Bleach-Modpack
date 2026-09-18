@@ -1,17 +1,8 @@
 {
-    "parent": "bleachmod:item/katana_handheld",
-    "textures": {
-      "layer0": "bleachmod:item/asauchi"
-    },
-    "overrides": [
-      {
-        "predicate": { "bleachmod:form": 1 },
-        "model": "bleachmod:item/ryujin_jakka_shikai"
-      },
-      {
-        "predicate": { "bleachmod:form": 2 },
-        "model": "bleachmod:item/ryujin_jakka_bankai"
-      }
-    ]
-  }
-  
+  "parent": "bleachmod:item/ryujin_katana_handheld",
+  "textures": { "layer0": "bleachmod:item/ryujin_jakka" },
+  "overrides": [
+    { "predicate": { "bleachmod:form": 1 }, "model": "bleachmod:item/ryujin_jakka_shikai" },
+    { "predicate": { "bleachmod:form": 2 }, "model": "bleachmod:item/ryujin_jakka_bankai" }
+  ]
+}
