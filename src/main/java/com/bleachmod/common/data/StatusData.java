@@ -1,5 +1,6 @@
 package com.bleachmod.common.data;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.HashSet;
@@ -14,6 +15,8 @@ public class StatusData {
     private int flameDashTicks;
     private boolean ignitionActive;
     private final Set<UUID> flameDashHitEntities = new HashSet<>();
+    private final Set<BlockPos> flameBarrageGroundPositions = new HashSet<>();
+    private int flameBarrageGroundTicks;
 
     public boolean allowAction(long tick) {
         if (lastActionTick != Long.MIN_VALUE && tick >= lastActionTick && tick - lastActionTick < 4) return false;
@@ -72,6 +75,27 @@ public class StatusData {
         techniqueSlot2CooldownTicks = Math.max(0, ticks);
     }
 
+    public int getFlameBarrageGroundTicks() {
+        return flameBarrageGroundTicks;
+    }
+
+    public void setFlameBarrageGroundTicks(int ticks) {
+        flameBarrageGroundTicks = Math.max(0, ticks);
+        if (flameBarrageGroundTicks == 0) {
+            flameBarrageGroundPositions.clear();
+        }
+    }
+
+    public void setFlameBarrageGroundPositions(Set<BlockPos> positions, int ticks) {
+        flameBarrageGroundPositions.clear();
+        flameBarrageGroundPositions.addAll(positions);
+        flameBarrageGroundTicks = Math.max(0, ticks);
+    }
+
+    public Set<BlockPos> getFlameBarrageGroundPositions() {
+        return Set.copyOf(flameBarrageGroundPositions);
+    }
+
     public int getFlameDashTicks() {
         return flameDashTicks;
     }
@@ -102,12 +126,20 @@ public class StatusData {
         if (techniqueSlot2CooldownTicks > 0) {
             techniqueSlot2CooldownTicks--;
         }
+        if (flameBarrageGroundTicks > 0) {
+            flameBarrageGroundTicks--;
+            if (flameBarrageGroundTicks == 0) {
+                flameBarrageGroundPositions.clear();
+            }
+        }
     }
 
     public void clearTransientState() {
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
+        flameBarrageGroundTicks = 0;
+        flameBarrageGroundPositions.clear();
         flameDashTicks = 0;
         ignitionActive = false;
         actionCharging = false;
@@ -128,10 +160,12 @@ public class StatusData {
         if (tag.contains("actionCharging")) {
             actionCharging = tag.getBoolean("actionCharging");
         }
-        // Cooldowns and contact targets are intentionally transient and are not loaded from NBT.
+        // Cooldowns, contact targets and temporary flame visuals are intentionally transient and are not loaded from NBT.
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
+        flameBarrageGroundTicks = 0;
+        flameBarrageGroundPositions.clear();
         flameDashTicks = 0;
         flameDashHitEntities.clear();
     }

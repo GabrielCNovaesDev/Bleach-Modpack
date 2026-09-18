@@ -41,7 +41,7 @@ Selecionar uma forma não a ativa. O HUD distingue forma ativa e alvo. A técnic
 
 ### Rajada curta de chamas — F2
 
-A Rajada curta usa o slot N e exige Asauchi na mão principal. Funciona em Selada ou Shikai, custa 15 de reiatsu, possui cooldown de 4 segundos e calcula no servidor um cone de 3 blocos com abertura de 60 graus. Entidades no cone recebem dano curto e ficam em chamas por 3 segundos. Partículas de chama aparecem sobre a superfície do terreno apenas como indicação visual; a técnica não altera blocos. Durante Bankai, o slot N permanece reservado para a futura variante F2 Bankai.
+A Rajada curta usa o slot N e exige Ryūjin Jakka na mão principal. Funciona em Selada ou Shikai, custa 15 de reiatsu, possui cooldown de 4 segundos e calcula no servidor um cone de 8 blocos com abertura de 80 graus. Entidades no cone, inclusive em contato imediato, recebem dano e ficam em chamas por 3 segundos. Partículas densas permanecem sobre as posições de superfície por 3 segundos e reaplicam dano periódico, sem alterar blocos. Durante Bankai, o slot N permanece reservado para a futura variante F2 Bankai.
 
 ## 3. Diário e interface
 

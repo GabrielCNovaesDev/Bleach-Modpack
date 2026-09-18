@@ -18,6 +18,10 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.HashSet;
+import java.util.Set;
+
+
 public final class TechniqueService {
     public static final int SLOT_1 = 1;
     public static final int SLOT_2 = 2;
@@ -41,10 +45,12 @@ public final class TechniqueService {
 
     public static final float FLAME_BARRAGE_COST = 15.0F;
     public static final int FLAME_BARRAGE_COOLDOWN_TICKS = 4 * 20;
-    public static final double FLAME_BARRAGE_RANGE = 3.0D;
+    public static final double FLAME_BARRAGE_RANGE = 8.0D;
     public static final double FLAME_BARRAGE_HALF_ANGLE_RADIANS = Math.PI / 6.0D;
     public static final float FLAME_BARRAGE_DAMAGE = 4.0F;
     public static final int FLAME_BARRAGE_FIRE_SECONDS = 3;
+    public static final int FLAME_BARRAGE_GROUND_DURATION_TICKS = 3 * 20;
+    public static final float FLAME_BARRAGE_GROUND_DAMAGE = 1.0F;
 
     private TechniqueService() {
     }
@@ -96,12 +102,12 @@ public final class TechniqueService {
         }
 
         data.getStatus().setTechniqueSlot2CooldownTicks(FLAME_BARRAGE_COOLDOWN_TICKS);
-        applyFlameBarrage(player);
+        applyFlameBarrage(player, data);
         sendFeedback(player, Component.translatable("message.bleachmod.technique.flame_barrage"));
         syncResources(player, data);
     }
 
-    private static void applyFlameBarrage(ServerPlayer player) {
+    private static void applyFlameBarrage(ServerPlayer player, PlayerData data) {
         ServerLevel level = player.serverLevel();
         Vec3 origin = player.getEyePosition();
         Vec3 direction = player.getLookAngle().normalize();
@@ -111,10 +117,11 @@ public final class TechniqueService {
 
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area,
                 entity -> entity != player && entity.isAlive())) {
-            Vec3 toTarget = target.getEyePosition().subtract(origin);
+            Vec3 toTarget = target.getBoundingBox().getCenter().subtract(origin);
             double distance = toTarget.length();
-            if (distance > FLAME_BARRAGE_RANGE || distance == 0.0D
-                    || toTarget.normalize().dot(direction) < minimumDot) {
+            boolean pointBlankContact = distance <= 0.75D;
+            if (distance > FLAME_BARRAGE_RANGE || (!pointBlankContact
+                    && (distance == 0.0D || toTarget.normalize().dot(direction) < minimumDot))) {
                 continue;
             }
             target.hurt(source, FLAME_BARRAGE_DAMAGE);
@@ -122,7 +129,8 @@ public final class TechniqueService {
             spawnBarrageImpact(level, target);
         }
 
-        spawnBarrageSurface(level, player, direction);
+        Set<BlockPos> groundPositions = spawnBarrageSurface(level, player, direction, true);
+        data.getStatus().setFlameBarrageGroundPositions(groundPositions, FLAME_BARRAGE_GROUND_DURATION_TICKS);
         level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT,
                 player.getSoundSource(), 0.7F, 1.3F);
     }
@@ -134,23 +142,36 @@ public final class TechniqueService {
                 4, 0.18D, 0.12D, 0.18D, 0.01D);
     }
 
-    private static void spawnBarrageSurface(ServerLevel level, ServerPlayer player, Vec3 direction) {
+    private static Set<BlockPos> spawnBarrageSurface(ServerLevel level, ServerPlayer player, Vec3 direction,
+                                                      boolean dense) {
+        Set<BlockPos> positions = new HashSet<>();
         Vec3 horizontal = new Vec3(direction.x, 0.0D, direction.z);
         if (horizontal.lengthSqr() < 0.0001D) {
-            return;
+            return positions;
         }
         horizontal = horizontal.normalize();
         Vec3 side = new Vec3(-horizontal.z, 0.0D, horizontal.x);
-        for (int step = 1; step <= 3; step++) {
+        for (int step = 0; step <= (int) FLAME_BARRAGE_RANGE; step++) {
             double halfWidth = step * Math.tan(FLAME_BARRAGE_HALF_ANGLE_RADIANS);
-            for (int sideStep = -1; sideStep <= 1; sideStep++) {
-                Vec3 point = player.position().add(horizontal.scale(step)).add(side.scale(sideStep * halfWidth));
+            int sideSamples = dense ? Math.max(1, (int) Math.ceil(halfWidth)) : 1;
+            for (int sideStep = -sideSamples; sideStep <= sideSamples; sideStep++) {
+                Vec3 point = player.position().add(horizontal.scale(step)).add(side.scale(sideStep * halfWidth / sideSamples));
                 BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                         BlockPos.containing(point.x, player.getY(), point.z));
-                level.sendParticles(ParticleTypes.FLAME, surface.getX() + 0.5D, surface.getY() + 0.15D,
-                        surface.getZ() + 0.5D, 3, 0.18D, 0.08D, 0.18D, 0.02D);
+                positions.add(surface);
+                sendBarrageGroundParticles(level, surface, dense);
             }
         }
+        return positions;
+    }
+
+    private static void sendBarrageGroundParticles(ServerLevel level, BlockPos surface, boolean dense) {
+        level.sendParticles(ParticleTypes.FLAME, surface.getX() + 0.5D, surface.getY() + 0.18D,
+                surface.getZ() + 0.5D, dense ? 14 : 4, 0.28D, 0.12D, 0.28D, 0.035D);
+        level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, surface.getX() + 0.5D, surface.getY() + 0.28D,
+                surface.getZ() + 0.5D, dense ? 5 : 1, 0.2D, 0.12D, 0.2D, 0.02D);
+        level.sendParticles(ParticleTypes.SMOKE, surface.getX() + 0.5D, surface.getY() + 0.38D,
+                surface.getZ() + 0.5D, dense ? 3 : 1, 0.18D, 0.14D, 0.18D, 0.012D);
     }
 
     private static void executeIgnition(ServerPlayer player, PlayerData data) {
@@ -215,6 +236,34 @@ public final class TechniqueService {
         if (player.tickCount % 4 == 0) {
             player.serverLevel().sendParticles(ParticleTypes.FLAME, player.getX(), player.getY() + 1.0D,
                     player.getZ(), 2, 0.18D, 0.25D, 0.18D, 0.01D);
+        }
+    }
+
+    public static void tickFlameBarrageGround(ServerPlayer player, PlayerData data) {
+        if (data.getStatus().getFlameBarrageGroundTicks() <= 0) {
+            return;
+        }
+        if (!player.isAlive() || player.isSpectator() || !isRyujinJakkaEquipped(player)
+                || Reference.FORM_BANKAI.equalsIgnoreCase(data.getCharacter().getActiveForm())) {
+            data.getStatus().setFlameBarrageGroundTicks(0);
+            return;
+        }
+
+        ServerLevel level = player.serverLevel();
+        for (BlockPos surface : data.getStatus().getFlameBarrageGroundPositions()) {
+            if (player.tickCount % 2 == 0) {
+                sendBarrageGroundParticles(level, surface, true);
+            }
+            if (player.tickCount % 10 != 0) {
+                continue;
+            }
+            AABB area = new AABB(surface).inflate(0.65D, 0.6D, 0.65D);
+            DamageSource source = player.damageSources().playerAttack(player);
+            for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area,
+                    entity -> entity != player && entity.isAlive())) {
+                target.hurt(source, FLAME_BARRAGE_GROUND_DAMAGE);
+                target.setSecondsOnFire(1);
+            }
         }
     }
 

@@ -8,7 +8,12 @@
 
 - Próxima tarefa: compilar e homologar exclusivamente a F2 base — Rajada curta
 
-- Última atualização: 2026-09-16
+- Última atualização: 2026-09-17
+
+```bash
+.\gradlew.bat clean
+./gradlew runClient
+```
 
 ## Gates
 
@@ -23,7 +28,7 @@
 | Kit Ryūjin Jakka | ESPECIFICADO | `pwr-spec-02-kit-ryujin-jakka.md` recebido e `06-plano-kit-ryujin-jakka.md` |
 | F1 base — Ignição | IMPLEMENTADA | `TechniqueService` + `CombatEvents`; homologação visual concluída pelo usuário |
 | F1 Bankai — Dash de chamas | HOMOLOGADA | `TechniqueService.tickFlameDash`; múltiplos alvos, dano único por alvo, alcance, colisão e cancelamentos verificados em jogo |
-| F2 base — Rajada curta | IMPLEMENTADA — NÃO HOMOLOGADA | `TechniqueService.executeFlameBarrage`; cone server-side, fogo e partículas de superfície sem alteração de blocos |
+| F2 base — Rajada curta | IMPLEMENTADA — NÃO HOMOLOGADA | `TechniqueService.executeFlameBarrage`; cone server-side de 8 blocos/80 graus, contato, fogo e partículas persistentes sem alteração de blocos |
 | F2 Bankai — Leque de fogo | PENDENTE | — |
 | Bloco `spirit_flame` | PENDENTE | Deve preceder F3/F4 base |
 | F3/F4 base e Bankai | PENDENTE | — |
@@ -82,13 +87,29 @@
 
 - Requer Asauchi na mão principal, custa 15 de reiatsu e possui cooldown próprio de 4 segundos.
 
-- Cone calculado exclusivamente no servidor, com alcance de 3 blocos e abertura total de 60 graus.
+- Cone calculado exclusivamente no servidor, inicialmente com alcance de 3 blocos e abertura total de 60 graus.
 
 - Cada entidade viva dentro do cone recebe 4 pontos de dano e fica em chamas por 3 segundos.
 
 - Partículas de chama são projetadas sobre a superfície do terreno para indicar o cone; nenhum bloco é colocado, substituído ou alterado.
 
 - Estado: implementação concluída; compilação e homologação manual pendentes.
+
+### 2026-09-17 — Ajuste da F2 base após migração Ryūjin Jakka
+
+- A exigência da arma permanece `ModItems.RYUJIN_JAKKA`; a Asauchi não autoriza a técnica.
+
+- A Bankai não foi alterada: o slot 2 continua indisponível enquanto a variante Bankai não for implementada.
+
+- Alcance ampliado para 8 blocos e abertura total para 80 graus.
+
+- Contato à queima-roupa incluído por tolerância geométrica, removendo a zona morta observada no primeiro bloco.
+
+- Partículas de `FLAME`, `SOUL_FIRE_FLAME` e `SMOKE` foram intensificadas ao longo do cone.
+
+- As posições de superfície ficam ativas por 3 segundos; durante esse período reaplicam partículas e dano de 1 ponto a cada 10 ticks, sem alterar blocos.
+
+- Estado: implementação ajustada; compilação e homologação manual pendentes.
 
 ## Decisões fechadas em 2026-09-15
 

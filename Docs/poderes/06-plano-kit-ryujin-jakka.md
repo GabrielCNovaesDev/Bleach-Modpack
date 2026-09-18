@@ -42,7 +42,7 @@ A invulnerabilidade a knockback externo não será implementada na primeira vers
 
 ### Entrega 3 — F2 base: Rajada curta
 
-Será um cone curto de aproximadamente 3 blocos e 60 graus. O cálculo do cone ocorrerá no servidor. A rajada aplicará dano e fogo curto sem tocar blocos.
+Será um cone calculado no servidor, inicialmente ampliado para 8 blocos e 80 graus totais. A rajada aplicará dano e fogo curto, incluindo contato imediato. Para o teste visual, manterá partículas densas e dano periódico sobre posições de superfície por poucos segundos, sem tocar ou alterar blocos. A variante Bankai do slot 2 permanece separada e não será alterada nesta etapa.
 
 ### Entrega 4 — F2 Bankai: Leque de fogo
 
