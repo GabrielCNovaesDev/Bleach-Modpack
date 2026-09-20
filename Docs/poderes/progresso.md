@@ -4,11 +4,11 @@
 
 - Branch: `Feature-Bankais-Poderes`
 
-- Gate atual: F1 base e F1 Bankai homologadas; F2 base implementada e aguardando homologação
+- Gate atual: F1 base, F1 Bankai, F2 base e F2 Bankai homologadas; protótipo do F4 Bankai implementado e aguardando homologação
 
-- Próxima tarefa: compilar e homologar exclusivamente a F2 base — Rajada curta
+- Próxima tarefa: compilar e homologar exclusivamente o F4 Bankai — Corte de Vapor Concentrado
 
-- Última atualização: 2026-09-17
+- Última atualização: 2026-09-20
 
 ```bash
 .\gradlew.bat clean
@@ -28,8 +28,9 @@
 | Kit Ryūjin Jakka | ESPECIFICADO | `pwr-spec-02-kit-ryujin-jakka.md` recebido e `06-plano-kit-ryujin-jakka.md` |
 | F1 base — Ignição | IMPLEMENTADA | `TechniqueService` + `CombatEvents`; homologação visual concluída pelo usuário |
 | F1 Bankai — Dash de chamas | HOMOLOGADA | `TechniqueService.tickFlameDash`; múltiplos alvos, dano único por alvo, alcance, colisão e cancelamentos verificados em jogo |
-| F2 base — Rajada curta | IMPLEMENTADA — NÃO HOMOLOGADA | `TechniqueService.executeFlameBarrage`; cone server-side de 8 blocos/80 graus, contato, fogo e partículas persistentes sem alteração de blocos |
-| F2 Bankai — Leque de fogo | PENDENTE | — |
+| F2 base — Rajada curta | HOMOLOGADA COM AJUSTE FINAL | `TechniqueService.executeFlameBarrage`; cone server-side de 8 blocos/60 graus, contato, fogo e partículas persistentes sem alteração de blocos |
+| F2 Bankai — Leque de fogo | HOMOLOGADA | `TechniqueService.executeFlameFan`; leque server-side de 14 blocos/90 graus, dano maior, partículas azuis densas e dano persistente no solo sem alteração de blocos |
+| F4 Bankai — Corte de Vapor Concentrado | AJUSTADO — AGUARDANDO NOVO TESTE | `TechniqueService.executeConcentratedSteamCut`; primeiro segmento à frente do jogador, lâmina vertical de 35 blocos, alcance de 100 blocos/45 graus, vapor intensificado, explosão secundária e cooldown zerado temporariamente |
 | Bloco `spirit_flame` | PENDENTE | Deve preceder F3/F4 base |
 | F3/F4 base e Bankai | PENDENTE | — |
 | Sincronização multiplayer | PARCIAL | efeitos server-side verificados; teste formal com dois clientes ainda pendente |
@@ -95,11 +96,55 @@
 
 - Estado: implementação concluída; compilação e homologação manual pendentes.
 
+### 2026-09-18 — F2 Bankai: Leque de fogo
+
+- O slot 2 agora resolve para a variante Bankai quando a forma ativa é Bankai; Selada/Shikai continuam usando a Rajada curta.
+
+- A variante exige `ModItems.RYUJIN_JAKKA` na mão principal e usa o cooldown compartilhado do slot 2.
+
+- Alcance: 14 blocos. Abertura total: 90 graus.
+
+- Custo: 25 de reiatsu. Dano direto: 8 pontos. Fogo: 4 segundos.
+
+- Cada alvo válido é atingido no máximo uma vez por ativação; contato imediato é aceito.
+
+- Partículas de trajetória e impacto são server-side. Nenhum bloco é colocado, substituído ou alterado.
+
+- Estado: implementação inicial concluída; polimento visual e dano persistente pendentes.
+
+### 2026-09-18 — Polimento do Leque Bankai: chamas azuis persistentes
+
+- O Leque passou a usar exclusivamente `SOUL_FIRE_FLAME`, removendo partículas vermelhas e fumaça do ataque.
+
+- A densidade foi ampliada nos impactos, na trajetória e nas posições de superfície.
+
+- O estado do solo é exclusivo da Bankai e fica separado das posições da Rajada curta.
+
+- As posições permanecem ativas por 4 segundos, reaplicam 1 ponto de dano a cada 10 ticks e recebem partículas azuis densas a cada 2 ticks.
+
+- Nenhum bloco é colocado, substituído ou alterado.
+
+- Estado: ajuste implementado; compilação e nova homologação manual pendentes.
+
+### 2026-09-20 — F4 Bankai: Corte de Vapor Concentrado
+
+- O slot 4, tecla C, agora resolve para a habilidade apenas quando a forma ativa é Bankai e a Ryūjin Jakka está na mão principal.
+
+- O protótipo é instantâneo, server-side, com alcance de 30 blocos, abertura de 30 graus, 16 pontos de dano, custo de 45 de reiatsu e cooldown próprio de 15 segundos.
+
+- O golpe usa dano mágico indireto para ignorar armadura vanilla enquanto o evento de combate mantém a Resistência do Bleach aplicável aos jogadores.
+
+- A trajetória atravessa paredes e destrói blocos comuns em volume estreito, sem gerar drops. Bedrock, blocos de comando e blocos indestrutíveis são preservados.
+
+- O visual usa `SOUL_FIRE_FLAME`, `CLOUD`, `END_ROD`, `CRIT` e som do Ender Dragon. O carregamento curto fica fora da primeira versão.
+
+- Estado: implementado; compilação e homologação manual pendentes.
+
 ### 2026-09-17 — Ajuste da F2 base após migração Ryūjin Jakka
 
 - A exigência da arma permanece `ModItems.RYUJIN_JAKKA`; a Asauchi não autoriza a técnica.
 
-- A Bankai não foi alterada: o slot 2 continua indisponível enquanto a variante Bankai não for implementada.
+- Naquele estado anterior, a Bankai não havia sido alterada e o slot 2 ainda estava indisponível; a variante Bankai foi implementada posteriormente em 2026-09-18.
 
 - Alcance ampliado para 8 blocos e abertura total para 80 graus.
 
@@ -146,3 +191,17 @@
 | PWR-007 | Cooldown base ser resetado ao entrar em Bankai. | Alto | Estado indexado pelo slot. | Planejado |
 
 | PWR-008 | Dash no chão prender no primeiro bloco do terreno e dificultar a mira horizontal. | Médio | Manter como limitação conhecida; polir movimento terrestre antes de uma futura revisão de F1. | Aberto, não bloqueante |
+
+### 2026-09-20 — Ajuste da lâmina vertical para testes
+
+- A origem deixou de usar a posição dos olhos e passou a usar a posição corporal do jogador.
+
+- A trajetória agora começa no corpo, avança desde o passo zero e mantém 30 blocos de alcance na direção exata da visão.
+
+- A área vertical foi ampliada para 15 blocos abaixo e 20 blocos acima da altura corporal do jogador, totalizando 35 blocos.
+
+- A densidade de `SOUL_FIRE_FLAME` foi reduzida e a de `CLOUD` foi aumentada para priorizar o vapor visual.
+
+- O cooldown do Corte está temporariamente em zero para permitir testes repetidos; o custo de 45 de reiatsu permanece ativo.
+
+- Estado: ajuste implementado; novo teste manual pendente.

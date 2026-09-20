@@ -143,5 +143,7 @@
   "message.bleachmod.technique.requires_ryujin_jakka": "Esta técnica exige a Ryūjin Jakka na mão principal.",
   "message.bleachmod.technique.flame_dash": "Dash de chamas executado.",
   "message.bleachmod.technique.flame_barrage": "Rajada curta de chamas executada.",
+  "message.bleachmod.technique.flame_fan": "Leque de fogo Bankai executado.",
+  "message.bleachmod.technique.steam_cut": "Corte de Vapor Concentrado executado.",
   "message.bleachmod.technique.barrage.requires_asauchi": "A Rajada curta exige a Zanpakutō na mão principal."
 }

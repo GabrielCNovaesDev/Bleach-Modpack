@@ -12,11 +12,14 @@ public class StatusData {
     private int flameBurstCooldownTicks;
     private int techniqueSlot1CooldownTicks;
     private int techniqueSlot2CooldownTicks;
+    private int techniqueSlot4CooldownTicks;
     private int flameDashTicks;
     private boolean ignitionActive;
     private final Set<UUID> flameDashHitEntities = new HashSet<>();
     private final Set<BlockPos> flameBarrageGroundPositions = new HashSet<>();
     private int flameBarrageGroundTicks;
+    private final Set<BlockPos> flameFanGroundPositions = new HashSet<>();
+    private int flameFanGroundTicks;
 
     public boolean allowAction(long tick) {
         if (lastActionTick != Long.MIN_VALUE && tick >= lastActionTick && tick - lastActionTick < 4) return false;
@@ -75,6 +78,14 @@ public class StatusData {
         techniqueSlot2CooldownTicks = Math.max(0, ticks);
     }
 
+    public int getTechniqueSlot4CooldownTicks() {
+        return techniqueSlot4CooldownTicks;
+    }
+
+    public void setTechniqueSlot4CooldownTicks(int ticks) {
+        techniqueSlot4CooldownTicks = Math.max(0, ticks);
+    }
+
     public int getFlameBarrageGroundTicks() {
         return flameBarrageGroundTicks;
     }
@@ -94,6 +105,27 @@ public class StatusData {
 
     public Set<BlockPos> getFlameBarrageGroundPositions() {
         return Set.copyOf(flameBarrageGroundPositions);
+    }
+
+    public int getFlameFanGroundTicks() {
+        return flameFanGroundTicks;
+    }
+
+    public void setFlameFanGroundTicks(int ticks) {
+        flameFanGroundTicks = Math.max(0, ticks);
+        if (flameFanGroundTicks == 0) {
+            flameFanGroundPositions.clear();
+        }
+    }
+
+    public void setFlameFanGroundPositions(Set<BlockPos> positions, int ticks) {
+        flameFanGroundPositions.clear();
+        flameFanGroundPositions.addAll(positions);
+        flameFanGroundTicks = Math.max(0, ticks);
+    }
+
+    public Set<BlockPos> getFlameFanGroundPositions() {
+        return Set.copyOf(flameFanGroundPositions);
     }
 
     public int getFlameDashTicks() {
@@ -121,6 +153,7 @@ public class StatusData {
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
+        techniqueSlot4CooldownTicks = 0;
     }
 
     public void tickTransientState() {
@@ -133,10 +166,19 @@ public class StatusData {
         if (techniqueSlot2CooldownTicks > 0) {
             techniqueSlot2CooldownTicks--;
         }
+        if (techniqueSlot4CooldownTicks > 0) {
+            techniqueSlot4CooldownTicks--;
+        }
         if (flameBarrageGroundTicks > 0) {
             flameBarrageGroundTicks--;
             if (flameBarrageGroundTicks == 0) {
                 flameBarrageGroundPositions.clear();
+            }
+        }
+        if (flameFanGroundTicks > 0) {
+            flameFanGroundTicks--;
+            if (flameFanGroundTicks == 0) {
+                flameFanGroundPositions.clear();
             }
         }
     }
@@ -145,8 +187,11 @@ public class StatusData {
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
+        techniqueSlot4CooldownTicks = 0;
         flameBarrageGroundTicks = 0;
         flameBarrageGroundPositions.clear();
+        flameFanGroundTicks = 0;
+        flameFanGroundPositions.clear();
         flameDashTicks = 0;
         ignitionActive = false;
         actionCharging = false;
@@ -171,8 +216,11 @@ public class StatusData {
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
+        techniqueSlot4CooldownTicks = 0;
         flameBarrageGroundTicks = 0;
         flameBarrageGroundPositions.clear();
+        flameFanGroundTicks = 0;
+        flameFanGroundPositions.clear();
         flameDashTicks = 0;
         flameDashHitEntities.clear();
     }

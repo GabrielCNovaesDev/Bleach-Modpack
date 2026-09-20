@@ -143,5 +143,7 @@
   "message.bleachmod.technique.requires_ryujin_jakka": "This technique requires Ryujin Jakka in your main hand.",
   "message.bleachmod.technique.flame_dash": "Flame Dash executed.",
   "message.bleachmod.technique.flame_barrage": "Short flame barrage executed.",
+  "message.bleachmod.technique.flame_fan": "Bankai flame fan executed.",
+  "message.bleachmod.technique.steam_cut": "Concentrated Steam Cut executed.",
   "message.bleachmod.technique.barrage.requires_asauchi": "The short barrage requires the Zanpakuto in the main hand."
 }

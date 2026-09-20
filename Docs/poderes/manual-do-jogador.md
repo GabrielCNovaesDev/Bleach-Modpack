@@ -33,7 +33,8 @@ Todos podem ser remapeados em Opções → Controles → Bleach.
 | V | Retornar um estágio |
 | X | Executar a técnica piloto Flame Burst / Explosão de chamas |
 | H | Slot F1: Ignição em Selada/Shikai ou Dash de chamas em Bankai |
-| N | Slot F2: Rajada curta de chamas em Selada/Shikai |
+| N | Slot F2: Rajada curta em Selada/Shikai ou Leque de fogo em Bankai |
+| C | Slot F4: Corte de Vapor Concentrado em Bankai |
 
 A técnica Flame Burst não exige Bankai ativo. Ela custa 20 de reiatsu, possui cooldown de 15 segundos e causa dano em uma área curta ao redor do jogador. O dano base provisório é 6 pontos. A tecla X é remapeável.
 
@@ -41,7 +42,15 @@ Selecionar uma forma não a ativa. O HUD distingue forma ativa e alvo. A técnic
 
 ### Rajada curta de chamas — F2
 
-A Rajada curta usa o slot N e exige Ryūjin Jakka na mão principal. Funciona em Selada ou Shikai, custa 15 de reiatsu, possui cooldown de 4 segundos e calcula no servidor um cone de 8 blocos com abertura de 80 graus. Entidades no cone, inclusive em contato imediato, recebem dano e ficam em chamas por 3 segundos. Partículas densas permanecem sobre as posições de superfície por 3 segundos e reaplicam dano periódico, sem alterar blocos. Durante Bankai, o slot N permanece reservado para a futura variante F2 Bankai.
+A Rajada curta usa o slot N e exige Ryūjin Jakka na mão principal. Funciona em Selada ou Shikai, custa 15 de reiatsu, possui cooldown de 4 segundos e calcula no servidor um cone de 8 blocos com abertura de 60 graus. Entidades no cone, inclusive em contato imediato, recebem dano e ficam em chamas por 3 segundos. Partículas densas permanecem sobre as posições de superfície por 3 segundos e reaplicam dano periódico, sem alterar blocos.
+
+### Leque de fogo Bankai — F2 evoluída
+
+Durante Bankai, o mesmo slot N resolve para o Leque de fogo. A técnica exige Ryūjin Jakka na mão principal, custa 25 de reiatsu, usa o cooldown compartilhado do slot F2 e calcula no servidor um leque de 14 blocos com abertura total de 90 graus. Cada entidade viva válida dentro do leque recebe 8 pontos de dano e fica em chamas por 4 segundos. O ataque usa exclusivamente `SOUL_FIRE_FLAME`, com partículas azuis densas no impacto e na superfície. As posições do solo permanecem ativas por 4 segundos, reaplicam dano de 1 ponto a cada 10 ticks e não colocam, substituem ou alteram blocos.
+
+### Corte de Vapor Concentrado — F4 Bankai
+
+O slot C executa um corte instantâneo de até 100 blocos, iniciado no primeiro bloco à frente da posição corporal do jogador e projetado na direção exata da visão. A lâmina é vertical, com 15 blocos abaixo e 20 blocos acima da altura do jogador, totalizando 35 blocos de altura. A abertura horizontal total foi ampliada para 45 graus. A primeira versão causa 16 pontos de dano e custa 45 de reiatsu; o cooldown está temporariamente zerado para testes. O golpe atravessa paredes, ignora armadura vanilla, respeita a Resistência do Bleach e destrói blocos comuns na trajetória sem gerar drops. O bloco sob o jogador não é incluído no primeiro segmento do corte. Bedrock, blocos de comando e blocos indestrutíveis são preservados. O visual prioriza `CLOUD`/vapor denso, com `SOUL_FIRE_FLAME` azul reduzido, `END_ROD`, `CRIT`, o som do Ender Dragon e uma explosão secundária de vapor no impacto final; o carregamento curto fica reservado para uma etapa posterior.
 
 ## 3. Diário e interface
 

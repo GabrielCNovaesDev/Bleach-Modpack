@@ -39,6 +39,7 @@ public class TickHandler {
             float previousEnergy = data.getResources().getCurrentReiatsu();
             int previousCharge = data.getResources().getActionCharge();
             TechniqueService.tickIgnition(player, data);
+            TechniqueService.tickFlameFanGround(player, data);
             TechniqueService.tickFlameBarrageGround(player, data);
             TechniqueService.tickFlameDash(player, data);
             FormData active = TransformationsHelper.getActiveFormData(data);

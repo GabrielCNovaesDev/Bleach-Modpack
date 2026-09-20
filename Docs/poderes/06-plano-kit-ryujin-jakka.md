@@ -42,11 +42,11 @@ A invulnerabilidade a knockback externo não será implementada na primeira vers
 
 ### Entrega 3 — F2 base: Rajada curta
 
-Será um cone calculado no servidor, inicialmente ampliado para 8 blocos e 80 graus totais. A rajada aplicará dano e fogo curto, incluindo contato imediato. Para o teste visual, manterá partículas densas e dano periódico sobre posições de superfície por poucos segundos, sem tocar ou alterar blocos. A variante Bankai do slot 2 permanece separada e não será alterada nesta etapa.
+Foi homologada como cone server-side de 8 blocos e 60 graus totais. A rajada aplica dano e fogo curto, incluindo contato imediato, mantém partículas densas e dano periódico sobre posições de superfície por poucos segundos, sem tocar ou alterar blocos. A variante Bankai do slot 2 é implementada separadamente na entrega seguinte.
 
 ### Entrega 4 — F2 Bankai: Leque de fogo
 
-Será o mesmo arquétipo do F2 base, com alcance aproximado de 8 a 10 blocos e dano maior. Não colocará fogo no terreno, porque essa responsabilidade ficará concentrada nas habilidades F3 e F4 base.
+Foi implementado como variante Bankai do mesmo slot da F2 base, resolvida exclusivamente no servidor. Usa Ryūjin Jakka, alcance de 14 blocos, abertura total de 90 graus, dano de 8 pontos e fogo por 4 segundos. O custo é 25 de reiatsu e o cooldown é compartilhado com o slot 2. Usa exclusivamente `SOUL_FIRE_FLAME` em partículas azuis densas. As posições da superfície ficam ativas por 4 segundos e reaplicam dano periódico, sem colocar fogo, sem alterar blocos e sem reutilizar o estado da F2 base.
 
 ### Entrega 5 — `spirit_flame`
 
@@ -70,9 +70,9 @@ Será uma linha ou arco de `spirit_flame` com 7 a 9 blocos de comprimento e 2 de
 
 ### Entrega 9 — F4 Bankai: Corte definitivo
 
-Será um ataque instantâneo em linha estreita, com alcance aproximado de 10 a 12 blocos e abertura de 30 graus. Não quebrará blocos. Ignorará armadura vanilla conforme a regra de design definida, mas manterá Resistência do Bleach quando o alvo for jogador.
+Foi iniciado como ataque Bankai instantâneo em lâmina vertical, com origem no primeiro bloco à frente da posição corporal do jogador, direção exata da visão e alcance de 100 blocos. A abertura horizontal total é de 45 graus. A lâmina possui 15 blocos abaixo e 20 acima da altura do jogador, totalizando 35 blocos. A primeira versão destrói blocos comuns na trajetória, atravessa paredes, não gera drops, ignora armadura vanilla e mantém a Resistência do Bleach quando o alvo for jogador. O bloco sob o jogador não entra no primeiro segmento. Bedrock, blocos de comando e blocos indestrutíveis são preservados.
 
-O dano e o custo serão os maiores do kit. O visual evitará uma explosão grande de fogo e usará partículas discretas, distorção de calor se viável e som grave.
+O protótipo usa 16 pontos de dano, custo de 45 de reiatsu e cooldown temporariamente zerado para testes. O visual prioriza vapor denso `CLOUD`, com chamas azuis `SOUL_FIRE_FLAME` reduzidas, além de `END_ROD`, `CRIT`, som do Ender Dragon e som secundário `GENERIC_EXPLODE` no impacto final. O carregamento curto foi deixado para uma etapa posterior, após a homologação da versão instantânea.
 
 ## Arquitetura prevista
 
