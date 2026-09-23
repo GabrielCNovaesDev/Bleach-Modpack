@@ -72,7 +72,7 @@ public final class QuestDefaults {
         quest.setTitle("bleachmod.quest.soul_society.1.name");
         quest.setDescription("bleachmod.quest.soul_society.1.desc");
         quest.setCategory("saga_soul_society");
-        quest.getObjectives().add(new KillObjective("minecraft:zombie", 5, KillObjective.SpawnMode.NATURAL, KillObjective.CountMode.ANY_MATCHING));
+        quest.getObjectives().add(new KillObjective("bleachmod:hollow", 6, KillObjective.SpawnMode.NATURAL, KillObjective.CountMode.ANY_MATCHING));
         quest.getRewards().add(new TpsReward(200));
         return quest;
     }

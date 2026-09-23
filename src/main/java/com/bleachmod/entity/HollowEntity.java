@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -87,6 +88,14 @@ public class HollowEntity extends Monster {
                 new NearestAttackableTargetGoal<>(
                         this,
                         Villager.class,
+                        true)
+        );
+
+        this.targetSelector.addGoal(
+                2,
+                new NearestAttackableTargetGoal<>(
+                        this,
+                        IronGolem.class,
                         true)
         );
     }
