@@ -67,8 +67,8 @@ public final class TechniqueService {
     /** Temporarily disabled to allow repeated manual testing. */
     public static final int STEAM_CUT_COOLDOWN_TICKS = 0;
     public static final double STEAM_CUT_RANGE = 100.0D;
-    /** 45 degrees total horizontal opening, represented by a 22.5 degree half-angle. */
-    public static final double STEAM_CUT_HALF_ANGLE_RADIANS = Math.PI / 8.0D;
+    /** 25 degrees total horizontal opening, represented by a 12.5 degree half-angle. */
+    public static final double STEAM_CUT_HALF_ANGLE_RADIANS = Math.toRadians(12.5D);
     public static final double STEAM_CUT_MIN_HALF_WIDTH = 0.65D;
     public static final int STEAM_CUT_BELOW_PLAYER_BLOCKS = 15;
     public static final int STEAM_CUT_ABOVE_PLAYER_BLOCKS = 20;
@@ -147,12 +147,13 @@ public final class TechniqueService {
         Vec3 origin = player.position();
         Vec3 direction = player.getLookAngle().normalize();
         Set<UUID> hitEntities = new HashSet<>();
+        Set<BlockPos> visitedBlocks = new HashSet<>();
         DamageSource source = player.damageSources().indirectMagic(player, player);
 
         for (int step = 1; step <= (int) STEAM_CUT_RANGE; step++) {
             Vec3 center = origin.add(direction.scale(step));
             double halfWidth = steamCutHalfWidthAt(step);
-            destroySteamCutBlocks(level, center, origin.y, halfWidth);
+            destroySteamCutBlocks(level, center, origin.y, halfWidth, visitedBlocks);
             AABB entityArea = new AABB(
                     center.x - halfWidth,
                     center.y - STEAM_CUT_BELOW_PLAYER_BLOCKS,
@@ -186,7 +187,8 @@ public final class TechniqueService {
         return Math.max(STEAM_CUT_MIN_HALF_WIDTH, step * Math.tan(STEAM_CUT_HALF_ANGLE_RADIANS));
     }
 
-    private static void destroySteamCutBlocks(ServerLevel level, Vec3 center, double playerY, double halfWidth) {
+    private static void destroySteamCutBlocks(ServerLevel level, Vec3 center, double playerY,
+                                               double halfWidth, Set<BlockPos> visitedBlocks) {
         int minX = (int) Math.floor(center.x - halfWidth);
         int maxX = (int) Math.floor(center.x + halfWidth);
         int minY = (int) Math.floor(playerY - STEAM_CUT_BELOW_PLAYER_BLOCKS);
@@ -194,10 +196,11 @@ public final class TechniqueService {
         int minZ = (int) Math.floor(center.z - halfWidth);
         int maxZ = (int) Math.floor(center.z + halfWidth);
         for (BlockPos pos : BlockPos.betweenClosed(minX, minY, minZ, maxX, maxY, maxZ)) {
-            if (isProtectedSteamCutBlock(level, pos)) {
+            BlockPos immutablePos = pos.immutable();
+            if (!visitedBlocks.add(immutablePos) || isProtectedSteamCutBlock(level, immutablePos)) {
                 continue;
             }
-            level.destroyBlock(pos, false);
+            level.destroyBlock(immutablePos, false);
         }
     }
 
