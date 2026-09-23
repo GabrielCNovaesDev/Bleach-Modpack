@@ -63,6 +63,8 @@ public final class BleachCommands {
                 }))))))));
         root.then(literal("reiatsu").then(literal("fill").then(argument("player",EntityArgument.player())
             .executes(ctx->mutate(ctx,(p,d)->d.getResources().setCurrentReiatsu(d.getResources().getMaxReiatsu()))))));
+        root.then(literal("cooldowns").then(literal("clear").then(argument("player",EntityArgument.player())
+            .executes(ctx->mutate(ctx,(p,d)->d.getStatus().clearTechniqueCooldowns())))));
         root.then(literal("asauchi").then(literal("give").then(argument("player",EntityArgument.player())
             .executes(ctx->mutate(ctx,(p,d)->{
                 ItemStack stack=new ItemStack(ModItems.ASAUCHI.get());

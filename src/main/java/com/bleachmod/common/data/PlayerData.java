@@ -15,7 +15,9 @@ public class PlayerData {
     private final PlayerQuestData playerQuestData = new PlayerQuestData();
     private boolean dataLoaded;
     private final AttributeData attributes = new AttributeData();
+
     public AttributeData getAttributes() { return attributes; }
+
     public void refreshDerivedResources() {
         boolean wasFull = resources.isReiatsuFull();
         double derived = Reference.BASE_REIATSU + 20.0D * attributes.level(AttributeData.RESERVE);
@@ -70,11 +72,12 @@ public class PlayerData {
         resources.setMaxReiatsu(Reference.BASE_REIATSU);
         resources.setCurrentReiatsu(Reference.BASE_REIATSU);
         resources.setActionCharge(0);
+        status.clearTransientState();
     }
 
     public void resetTransientState() {
         resources.setActionCharge(0);
-        status.setActionCharging(false);
+        status.clearTransientState();
     }
 
     public CompoundTag save() {

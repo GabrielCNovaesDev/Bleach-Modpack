@@ -42,6 +42,41 @@ public final class ModKeybinds {
 
     public static final KeyMapping STATUS = new KeyMapping("key.bleachmod.status", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
     public static final KeyMapping WHEEL = new KeyMapping("key.bleachmod.wheel", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, CATEGORY);
+    public static final KeyMapping FLAME_BURST = new KeyMapping(
+            "key.bleachmod.flame_burst",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_X,
+            CATEGORY
+    );
+    public static final KeyMapping TECHNIQUE_SLOT_1 = new KeyMapping(
+            "key.bleachmod.technique_slot_1",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_H,
+            CATEGORY
+    );
+    public static final KeyMapping TECHNIQUE_SLOT_2 = new KeyMapping(
+            "key.bleachmod.technique_slot_2",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_N,
+            CATEGORY
+    );
+    public static final KeyMapping TECHNIQUE_SLOT_3 = new KeyMapping(
+            "key.bleachmod.technique_slot_3",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_B,
+            CATEGORY
+    );
+    public static final KeyMapping TECHNIQUE_SLOT_4 = new KeyMapping(
+            "key.bleachmod.technique_slot_4",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_C,
+            CATEGORY
+    );
 
     private ModKeybinds() {
     }

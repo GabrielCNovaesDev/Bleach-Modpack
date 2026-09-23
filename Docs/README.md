@@ -106,6 +106,7 @@ Alinhados à plataforma do original para que a doc de capability/packets/eventos
 Passo a passo do clone até o cliente: [`desenvolvimento/manual-inicializacao.md`](desenvolvimento/manual-inicializacao.md). Java 17 e `JAVA_HOME` são obrigatórios.
 
 ```bash
+.\gradlew.bat clean
 ./gradlew runClient
 ```
 

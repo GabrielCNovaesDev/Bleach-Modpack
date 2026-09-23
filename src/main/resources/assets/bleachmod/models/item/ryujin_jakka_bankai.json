@@ -1,0 +1,4 @@
+{
+  "parent": "bleachmod:item/ryujin_katana_handheld",
+  "textures": { "layer0": "bleachmod:item/ryujin_jakka_bankai" }
+}
