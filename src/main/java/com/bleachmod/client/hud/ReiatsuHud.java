@@ -10,11 +10,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
+import java.util.List;
+
 /**
- * Renders the Bleach concept HUD: a single panel showing VIDA / REIATSU / TRANSFORMACAO,
- * anchored top-left, with Spirit Points and the active Zanpakutō stage inside the
- * Transformacao row. Vanilla hearts are hidden by VanillaHealthHider once a character
- * exists, so this HUD owns the player's HP visualization.
+ * Renders the compact Bleach HUD: VIDA / REIATSU / TRANSFORMACAO stay in a
+ * responsive panel at the upper-left, while the detailed resource information
+ * sits beside the hotbar. Vanilla hearts are hidden by VanillaHealthHider once a
+ * character exists, so this HUD owns the player's HP visualization.
  */
 public final class ReiatsuHud {
     private static float shownCharge;
@@ -38,13 +40,12 @@ public final class ReiatsuHud {
 
     private static void renderPanel(Minecraft mc, net.minecraft.client.gui.GuiGraphics g,
                                     int screenWidth, int screenHeight, PlayerData data) {
-        float scale = BleachTextures.HUD_SCALE;
+        HudLayout.Panel panel = HudLayout.panel(screenWidth, screenHeight);
+        float scale = panel.scale();
         int panelSrcW = BleachTextures.HUD_SRC_W;
         int panelSrcH = BleachTextures.HUD_SRC_H;
-        int panelW = Math.round(panelSrcW * scale);
-        int panelH = Math.round(panelSrcH * scale);
-        int x = 6;
-        int y = 6;
+        int x = panel.x();
+        int y = panel.y();
 
         // Panel base (hud_panel_full.png) drawn at scale.
         g.pose().pushPose();
@@ -79,22 +80,30 @@ public final class ReiatsuHud {
         drawPercentLabel(g, mc.font, x, y, scale,
                 BleachTextures.HUD_TRANSFORM_BOUNDS, transformRatio * 100f);
 
-        // SP + Zanpakutō stage live inside the Transformacao row, below the bar fill.
-        BleachTextures.HudBarBounds transformBounds = BleachTextures.HUD_TRANSFORM_BOUNDS;
-        int infoY = y + Math.round((transformBounds.y() + transformBounds.height() + 12) * scale);
-        int infoX = x + Math.round(BleachTextures.HUD_HEALTH_BOUNDS.bottomX() * scale);
-        g.drawString(mc.font,
-                Component.translatable("hud.bleachmod.reiatsu",
+        drawInformation(g, mc, screenWidth, screenHeight, data);
+    }
+
+    private static void drawInformation(net.minecraft.client.gui.GuiGraphics g, Minecraft mc,
+                                        int screenWidth, int screenHeight, PlayerData data) {
+        List<InfoLine> lines = List.of(
+                new InfoLine(Component.translatable("hud.bleachmod.reiatsu",
                         (int) data.getResources().getCurrentReiatsu(),
-                        (int) data.getResources().getMaxReiatsu()),
-                infoX, infoY, 0xE8C547, false);
-        g.drawString(mc.font,
-                Component.translatable("hud.bleachmod.target",
-                        Component.translatable("form.bleachmod." + data.getCharacter().getActiveForm())),
-                infoX, infoY + 11, 0xCAB7FF, false);
-        g.drawString(mc.font,
-                Component.translatable("hud.bleachmod.tp", (int) data.getResources().getTrainingPoints()),
-                infoX, infoY + 22, 0xA0E8A0, false);
+                        (int) data.getResources().getMaxReiatsu()), 0xE8C547),
+                new InfoLine(Component.translatable("hud.bleachmod.target",
+                        Component.translatable("form.bleachmod." + data.getCharacter().getActiveForm())), 0xCAB7FF),
+                new InfoLine(Component.translatable("hud.bleachmod.tp",
+                        (int) data.getResources().getTrainingPoints()), 0xA0E8A0)
+        );
+        int lineStep = mc.font.lineHeight + 2;
+        int blockWidth = lines.stream().mapToInt(line -> mc.font.width(line.text())).max().orElse(0);
+        int blockHeight = mc.font.lineHeight + lineStep * (lines.size() - 1);
+        HudLayout.Point position = HudLayout.information(screenWidth, screenHeight, blockWidth, blockHeight);
+
+        for (int index = 0; index < lines.size(); index++) {
+            InfoLine line = lines.get(index);
+            g.drawString(mc.font, line.text(), position.x(), position.y() + index * lineStep,
+                    line.color(), true);
+        }
     }
 
     private static float computeHealthRatio(Minecraft mc, PlayerData data) {
@@ -164,9 +173,16 @@ public final class ReiatsuHud {
                                          BleachTextures.HudBarBounds bounds, float percent) {
         int pct = Math.round(percent);
         String text = pct + "%";
-        int rightX = panelX + Math.round(bounds.percentRight() * scale) - font.width(text);
-        int centerY = panelY + Math.round((bounds.y() + bounds.height() / 2f) * scale) - 4;
-        g.drawString(font, text, rightX + 1, centerY + 1, 0x80000000, false);
-        g.drawString(font, text, rightX, centerY, 0xFFFFFFFF, false);
+        float textScale = Math.max(0.72F, Math.min(1.0F, scale / 0.14F));
+        int rightX = panelX + Math.round(bounds.percentRight() * scale);
+        int centerY = panelY + Math.round((bounds.y() + bounds.height() / 2f) * scale);
+        g.pose().pushPose();
+        g.pose().translate(rightX, centerY, 0);
+        g.pose().scale(textScale, textScale, 1.0F);
+        g.drawString(font, text, -font.width(text), -font.lineHeight / 2, 0xFFFFFFFF, true);
+        g.pose().popPose();
+    }
+
+    private record InfoLine(Component text, int color) {
     }
 }

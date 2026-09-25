@@ -87,12 +87,11 @@ public final class BleachTextures {
     // Medidas reais extraidas pixel-a-pixel do PNG (slots horizontais onde os fills aparecem).
     public static final int HUD_SRC_W = 2169;
     public static final int HUD_SRC_H = 725;
-    public static final float HUD_SCALE = 0.22F;
     // Cada fill (hud_*_fill.png) tem 1280 x 110. Os pocos do painel, entretanto,
     // nao formam uma grade uniforme: os rotulos avancam progressivamente para a
     // direita e as duas extremidades internas sao inclinadas. O preenchimento cobre
     // todo o poco ate a borda direita, como na referencia conceitual. Coordenadas
-    // medidas no PNG original (antes do HUD_SCALE).
+    // medidas no PNG original (antes da escala responsiva aplicada pelo HudLayout).
     public record HudBarBounds(int topX, int topRight, int bottomX, int bottomRight,
                                int y, int height, int percentRight) {
     }

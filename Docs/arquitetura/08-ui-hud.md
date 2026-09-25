@@ -10,12 +10,12 @@ Status de 304 × 228 mantém sete atributos/BP, com tooltips de compra. Radial e
 
 A branch `Life-UI` substitui os corações de Minecraft por uma HUD Bleach toda desenhada em código:
 
-- Painel base: `src/main/resources/assets/bleachmod/textures/gui/hud/bleach_hud_concept.png` (2170 × 725), desenhado em escala 0.45×.
+- Painel base: `src/main/resources/assets/bleachmod/textures/gui/hud/hud_panel_full.png` (2169 × 725), desenhado com escala responsiva limitada entre 0.09× e 0.14×.
 - Três trilhos de preenchimento entregues pelo usuário:
   - `hud_health_fill.png` (Vida) — gradiente vermelho.
   - `hud_reiatsu_fill.png` (Reiatsu) — gradiente azul.
   - `hud_transform_fill.png` (Transformação) — gradiente vermelho→azul.
-- Spiritual Points e estágio da Zanpakutō ficam dentro da barra de Transformação. O game-side já chama esses valores de SP (Spiritual Points), embora a chave de tradução histórica seja `hud.bleachmod.tp`.
+- Reiatsu numérica, estágio da Zanpakutō e Spiritual Points formam um bloco separado no canto inferior esquerdo, imediatamente ao lado da hotbar (ou acima dela em telas estreitas). O game-side já chama esses valores de SP (Spiritual Points), embora a chave de tradução histórica seja `hud.bleachmod.tp`.
 - Cansaço da barra de Transformação: lê `ResourcesData.getActionCharge` (0–100). 0% quando o R não está sendo segurado.
 
 ### Suprimir corações vanilla
@@ -121,4 +121,4 @@ A tela K distribui sete categorias em duas colunas, mostra rank sem sufixo de ca
 
 ## Implementação Bleach — HUD (`bleach_player_hud`)
 
-A antiga `ReiatsuHud` foi rebatizada para overlay `bleach_player_hud` (registrado em `BleachClient.registerOverlays`) e reescrita para renderizar o painel conceitual. O overlay usa `GuiGraphics` para escalar o PNG inteiro com `PoseStack#scale`, depois blita cada fill na sua faixa interna e desenha a percentagem como texto. O cancelamento dos corações vanilla fica separado, em `VanillaHealthHider`, justamente porque o registro de overlay no Forge não permite removê-los.
+A antiga `ReiatsuHud` foi rebatizada para overlay `bleach_player_hud` (registrado em `BleachClient.registerOverlays`) e reescrita para renderizar o painel conceitual. O `HudLayout` limita a escala pelo tamanho lógico da GUI, mantendo o painel no alto à esquerda com margem e reduzindo-o nos GUI Scales maiores. O overlay usa `GuiGraphics` para escalar o PNG inteiro com `PoseStack#scale`, depois blita cada fill na sua faixa interna e desenha a percentagem como texto. O bloco de valores detalhados é ancorado à esquerda da hotbar e sobe para cima dela quando não há largura disponível. O cancelamento dos corações vanilla fica separado, em `VanillaHealthHider`, justamente porque o registro de overlay no Forge não permite removê-los.
