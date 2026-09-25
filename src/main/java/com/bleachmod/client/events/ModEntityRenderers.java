@@ -1,6 +1,7 @@
 package com.bleachmod.client.events;
 
 import com.bleachmod.Reference;
+import com.bleachmod.client.model.ModModelLayers;
 import com.bleachmod.entity.HollowEntity;
 import com.bleachmod.entity.QuestNpcEntity;
 import com.bleachmod.registry.ModEntities;
@@ -16,6 +17,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import com.bleachmod.client.model.HollowBossModel;
+import com.bleachmod.client.model.ModModelLayers;
+import com.bleachmod.entity.HollowBossEntity;
 
 @Mod.EventBusSubscriber(
         modid = Reference.MOD_ID,
@@ -32,8 +36,15 @@ public class ModEntityRenderers {
                 ModEntities.HOLLOW.get(),
                 HollowRenderer::new
         );
+
+        event.registerEntityRenderer(
+                ModEntities.HOLLOW_BOSS.get(),
+                HollowBossRenderer::new
+        );
+
         ModEntities.questNpcs().values().forEach(type ->
-                event.registerEntityRenderer(type.get(), QuestNpcRenderer::new));
+                event.registerEntityRenderer(type.get(), QuestNpcRenderer::new)
+        );
     }
 
     public static class HollowRenderer
@@ -63,6 +74,47 @@ public class ModEntityRenderers {
         ) {
             return TEXTURE;
         }
+    }
+
+    public static class HollowBossRenderer
+            extends MobRenderer<
+            HollowBossEntity,
+            HollowBossModel
+            > {
+
+        private static final ResourceLocation TEXTURE =
+                Reference.id("textures/entity/hollow_boss.png");
+
+        public HollowBossRenderer(
+                EntityRendererProvider.Context context
+        ) {
+            super(
+                    context,
+                    new HollowBossModel(
+                            context.bakeLayer(
+                                    ModModelLayers.HOLLOW_BOSS
+                            )
+                    ),
+                    0.7F
+            );
+        }
+
+        @Override
+        public ResourceLocation getTextureLocation(
+                HollowBossEntity entity
+        ) {
+            return TEXTURE;
+        }
+    }
+
+    @SubscribeEvent
+    public static void registerLayerDefinitions(
+            EntityRenderersEvent.RegisterLayerDefinitions event
+    ) {
+        event.registerLayerDefinition(
+                ModModelLayers.HOLLOW_BOSS,
+                HollowBossModel::createBodyLayer
+        );
     }
 
     public static class QuestNpcRenderer extends MobRenderer<QuestNpcEntity, PlayerModel<QuestNpcEntity>> {

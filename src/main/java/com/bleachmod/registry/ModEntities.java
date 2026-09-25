@@ -11,6 +11,10 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import com.bleachmod.entity.HollowEntity;
+import com.bleachmod.entity.HollowBossEntity;
+import com.bleachmod.entity.QuestNpcEntity;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -31,6 +35,15 @@ public class ModEntities {
                             .of(HollowEntity::new, MobCategory.MONSTER)
                             .sized(0.8F, 2.0F)
                             .build("hollow")
+            );
+
+    public static final RegistryObject<EntityType<HollowBossEntity>> HOLLOW_BOSS =
+            ENTITY_TYPES.register(
+                    "hollow_boss",
+                    () -> EntityType.Builder
+                            .of(HollowBossEntity::new, MobCategory.MONSTER)
+                            .sized(0.8F, 2.0F)
+                            .build("hollow_boss")
             );
 
     public static final RegistryObject<EntityType<QuestNpcEntity>> NPC_SADO_YASUTORA = registerNpc("sado_yasutora");
