@@ -15,6 +15,7 @@ Este projeto é um trabalho derivado do mod **Dragon Mine Z**, distribuído sob 
 | [`game-design/`](game-design/00-mapa-modular.md) | Planejamento modular da experiência, conteúdo e progressão | [Mapa modular](game-design/00-mapa-modular.md) |
 | [`desenvolvimento/`](desenvolvimento/manual-inicializacao.md) | Clone, Java 17, JAVA_HOME e `runClient` | [Manual de inicialização](desenvolvimento/manual-inicializacao.md) |
 | [`jogador/`](jogador/manual-do-jogador.md) | Jogar o MVP (controles, quests, progressão) | [Manual do jogador](jogador/manual-do-jogador.md) |
+| [`poderes/`](poderes/README.md) | Kit Ryūjin, contratos, comandos e histórico da feature | [Referência operacional](poderes/README.md) |
 | [`planejamento/`](planejamento/plano-implementacao-mvp.md) | Plano de entrega, revisão técnica e especificação da análise | [Plano do MVP](planejamento/plano-implementacao-mvp.md) |
 | [`arte/`](arte/prompts-arte-mvp.md) | Briefing e prompts de texturas/UI | [Prompts de arte](arte/prompts-arte-mvp.md) |
 | [`arquitetura/`](arquitetura/00-overview.md) | Engenharia reversa do Dragon Mine Z (série 00–12) | [Overview](arquitetura/00-overview.md) |

@@ -9,6 +9,14 @@ public class ResourcesData {
     private float maxReiatsu = Reference.BASE_REIATSU;
     private int actionCharge;
     private float trainingPoints;
+    // Operator test override; deliberately absent from saved/player sync data.
+    private boolean costsDisabled;
+
+    public boolean areCostsDisabled() { return costsDisabled; }
+    public void setCostsDisabled(boolean disabled) { costsDisabled = disabled; }
+    public boolean canAffordReiatsu(float amount) {
+        return Float.isFinite(amount) && amount >= 0 && (costsDisabled || currentReiatsu >= amount);
+    }
 
     public float getCurrentReiatsu() {
         return currentReiatsu;
@@ -19,14 +27,15 @@ public class ResourcesData {
     }
 
     public void addReiatsu(float amount) {
+        if (costsDisabled && amount < 0) return;
         setCurrentReiatsu(currentReiatsu + amount);
     }
 
     public boolean consumeReiatsu(float amount) {
-        if (!Float.isFinite(amount) || amount < 0 || currentReiatsu < amount) {
+        if (!canAffordReiatsu(amount)) {
             return false;
         }
-        setCurrentReiatsu(currentReiatsu - amount);
+        if (!costsDisabled) setCurrentReiatsu(currentReiatsu - amount);
         return true;
     }
 
@@ -86,6 +95,7 @@ public class ResourcesData {
     }
 
     public void load(CompoundTag tag) {
+        costsDisabled = false;
         if (tag.contains("currentReiatsu")) {
             currentReiatsu = tag.getFloat("currentReiatsu");
         }

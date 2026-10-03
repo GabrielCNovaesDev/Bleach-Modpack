@@ -47,7 +47,8 @@ public class TickHandler {
                     data.getAttributes().level(AttributeData.CONTROL));
             if (drain > 0.0F) {
                 data.getResources().addReiatsu(-drain);
-                if (data.getResources().getCurrentReiatsu() <= data.getResources().getMaxReiatsu() * Reference.REVERT_REIATSU_RATIO) {
+                if (!data.getResources().areCostsDisabled()
+                        && data.getResources().getCurrentReiatsu() <= data.getResources().getMaxReiatsu() * Reference.REVERT_REIATSU_RATIO) {
                     FormModeHandler.revertToSealed(player, data, Component.translatable("message.bleachmod.form.drained_reiatsu"));
                 }
             } else {
@@ -85,6 +86,10 @@ public class TickHandler {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        PlayerCapability.get(player).ifPresent(data -> data.resetTransientState());
+        PlayerCapability.get(player).ifPresent(data -> {
+            data.getStatus().setCooldownsDisabled(false);
+            data.getResources().setCostsDisabled(false);
+            data.resetTransientState();
+        });
     }
 }

@@ -16,6 +16,81 @@ import java.util.*;
 public final class MvpRegressionTest {
     private static int count;
     public static void main(String[] args) {
+        test("Ryujin models parse as explicit geometry with a shared corrected grip", () -> {
+            try {
+                var directory = java.nio.file.Path.of("src/main/resources/assets/bleachmod/models/item");
+                var parent = JsonParser.parseString(java.nio.file.Files.readString(
+                        directory.resolve("ryujin_katana_handheld.json"))).getAsJsonObject();
+                yes(!parent.has("parent")); // builtin/generated would replace our geometry with the short sprite.
+                var display = parent.getAsJsonObject("display");
+                eq(55, display.getAsJsonObject("thirdperson_righthand").getAsJsonArray("rotation").get(2).getAsInt());
+                eq(-55, display.getAsJsonObject("thirdperson_lefthand").getAsJsonArray("rotation").get(2).getAsInt());
+                for (String name : List.of("ryujin_jakka", "ryujin_jakka_shikai", "ryujin_jakka_bankai")) {
+                    String source = java.nio.file.Files.readString(directory.resolve(name + ".json"));
+                    var parsed = net.minecraft.client.renderer.block.model.BlockModel.fromString(source);
+                    eq(14, parsed.getElements().size());
+                    var model = JsonParser.parseString(source).getAsJsonObject();
+                    eq("bleachmod:item/ryujin_katana_handheld", model.get("parent").getAsString());
+                    for (var element : model.getAsJsonArray("elements")) {
+                        var part = element.getAsJsonObject();
+                        eq(6, part.getAsJsonObject("faces").size());
+                        for (int axis = 0; axis < 3; axis++) {
+                            double from = part.getAsJsonArray("from").get(axis).getAsDouble();
+                            double to = part.getAsJsonArray("to").get(axis).getAsDouble();
+                            yes(from >= -16 && to <= 32 && from < to);
+                        }
+                    }
+                }
+            } catch (java.io.IOException exception) { throw new IllegalStateException(exception); }
+        });
+        test("free reiatsu accepts zero balance without debit and restore enforces costs", () -> {
+            ResourcesData resources = new ResourcesData();
+            resources.setCurrentReiatsu(0);
+            resources.setCostsDisabled(true);
+            yes(resources.canAffordReiatsu(45));
+            yes(resources.consumeReiatsu(45));
+            eq(0F, resources.getCurrentReiatsu());
+            yes(!resources.consumeReiatsu(Float.NaN));
+            yes(!resources.consumeReiatsu(-1));
+            resources.setCurrentReiatsu(50);
+            resources.addReiatsu(-5);
+            eq(50F, resources.getCurrentReiatsu());
+            resources.setCostsDisabled(false);
+            yes(resources.consumeReiatsu(45));
+            eq(5F, resources.getCurrentReiatsu());
+            yes(!resources.consumeReiatsu(6));
+        });
+        test("cooldown test mode covers every slot and survives form cleanup", () -> {
+            StatusData status = new StatusData();
+            status.setTechniqueSlot4CooldownTicks(1200);
+            status.setCooldownsDisabled(true);
+            status.setFlameBurstCooldownTicks(40);
+            status.setTechniqueSlot1CooldownTicks(100);
+            status.setTechniqueSlot2CooldownTicks(80);
+            status.setTechniqueSlot3CooldownTicks(400);
+            status.setTechniqueSlot4CooldownTicks(1200);
+            status.clearTransformationState();
+            yes(status.areCooldownsDisabled());
+            eq(0, status.getFlameBurstCooldownTicks());
+            eq(0, status.getTechniqueSlot1CooldownTicks());
+            eq(0, status.getTechniqueSlot2CooldownTicks());
+            eq(0, status.getTechniqueSlot3CooldownTicks());
+            eq(0, status.getTechniqueSlot4CooldownTicks());
+            status.setCooldownsDisabled(false);
+            status.setTechniqueSlot4CooldownTicks(1200);
+            eq(1200, status.getTechniqueSlot4CooldownTicks());
+        });
+        test("operator overrides are never restored from NBT", () -> {
+            PlayerData original = new PlayerData();
+            original.getStatus().setCooldownsDisabled(true);
+            original.getResources().setCostsDisabled(true);
+            PlayerData loaded = new PlayerData();
+            loaded.getStatus().setCooldownsDisabled(true);
+            loaded.getResources().setCostsDisabled(true);
+            loaded.load(original.save());
+            yes(!loaded.getStatus().areCooldownsDisabled());
+            yes(!loaded.getResources().areCostsDisabled());
+        });
         test("oriented wall rejects behind width height and diagonal query corners", () -> {
             var origin = net.minecraft.world.phys.Vec3.ZERO;
             var forward = new net.minecraft.world.phys.Vec3(0, 0, 1);

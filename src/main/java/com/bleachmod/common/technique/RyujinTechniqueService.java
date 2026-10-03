@@ -119,7 +119,7 @@ public final class RyujinTechniqueService {
             feedback(player, "cooldown", (int) Math.ceil(cooldown / 20.0));
             return false;
         }
-        if (data.getResources().getCurrentReiatsu() < cost) {
+        if (!data.getResources().canAffordReiatsu(cost)) {
             feedback(player, "no_reiatsu", (int) cost);
             return false;
         }
@@ -131,7 +131,9 @@ public final class RyujinTechniqueService {
         float cost = tornado ? TORNADO_COST : WALL_COST;
         if (!ready(player, data, data.getStatus().getTechniqueSlot3CooldownTicks(), cost)) return;
         Runtime runtime = ACTIVE.computeIfAbsent(player.getUUID(), id -> new Runtime(player));
-        if (runtime.area != null) { feedback(player, "effect_active"); return; }
+        if (runtime.area != null && !data.getStatus().areCooldownsDisabled()) {
+            feedback(player, "effect_active"); return;
+        }
         if (!data.getResources().consumeReiatsu(cost)) return;
         Vec3 direction = Vec3.directionFromRotation(0, player.getYRot()).normalize();
         Vec3 origin = tornado ? player.position() : player.position().add(direction);
@@ -150,8 +152,10 @@ public final class RyujinTechniqueService {
         Runtime runtime = ACTIVE.computeIfAbsent(player.getUUID(), id -> new Runtime(player));
         if (runtime.swarm != null) {
             runtime.swarm.bats.removeIf(bat -> !bat.isAlive() || bat.isRemoved());
-            if (!runtime.swarm.bats.isEmpty()) { feedback(player, "bats_active"); return; }
-            runtime.swarm = null;
+            if (!runtime.swarm.bats.isEmpty() && !data.getStatus().areCooldownsDisabled()) {
+                feedback(player, "bats_active"); return;
+            }
+            clearSwarm(runtime);
         }
         Swarm swarm = new Swarm(runtime.level.getGameTime());
         runtime.swarm = swarm;
@@ -233,10 +237,10 @@ public final class RyujinTechniqueService {
             }
         } else {
             // Fixed vertical sheet: 16 x 2 x 15. Samples never apply damage.
-            for (int along = 0; along < 16; along++) for (int height = 0; height < 15; height += 2) {
+            for (int along = 0; along < 16; along++) for (int height = 0; height < 15; height++) {
                 Vec3 point = center.add(area.direction.scale(along + 0.5));
                 runtime.level.sendParticles(ParticleTypes.FLAME, point.x, center.y + height + 0.5,
-                        point.z, 3, Math.abs(area.direction.z) * 0.8 + 0.12, 0.45,
+                        point.z, 5, Math.abs(area.direction.z) * 0.65 + 0.12, 0.3,
                         Math.abs(area.direction.x) * 0.8 + 0.12, 0.015);
             }
         }
@@ -317,7 +321,7 @@ public final class RyujinTechniqueService {
                     area.age++;
                     Vec3 center = area.tornado ? owner.position() : area.origin;
                     damageArea(runtime, center, area.tornado ? TORNADO_DAMAGE : WALL_DAMAGE, area.tornado ? 2 : 3);
-                    if (area.age % (area.tornado ? 2 : 4) == 0) drawArea(runtime, center);
+                    if (area.age % 2 == 0) drawArea(runtime, center);
                 }
             }
             if (runtime.swarm != null) {

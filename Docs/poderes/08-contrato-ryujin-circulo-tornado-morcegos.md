@@ -44,7 +44,7 @@ Substitui o Círculo após teste do usuário. A forma base deixou de ser uma ár
 | Dano base por contato | 18 por alvo, no máximo a cada 20 ticks |
 | Knockback em mobs | Força 0,25 para o lado mais próximo da muralha, somente com dano aceito |
 | Fogo | 3 segundos por aplicação |
-| Visual | Paredão vertical temporário de FLAME, 128 amostras a cada 4 ticks |
+| Visual | Paredão vertical temporário de FLAME, 240 amostras com 5 partículas cada a cada 2 ticks |
 
 Dano, custo e recarga são valores iniciais para o teste da Muralha. O intervalo de 20 ticks
 impede dano por amostra/partícula. O hitbox precisa intersectar o volume orientado de
@@ -91,7 +91,7 @@ Um morcego distante mais de 24 blocos pode voltar para um ponto livre próximo d
 Morcegos não atacam mobs passivos, jogadores, NPCs de quest, aliados nem invocações marcadas.
 O dano é travado por alvo para impedir cinco impactos simultâneos sobre a mesma entidade.
 
-Não é possível invocar novamente enquanto algum morcego registrado estiver vivo,
+Em modo normal, não é possível invocar novamente enquanto algum morcego registrado estiver vivo,
 mesmo após o cooldown. Entidades mortas/removidas são retiradas da lista.
 O cast falha sem cobrar recursos se não conseguir criar o enxame completo em espaço livre.
 Os marcadores `bleachmod_flame_bat` e `bleachmod_flame_bat_owner` identificam entidades
@@ -136,6 +136,35 @@ arma inválida, personagem inválido, unload do mundo e parada do servidor.
 A muralha não acompanha o jogador; o tornado acompanha. A troca de forma cancela ambos
 sem reiniciar cooldown. O comando `/bleachdev cooldowns clear Player` cancela também
 as novas áreas/enxames, além de limpar os cooldowns e o estado anterior de testes.
+
+## Modelo da katana e comandos de teste
+
+Revisão final: [relatório consolidado](11-fechamento-ryujin-comandos-modelos-2026-10-03.md).
+As três formas usam geometria explícita de katana, cabo com faixas, guarda e lâmina
+alongada com ponta em segmentos. As rotações da antiga Ryujin estavam invertidas
+para a orientação de seu cabo. O modelo compartilhado corrige as duas mãos, primeira
+e terceira pessoa, e ajusta inventário/chão/moldura. Selada usa metal, Shikai borda
+vermelha e Bankai lâmina escura com borda rubra; preserva as texturas e o predicate de forma.
+
+Comandos de operador (permissão 2, personagem criado), por jogador:
+
+| Comando | Resultado |
+| --- | --- |
+| `/bleachdev cooldowns clear Player` | Zera recargas atuais uma vez, cancela áreas/enxame/Dash; preserva o modo atual e a ignição |
+| `/bleachdev cooldowns disable Player` | Zera recargas e efeitos anteriores; novos casts ficam sem cooldown |
+| `/bleachdev cooldowns restore Player` | Restaura recargas normais, aplicadas no próximo uso conforme o executor |
+| `/bleachdev reiatsu free Player` | Custo zero nas técnicas, ignição, ativação e manutenção das formas, mesmo com saldo zero |
+| `/bleachdev reiatsu restore Player` | Restaura os custos e drenos normais, sem alterar o saldo |
+| `/bleachdev inspect Player` | Mostra também os modos de cooldown e custos |
+
+Não se alteram constantes de técnicas nem JSONs de formas. `restore` não inventa uma
+recarga para uma técnica que ainda não foi usada; o próximo cast atribui seu tempo exato.
+No modo sem cooldown, recastar área/enxame substitui a instância anterior, sem acumular
+entidades ou multiplicar dano. O limite de pacotes e requisitos de arma, raça, skill,
+desbloqueio, domínio e seleção de forma continuam valendo. Overrides não são salvos:
+reconectar/reiniciar ou renascer restaura o modo normal; trocar de dimensão conserva
+os modos de teste da sessão. Comandos de teste sincronizam sem normalizar progressão
+nem desligar a ignição. Nada muda no protocolo ou schema.
 
 ## Arquitetura e terreno futuro
 

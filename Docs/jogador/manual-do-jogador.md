@@ -56,7 +56,7 @@ Todas as técnicas do kit exigem Ryūjin Jakka na mão principal. Asauchi não a
 | Morcegos (C base) | 25 | 2/20 ticks por alvo, compartilhado pelo enxame | 10 s + enxame encerrado |
 | Corte de Vapor (C Bankai) | 45 | 48 | 60 s |
 
-**Muralha:** comprimento 16, largura 2, altura 15. Começa 1 bloco à frente do jogador, na direção horizontal da mira, fica fixa por 5 s e aplica knockback leve (0,25) em mobs atingidos.
+**Muralha:** comprimento 16, largura 2, altura 15. Começa 1 bloco à frente do jogador, na direção horizontal da mira, fica fixa por 5 s e aplica knockback leve (0,25) em mobs atingidos. A revisão final concentra as chamas com 240 amostras verticais e 1.200 partículas por emissão a cada dois ticks, sem aumentar dano.
 **Tornado:** raio 6, altura 10, segue o jogador durante 10 s. Duas espirais horárias vistas de cima, chamas FLAME mais densas e com velocidade tangencial para criar sensação de vento.
 **Morcegos:** 5 entidades vanilla com 4 de vida, seguem com deslocamento controlado pelo servidor e atacam apenas mobs hostis; desaparecem após 40 s.
 O enxame bloqueia outra invocação enquanto algum morcego válido estiver vivo. Espaço bloqueado
@@ -199,13 +199,19 @@ Exigem permissão 2 e personagem já confirmado. Troque Player pelo nome do joga
 /bleachdev mastery set Player zanpakuto bankai 50
 /bleachdev reiatsu fill Player
 /bleachdev cooldowns clear Player
+/bleachdev cooldowns disable Player
+/bleachdev cooldowns restore Player
+/bleachdev reiatsu free Player
+/bleachdev reiatsu restore Player
 /bleachdev asauchi give Player
 /bleachdev inspect Player
 ```
 
 skill set aceita 0–2 e pode reduzir nível; valores >=1/2 também descobrem as formas para teste. mastery set não compra skill nem descobre a forma. Os comandos normalizam formas inválidas, cancelam carga e sincronizam o estado.
 
-cooldowns clear cancela áreas, Dash e morcegos e limpa recargas sem apagar progresso. Não existe reset geral. Para obter itens vanilla de teste, use /give.
+cooldowns clear cancela áreas, Dash e morcegos e limpa recargas uma vez, preservando ignição e os modos de teste. cooldowns disable mantém todos os slots e Flame Burst sem recarga; áreas/enxames recastados substituem a instância anterior. cooldowns restore devolve os tempos programados a partir do próximo uso (incluindo os 60 s do Corte).
+
+reiatsu free zera o custo de habilidades, ignição, ativação e manutenção de Shikai/Bankai, mesmo com saldo zero; não zera nem preenche o saldo. reiatsu restore volta aos custos normais, incluindo os JSONs de formas do mundo. Esses comandos de teste não normalizam formas nem apagam progresso. inspect informa os dois modos. Reconectar, reiniciar ou renascer restaura o modo normal; mudança de dimensão conserva os modos. Requisitos de arma, desbloqueio e domínio continuam valendo. Não existe reset geral. Para obter itens vanilla de teste, use /give.
 
 Reload prepara quests e formas antes de substituí-las. Erros preservam os registries anteriores e são informados ao operador e no log.
 
@@ -239,7 +245,7 @@ Faça backup antes de adaptar os JSONs de um mundo existente. A nova economia n�
 
 ## 10. Limites atuais
 
-Hollow/Hollow Boss e oito NPCs de quest existem como protótipos. Outras raças jogáveis, dimensões, party, facções e mentores completos ainda não existem. O kit Ryūjin possui os quatro slots; as três técnicas novas e o Corte ajustado aguardam homologação visual/multiplayer. Há regressões e GameTests específicos deste ciclo, mas não indicador contínuo de cooldown nem animação óssea. Sem respec.
+Hollow/Hollow Boss e oito NPCs de quest existem como protótipos. Outras raças jogáveis, dimensões, party, facções e mentores completos ainda não existem. O kit Ryūjin possui os quatro slots, com Muralha/Tornado/Morcegos da entrega anterior confirmados pelo usuário. Os novos modelos de katana das três formas corrigem a orientação e alongam a lâmina; a pegada e as partículas mais densas desta revisão aguardam homologação visual/multiplayer. Há 49 regressões e 14 GameTests aprovados, mas não indicador contínuo de cooldown nem animação óssea. Sem respec. Consulte o [relatório consolidado](../poderes/11-fechamento-ryujin-comandos-modelos-2026-10-03.md).
 
 ## 11. Manutenção
 

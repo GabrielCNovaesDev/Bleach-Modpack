@@ -9,6 +9,20 @@ import java.util.UUID;
 
 public class StatusData {
     private long lastActionTick = Long.MIN_VALUE;
+    private boolean cooldownsDisabled;
+
+    public boolean areCooldownsDisabled() { return cooldownsDisabled; }
+    public void setCooldownsDisabled(boolean disabled) {
+        cooldownsDisabled = disabled;
+        clearCooldowns();
+    }
+    public void clearCooldowns() {
+        flameBurstCooldownTicks = 0;
+        techniqueSlot1CooldownTicks = 0;
+        techniqueSlot2CooldownTicks = 0;
+        techniqueSlot3CooldownTicks = 0;
+        techniqueSlot4CooldownTicks = 0;
+    }
     private int flameBurstCooldownTicks;
     private int techniqueSlot1CooldownTicks;
     private int techniqueSlot2CooldownTicks;
@@ -52,7 +66,7 @@ public class StatusData {
     }
 
     public void setFlameBurstCooldownTicks(int ticks) {
-        flameBurstCooldownTicks = Math.max(0, ticks);
+        flameBurstCooldownTicks = cooldownsDisabled ? 0 : Math.max(0, ticks);
     }
 
     public boolean isIgnitionActive() {
@@ -68,7 +82,7 @@ public class StatusData {
     }
 
     public void setTechniqueSlot1CooldownTicks(int ticks) {
-        techniqueSlot1CooldownTicks = Math.max(0, ticks);
+        techniqueSlot1CooldownTicks = cooldownsDisabled ? 0 : Math.max(0, ticks);
     }
 
     public int getTechniqueSlot2CooldownTicks() {
@@ -76,7 +90,7 @@ public class StatusData {
     }
 
     public void setTechniqueSlot2CooldownTicks(int ticks) {
-        techniqueSlot2CooldownTicks = Math.max(0, ticks);
+        techniqueSlot2CooldownTicks = cooldownsDisabled ? 0 : Math.max(0, ticks);
     }
 
     public int getTechniqueSlot4CooldownTicks() {
@@ -88,7 +102,7 @@ public class StatusData {
     }
 
     public void setTechniqueSlot3CooldownTicks(int ticks) {
-        techniqueSlot3CooldownTicks = Math.max(0, ticks);
+        techniqueSlot3CooldownTicks = cooldownsDisabled ? 0 : Math.max(0, ticks);
     }
 
     /** Changing form cancels active effects but must not allow a cooldown bypass. */
@@ -107,7 +121,7 @@ public class StatusData {
     }
 
     public void setTechniqueSlot4CooldownTicks(int ticks) {
-        techniqueSlot4CooldownTicks = Math.max(0, ticks);
+        techniqueSlot4CooldownTicks = cooldownsDisabled ? 0 : Math.max(0, ticks);
     }
 
     public int getFlameBarrageGroundTicks() {
@@ -242,6 +256,7 @@ public class StatusData {
     }
 
     public void load(CompoundTag tag) {
+        cooldownsDisabled = false;
         if (tag.contains("hasCreatedCharacter")) {
             hasCreatedCharacter = tag.getBoolean("hasCreatedCharacter");
         }

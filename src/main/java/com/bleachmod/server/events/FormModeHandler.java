@@ -104,7 +104,7 @@ public final class FormModeHandler {
         if (instant) {
             cost = (float) (target.getEnergyDrain() * 4.0D);
         }
-        if (data.getResources().getCurrentReiatsu() < cost) {
+        if (!data.getResources().canAffordReiatsu(cost)) {
             player.displayClientMessage(Component.translatable("message.bleachmod.form.no_reiatsu", (int) cost), true);
             return;
         }

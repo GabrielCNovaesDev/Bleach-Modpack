@@ -64,13 +64,19 @@ public final class BleachCommands {
                 }))))))));
         root.then(literal("reiatsu").then(literal("fill").then(argument("player",EntityArgument.player())
             .executes(ctx->mutate(ctx,(p,d)->d.getResources().setCurrentReiatsu(d.getResources().getMaxReiatsu()))))));
+        root.then(literal("reiatsu").then(literal("free").then(argument("player",EntityArgument.player())
+            .executes(ctx->mutateTest(ctx,(p,d)->d.getResources().setCostsDisabled(true))))));
+        root.then(literal("reiatsu").then(literal("restore").then(argument("player",EntityArgument.player())
+            .executes(ctx->mutateTest(ctx,(p,d)->d.getResources().setCostsDisabled(false))))));
+        root.then(literal("cooldowns").then(literal("disable").then(argument("player",EntityArgument.player())
+            .executes(ctx->mutateTest(ctx,(p,d)->{
+                d.getStatus().setCooldownsDisabled(true);
+                resetTechniqueEffects(p,d);
+            })))));
+        root.then(literal("cooldowns").then(literal("restore").then(argument("player",EntityArgument.player())
+            .executes(ctx->mutateTest(ctx,(p,d)->d.getStatus().setCooldownsDisabled(false))))));
         root.then(literal("cooldowns").then(literal("clear").then(argument("player",EntityArgument.player())
-    .executes(ctx -> mutate(ctx, (p, d) -> {
-        d.getStatus().clearTechniqueTestState();
-        com.bleachmod.common.technique.RyujinTechniqueService.cancel(p);
-        p.setDeltaMovement(Vec3.ZERO);
-        p.hurtMarked = true;
-    })))));
+            .executes(ctx->mutateTest(ctx,BleachCommands::resetTechniqueEffects)))));
 
         root.then(literal("asauchi").then(literal("give").then(argument("player",EntityArgument.player())
             .executes(ctx->mutate(ctx,(p,d)->{
@@ -83,6 +89,8 @@ public final class BleachCommands {
             ctx.getSource().sendSuccess(()->Component.literal(p.getScoreboardName()+": "+d.getCharacter().getRace()
                 +" | "+d.getCharacter().getActiveForm()+" -> "+d.getCharacter().getSelectedForm()
                 +" | reiatsu="+d.getResources().getCurrentReiatsu()+"/"+d.getResources().getMaxReiatsu()
+                +" | cooldowns="+(d.getStatus().areCooldownsDisabled()?"disabled":"normal")
+                +" | reiatsuCosts="+(d.getResources().areCostsDisabled()?"free":"normal")
                 +" | BP="+Math.round(d.getBattlePower())
                 +" | points="+d.getResources().getTrainingPoints()+" | zanpakuto="+d.getSkills().getLevel("zanpakuto")
                 +" | mastery="+d.getCharacter().getMastery("zanpakuto","shikai")+"/"+d.getCharacter().getMastery("zanpakuto","bankai")),false);
@@ -91,14 +99,29 @@ public final class BleachCommands {
         event.getDispatcher().register(root);
     }
     private interface Mutation { void apply(ServerPlayer player,PlayerData data); }
+    private static void resetTechniqueEffects(ServerPlayer player,PlayerData data) {
+        data.getStatus().clearTechniqueTestState();
+        com.bleachmod.common.technique.RyujinTechniqueService.cancel(player);
+        player.setDeltaMovement(Vec3.ZERO);
+        player.hurtMarked = true;
+    }
     private static int mutate(CommandContext<CommandSourceStack> ctx,Mutation action) throws CommandSyntaxException {
+        return mutate(ctx,action,true);
+    }
+    private static int mutateTest(CommandContext<CommandSourceStack> ctx,Mutation action) throws CommandSyntaxException {
+        return mutate(ctx,action,false);
+    }
+    private static int mutate(CommandContext<CommandSourceStack> ctx,Mutation action,boolean normalize) throws CommandSyntaxException {
         ServerPlayer player=EntityArgument.getPlayer(ctx,"player");
         PlayerData data=SyncHelper.require(player);
         if(!data.getStatus().hasCreatedCharacter()) throw new SimpleCommandExceptionType(Component.literal("Confirm the character first")).create();
         try { action.apply(player,data); }
         catch(IllegalArgumentException e) { throw new SimpleCommandExceptionType(Component.literal(e.getMessage())).create(); }
-        ProgressionService.sync(player,data);
-        ctx.getSource().sendSuccess(()->Component.literal("Bleach: "+player.getScoreboardName()+" updated"),true);
+        if (normalize) ProgressionService.sync(player,data);
+        else SyncHelper.full(player);
+        ctx.getSource().sendSuccess(()->Component.literal("Bleach: "+player.getScoreboardName()+" updated"
+                +" | cooldowns="+(data.getStatus().areCooldownsDisabled()?"disabled":"normal")
+                +" | reiatsuCosts="+(data.getResources().areCostsDisabled()?"free":"normal")),true);
         return 1;
     }
 }
