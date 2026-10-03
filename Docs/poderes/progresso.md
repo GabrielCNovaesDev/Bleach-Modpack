@@ -1,10 +1,37 @@
-# Consolidação e ajustes finais — 03/10/2026
+# Feature Ryūjin Jakka concluída — 03/10/2026
 
-Muralha substitui Círculo (16 × 2 × 15, 5 s); Tornado atualizado (raio 6, altura 10, fluxo horário); morcegos corrigidos com movimento servidor e alvo hostil. O usuário confirmou que a entrega `57966f8` funciona bem. Nesta revisão: comandos contínuos de teste de cooldown/reiatsu, katana longa com orientação corrigida nas três formas e Muralha mais densa. Build, 49 regressões e 14 GameTests aprovados; novo visual aguarda homologação no cliente. Detalhes: [relatório consolidado](11-fechamento-ryujin-comandos-modelos-2026-10-03.md).
+O usuário confirmou a conclusão após a entrega `5a02b61`, na branch `Feature-Poderes-bankais`. Nenhuma implementação resta neste ciclo. Última validação de código: build, 49 regressões e 14 GameTests aprovados; 22 JSONs válidos. A atualização atual é exclusivamente documental, limitada a `Docs/poderes`.
+
+## Progresso por feature e entrega
+
+| Etapa | Alteração e lógica | Arquivos principais | Estado |
+| --- | --- | --- | --- |
+| Base existente | H/N resolvidos pela forma servidor; X preservado; Ryujin autoriza o kit | `TechniqueService`, `StatusData`, `TickHandler` | Reaproveitada |
+| `141205c` — B/C | Runtime por UUID para área/enxame, expiração e limpeza; cilindro filtra a caixa de consulta | `RyujinTechniqueService`, `TechniqueGeometry`, `RyujinGameTests` | Concluída; Círculo posteriormente substituído |
+| `141205c` — recargas/Corte | Slot 3 incluído; mudança de forma preserva cooldown; Corte dano 48/custo 45/60 s | `StatusData`, `FormModeHandler`, `ProgressionService`, `TechniqueService` | Concluída |
+| `57966f8` — Muralha | Volume orientado 16 × 2 × 15, fixo por 5 s; contato com intervalo e knockback | `RyujinTechniqueService`, `TechniqueGeometry`, testes | Concluída |
+| `57966f8` — Tornado | Raio 6/altura 10, duas hélices com fase horária e velocidade tangencial | `RyujinTechniqueService`, `TechniqueGeometry` | Concluída |
+| `57966f8` — morcegos | NoAI com movimento explícito e colisão; alvo `Enemy`; ataque compartilhado por alvo | `RyujinTechniqueService`, `RyujinGameTests` | Concluída |
+| `5a02b61` — comandos | Overrides individuais de recarga/custo; restauração das regras; manutenção gratuita das formas | `BleachCommands`, `StatusData`, `ResourcesData`, `FormModeHandler`, `TickHandler` | Concluída |
+| `5a02b61` — modelos/visual | 14 elementos de katana, orientação das duas mãos, variantes; Muralha 1.200 chamas/2 ticks | Quatro modelos JSON de Ryujin, `RyujinTechniqueService`, regressões | Entregue; feature encerrada pelo usuário |
+
+## Sequência da implementação e verificação
+
+1. Compararam-se documentos e executores, separando planejamento antigo do contrato autorizado.
+2. Criou-se o runtime B/C e preservaram-se recargas por slot nas transformações; consolidou-se o Corte.
+3. Após teste do usuário, substituiu-se Círculo, ampliou-se Tornado e corrigiu-se voo/ataque dos morcegos.
+4. Implementaram-se comandos contínuos por jogador e sua restauração, incluindo ignição e formas.
+5. Corrigiram-se orientação/modelos das três formas e intensificaram-se partículas sem mudar dano.
+6. Cada entrega de código passou por build/regressões/GameTests: 43/9, depois 45/11, finalmente 49/14.
+7. O usuário encerrou a feature; documentação desta pasta atualizada com lógica, arquivos e histórico.
+
+Detalhes por passo: [histórico técnico completo](12-historico-tecnico-passo-a-passo-ryujin.md). Referências: [contrato](08-contrato-ryujin-circulo-tornado-morcegos.md), [relatório final](11-fechamento-ryujin-comandos-modelos-2026-10-03.md) e [comandos](manual-do-jogador.md).
+
+O aceite geral não registra uma bateria multiplayer formal ou medição de desempenho específica. Esses roteiros permanecem referências para regressões futuras, sem reabrir a feature. `spirit_flame`, vínculo, outras raças e mentores seguem escopo futuro separado.
 
 # Estado operacional — 03/10/2026
 
-Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Pendentes: homologação dos modelos/visual atuais e desempenho multiplayer.
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Estado: concluída por confirmação do usuário.
 
 ## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
 

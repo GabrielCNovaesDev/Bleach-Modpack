@@ -1,3 +1,17 @@
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Checklist vigente e implementação
+
+1. O requisito atual é Ryūjin Jakka, identificado por `TechniqueService.isRyujinJakkaEquipped`; a referência a Asauchi no checklist original abaixo é histórica.
+2. H base alterna `StatusData.ignitionActive`; `tickIgnition` consome 0,05/tick. `ignitionDamageBonus` fornece 0,15; `applyIgnitionHit` aplica fogo. H Bankai resolve Dash.
+3. Dash usa custo 20, recarga 100 ticks, duração 16 e dano base 4. `tickFlameDash` trata movimento/colisão; `markFlameDashHit` impede múltiplos impactos no mesmo UUID.
+4. `141205c` preserva recarga na transformação. `5a02b61` cobre recarga por `StatusData.cooldownsDisabled` e dreno por `ResourcesData.costsDisabled`.
+5. `BleachCommands.mutateTest` sincroniza sem normalizar: `clear` preserva ignição e cancela Dash. `RyujinGameTests` verifica o comando e ignição gratuita/restaurada no saldo zero.
+6. Para repetir o roteiro antigo, use Ryujin e confira modo normal/gratuito/restaurado. Itens de investigação abaixo são o registro anterior, não pendências que reabrem a feature concluída.
+
+---
+
 # Checklist de homologação — F1 base: Ignição e F1 Bankai: Dash de chamas
 
 ## Objetivo

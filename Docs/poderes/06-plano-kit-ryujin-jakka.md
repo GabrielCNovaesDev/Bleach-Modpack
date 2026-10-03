@@ -1,6 +1,19 @@
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Plano executado, passo a passo
+
+1. H/N/X foram reaproveitados; `TechniqueService` resolve variantes no servidor e exige Ryujin na mão principal para o kit.
+2. `141205c`: runtime B/C em `RyujinTechniqueService`, cilindros em `TechniqueGeometry`, recarga F3 e preservação por forma em `StatusData`, `FormModeHandler` e `ProgressionService`. Corte consolidado: dano 48/custo 45/cooldown 60 s.
+3. `57966f8`: Muralha substitui Círculo, com volume orientado; Tornado ganha raio 6/altura 10 e espiral horária; `tickSwarm` passa a mover Bat explicitamente e selecionar hostis.
+4. `5a02b61`: comandos contínuos por jogador, centralização de custo/cooldown, quatro JSONs de modelo de katana e Muralha mais densa.
+5. Feature encerrada pelo usuário. Leque médio/Círculo Bankai não são tarefas remanescentes; `spirit_flame` e vínculo permanecem fora do ciclo.
+
+---
+
 # Estado operacional — 03/10/2026
 
-Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Implementação nova sujeita à homologação manual.
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Feature concluída pelo usuário após `5a02b61`; histórico técnico e arquivos descritos nesta atualização.
 
 ## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
 

@@ -1,6 +1,18 @@
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Evolução do Flame Burst
+
+1. X foi preservado em `TechniqueService.executeFlameBurst`: servidor cobra 20, aplica dano base 6 em raio 3 e cooldown 300 ticks.
+2. `141205c`: `StatusData.clearTransformationState` preserva a recarga ao transformar, sem alterar o executor de X.
+3. `5a02b61`: `StatusData.setFlameBurstCooldownTicks` atribui zero no modo de teste; `ResourcesData.consumeReiatsu` dispensa débito no modo gratuito; `BleachCommands` restaura as regras por jogador.
+4. A última suíte passou com 49 regressões e 14 GameTests. O estado «não compilado» abaixo é histórico; não foi adicionado GameTest exclusivo de combate para X nesta revisão.
+
+---
+
 # Estado operacional — 03/10/2026
 
-Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Implementação nova sujeita à homologação manual.
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Feature concluída pelo usuário após `5a02b61`; histórico técnico e arquivos descritos nesta atualização.
 
 ## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
 

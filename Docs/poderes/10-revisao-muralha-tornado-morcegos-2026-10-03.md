@@ -1,3 +1,15 @@
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Evolução desta revisão até o aceite
+
+1. Este relatório registra `57966f8`: Muralha orientada em `TechniqueGeometry`, área/tornado e movimento de morcegos em `RyujinTechniqueService`, verificados em integração/regressões.
+2. O usuário confirmou essa entrega. `5a02b61` preservou combate e aumentou apenas a densidade da Muralha: 240 amostras × 5 chamas a cada dois ticks.
+3. A etapa final acrescentou geometrias longas de Ryujin, flags em `StatusData`/`ResourcesData` e comandos em `BleachCommands`; detalhes no [relatório 11](11-fechamento-ryujin-comandos-modelos-2026-10-03.md).
+4. O aceite final encerrou a feature. Os 45/11 testes abaixo permanecem resultados desta etapa, não da entrega final.
+
+---
+
 # Revisão após teste em jogo — 03/10/2026
 
 Branch: `Feature-Poderes-bankais`. Base: commit `141205c`.

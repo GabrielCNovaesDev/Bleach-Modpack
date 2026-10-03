@@ -1,3 +1,15 @@
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Desdobramentos da entrega inicial
+
+1. Este relatório corresponde a `141205c`: novo runtime/áreas/enxame em `RyujinTechniqueService`, cilindro em `TechniqueGeometry`, testes em `RyujinGameTests`, recarga F3 em `StatusData` e preservação por forma/normalização.
+2. `57966f8` substituiu Círculo, corrigiu NoAI por `move(MoverType.SELF, ...)` e ampliou Tornado; características iniciais abaixo não representam o visual final.
+3. `5a02b61` acrescentou comandos contínuos, custos centralizados e modelos geométricos. Contagens de testes abaixo são históricas; a suíte final passou com 49 regressões/14 GameTests.
+4. Feature encerrada pelo usuário após a entrega final; a sequência completa está no histórico técnico vinculado acima.
+
+---
+
 # Histórico da primeira entrega — substituída após teste do usuário
 
 A revisão atual substitui Círculo por Muralha, amplia o Tornado e corrige o movimento dos morcegos. Consulte o [relatório da revisão](10-revisao-muralha-tornado-morcegos-2026-10-03.md). Os números e testes abaixo correspondem somente ao commit inicial.

@@ -1,6 +1,20 @@
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Evolução da migração até o fechamento
+
+1. `TechniqueService.isRyujinJakkaEquipped` exige `ModItems.RYUJIN_JAKKA`; Asauchi mantém combate básico. Servidor escolhe a variante pela forma.
+2. `141205c` integra B/C e preservação de recarga; `57966f8` consolida Muralha/Tornado/morcegos em `RyujinTechniqueService` e geometria em `TechniqueGeometry`.
+3. `5a02b61` troca sprite curto por 14 elementos nos três modelos, com pai compartilhado. UVs usam PNGs de Ryujin existentes; a antiga observação de fallback Asauchi abaixo é histórica. Predicates preservados.
+4. `StatusData`/`ResourcesData` integram testes; autorização de arma/forma continua. `restore` devolve as regras normais sem desfazer a migração.
+5. Rajada vigente: alcance 8 e meia-abertura π/6 (60° totais) no código; os 80° do registro antigo não são o valor atual executado.
+6. Usuário encerrou a feature após `5a02b61`; arquivos e testes completos no histórico técnico.
+
+---
+
 # Estado operacional — 03/10/2026
 
-Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Implementação nova sujeita à homologação manual.
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Feature concluída pelo usuário após `5a02b61`; histórico técnico e arquivos descritos nesta atualização.
 
 ## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
 

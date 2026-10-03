@@ -1,3 +1,19 @@
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Aceite final e mapa técnico
+
+Entrega: `5a02b61`. Após recebê-la, o usuário informou que a feature está concluída. Isso encerra o ciclo; roteiros de conferência abaixo ficam para regressões futuras, sem implementação pendente neste fechamento.
+
+1. `BleachCommands` registra modos por jogador; `mutateTest` sincroniza sem desligar ignição incidentalmente.
+2. `StatusData` aplica cooldown zero nos setters; `ResourcesData` centraliza autorização/débito e dispensa drenos.
+3. `FormModeHandler` usa custo central; `TickHandler` mantém formas gratuitas no saldo zero. Restaurar retoma regras normais sem alterar constantes/JSONs.
+4. `RyujinTechniqueService` substitui áreas/enxames em recast de teste e concentra a Muralha.
+5. Os quatro JSONs de Ryujin corrigem orientação e constroem a katana longa; PNGs preservados.
+6. `MvpRegressionTest`/`RyujinGameTests` verificam estado, parser e comandos reais: 49 regressões/14 GameTests. Aceite geral não constitui medição formal multiplayer.
+
+---
+
 # Ryūjin Jakka — consolidação da feature e ajustes finais
 
 Data: 03/10/2026. Branch exclusiva de entrega: `Feature-Poderes-bankais`.
@@ -17,8 +33,8 @@ Base desta revisão: `57966f8`. Minecraft 1.20.1 / Forge 47.4.10 / Java 17.
    de katana para as três formas, partículas mais concentradas na Muralha.
 
 O usuário confirmou que a entrega `57966f8` funciona bem no jogo. Essa confirmação
-vale para a entrega anterior; a orientação e o visual deste novo modelo ainda precisam
-de homologação no cliente, especialmente nas duas mãos e nas três formas.
+vale para a entrega anterior; a orientação e o visual deste novo modelo foram entregues para
+homologação no cliente; posteriormente o usuário encerrou a feature.
 
 ## Kit vigente em modo normal
 
@@ -104,7 +120,7 @@ Executado: `gradlew.bat --offline --no-daemon check build runGameTestServer`.
 - Os testes anteriores de geometria, movimento/ataque dos morcegos, duração da
   Muralha, variantes por forma e cooldown do Corte continuam passando.
 
-Teste automatizado de modelo não confirma pegada visual no cliente. Próxima homologação:
+Teste automatizado de modelo não confirma pegada visual no cliente. Roteiro preservado para regressões futuras após o aceite final:
 
 1. Comparar com Asauchi em primeira/terceira pessoa, mão direita/esquerda e offhand;
    verificar cabo na mão, comprimento, inventário, item no chão e moldura.

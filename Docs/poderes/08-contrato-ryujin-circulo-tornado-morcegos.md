@@ -1,3 +1,15 @@
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Rastreabilidade do contrato encerrado
+
+1. `141205c`: roteamento B/C em `TechniqueService`, runtime em `RyujinTechniqueService`, recarga F3 e preservação de cooldown em `StatusData`. Corte: dano 48 e 1.200 ticks.
+2. `57966f8`: Círculo substituído por Muralha; `wallBounds/intersectsWall` tratam o volume orientado. `tornadoAngle` define a fase horária; `tickSwarm` aplica movimento com colisão e alvo hostil.
+3. `5a02b61`: flags centralizadas em `StatusData`/`ResourcesData`, comandos em `BleachCommands`, integração em forma/tick, geometrias de katana e 1.200 partículas por emissão da Muralha.
+4. O usuário concluiu a feature. Tabelas abaixo são o estado vigente normal; overrides não reescrevem constantes. Roteiros ficam para regressões futuras.
+
+---
+
 # Contrato atual — Ryūjin Jakka
 
 Atualizado em 03/10/2026. Branch de entrega: `Feature-Poderes-bankais`.
@@ -7,7 +19,7 @@ Este contrato substitui o plano anterior de Leque médio, Círculo Bankai e Mura
 Essas propostas ficam como histórico, não como tarefas deste ciclo.
 Revisão após teste do usuário: Círculo substituído por Muralha; Tornado ampliado; morcegos corrigidos. O usuário autorizou implementar o novo conjunto, manter o Corte destrutivo,
 restaurar sua recarga para um minuto e aumentar seu dano base para 48.
-Os números das três habilidades novas são valores iniciais de protótipo, sujeitos a teste.
+Os números das três habilidades novas são os valores vigentes da feature concluída pelo usuário.
 
 ## Slots e requisitos
 
@@ -185,7 +197,7 @@ Nunca substituir esse contrato por um `setBlock(Blocks.FIRE)` simples.
 O estado de compilação/testes é registrado no relatório deste ciclo. Implementação e
 teste automatizado não equivalem a homologação visual ou multiplayer.
 
-Roteiro manual obrigatório:
+Roteiro de referência para regressões futuras da feature concluída:
 
 1. H/N preservados em Selada, Shikai e Bankai; Asauchi recusa o kit.
 2. B base forma muralha 16 × 2 × 15, permanece fixa por 100 ticks, causa dano de contato/knockback e exclui fora/aliado.

@@ -1,6 +1,19 @@
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Divergências resolvidas após o snapshot
+
+1. A auditoria antiga tratou um snapshot sem Git verificável. Esta sessão conferiu os commits `141205c`, `57966f8` e `5a02b61`; não atribui testes retroativamente ao snapshot.
+2. `TechniqueService` consolidou slots B Muralha/Tornado e C Morcegos/Corte; constantes do Corte: dano 48/custo 45/1.200 ticks.
+3. `StatusData`, `FormModeHandler` e `ProgressionService` preservam cooldown ao limpar efeitos de transformação.
+4. `RyujinTechniqueService`/`TechniqueGeometry` corrigiram voo, parede orientada e espiral horária; JSONs de Ryujin corrigiram orientação/forma da espada.
+5. `BleachCommands`, `ResourcesData` e `StatusData` fornecem overrides testados. Protocolo/schema preservados. Feature concluída; a auditoria antiga não é lista atual de pendências.
+
+---
+
 # Estado operacional — 03/10/2026
 
-Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Implementação nova sujeita à homologação manual.
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Feature concluída pelo usuário após `5a02b61`; histórico técnico e arquivos descritos nesta atualização.
 
 ## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
 
