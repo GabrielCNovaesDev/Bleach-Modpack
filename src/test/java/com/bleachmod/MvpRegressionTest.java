@@ -7,6 +7,7 @@ import com.bleachmod.common.quest.objectives.*;
 import com.bleachmod.common.quest.rewards.*;
 import com.bleachmod.common.evolution.*;
 import com.bleachmod.common.ProgressionService;
+import com.bleachmod.client.hud.HudLayout;
 import com.google.gson.*;
 import net.minecraft.nbt.CompoundTag;
 import java.util.*;
@@ -180,6 +181,18 @@ public final class MvpRegressionTest {
             provider.getData().getResources().addTrainingPoints(321);provider.invalidate();
             PlayerProvider replacement=new PlayerProvider();replacement.deserializeNBT(provider.serializeNBT());
             eq(321F,replacement.getData().getResources().getTrainingPoints());
+        });
+        test("HUD panel remains compact across GUI widths",()->{
+            HudLayout.Panel narrow=HudLayout.panel(339,189), normal=HudLayout.panel(509,189), wide=HudLayout.panel(1017,189);
+            yes(narrow.width()<normal.width());yes(normal.width()<wide.width());
+            yes(narrow.width()<=339*.60F);yes(normal.width()<=509*.60F);yes(wide.width()<1017*.35F);
+            yes(normal.x()>0);yes(normal.y()>0);
+        });
+        test("HUD information stays beside or above the hotbar",()->{
+            HudLayout.Point beside=HudLayout.information(509,189,110,31);
+            yes(beside.x()+110<=509/2-91);yes(beside.y()+31<=189);
+            HudLayout.Point above=HudLayout.information(320,180,110,31);
+            eq(6,above.x());yes(above.y()+31<=180-22-6);
         });
         test("client form snapshot cannot overwrite logical server snapshot",()->{
             var initial=FormRegistry.parse(forms().toString());FormRegistry.installServer(initial);

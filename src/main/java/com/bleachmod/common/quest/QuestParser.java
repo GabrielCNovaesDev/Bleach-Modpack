@@ -69,22 +69,40 @@ public final class QuestParser {
     private static QuestObjective parseObjective(JsonObject json) {
         if (json.get("count").getAsInt() < 1 || json.get("count").getAsInt() > 10000)
             throw new IllegalArgumentException("Objective count must be 1..10000");
-        if (json.has("spawn") && !"NATURAL".equalsIgnoreCase(json.get("spawn").getAsString()))
-            throw new IllegalArgumentException("QUEST spawning is not supported in this MVP; use NATURAL");
-        if (json.has("count_mode") && !"ANY_MATCHING".equalsIgnoreCase(json.get("count_mode").getAsString()))
-            throw new IllegalArgumentException("Use ANY_MATCHING with NATURAL");
-        String id = json.has("entity") ? json.get("entity").getAsString() : json.get("item").getAsString();
-        if (!id.matches("#?[a-z0-9_.-]+:[a-z0-9_./-]+")) throw new IllegalArgumentException("Invalid resource ID: " + id);
+
+        String id = json.has("entity")
+                ? json.get("entity").getAsString()
+                : json.get("item").getAsString();
+
+        if (!id.matches("#?[a-z0-9_.-]+:[a-z0-9_./-]+"))
+            throw new IllegalArgumentException("Invalid resource ID: " + id);
+
         String type = json.get("type").getAsString().toUpperCase(java.util.Locale.ROOT);
+
         return switch (type) {
             case "KILL" -> new KillObjective(
                     json.get("entity").getAsString(),
                     json.get("count").getAsInt(),
-                    json.has("spawn") ? KillObjective.SpawnMode.valueOf(json.get("spawn").getAsString().toUpperCase()) : KillObjective.SpawnMode.NATURAL,
-                    json.has("count_mode") ? KillObjective.CountMode.valueOf(json.get("count_mode").getAsString().toUpperCase()) : KillObjective.CountMode.ANY_MATCHING
+                    json.has("spawn")
+                            ? KillObjective.SpawnMode.valueOf(
+                            json.get("spawn").getAsString().toUpperCase()
+                    )
+                            : KillObjective.SpawnMode.NATURAL,
+                    json.has("count_mode")
+                            ? KillObjective.CountMode.valueOf(
+                            json.get("count_mode").getAsString().toUpperCase()
+                    )
+                            : KillObjective.CountMode.ANY_MATCHING
             );
-            case "ITEM" -> new ItemObjective(json.get("item").getAsString(), json.get("count").getAsInt());
-            default -> throw new IllegalArgumentException("Unsupported objective type: " + type);
+
+            case "ITEM" -> new ItemObjective(
+                    json.get("item").getAsString(),
+                    json.get("count").getAsInt()
+            );
+
+            default -> throw new IllegalArgumentException(
+                    "Unsupported objective type: " + type
+            );
         };
     }
 

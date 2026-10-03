@@ -37,3 +37,4 @@ Write-Host "Using JAVA_HOME=$javaHome"
 exit $LASTEXITCODE
 
 # .\build-forge.ps1 para rodar
+# ./gradlew runClient

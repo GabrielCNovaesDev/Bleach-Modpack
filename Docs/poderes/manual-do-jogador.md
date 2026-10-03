@@ -72,7 +72,7 @@ O slot C executa um corte instantâneo de até 100 blocos, iniciado no primeiro 
 
 - Notificações são enfileiradas com limite para evitar acúmulo.
 
-- HUD de recursos usa o painel conceitual `bleach_hud_concept.png` em escala 0.45×, com três barras empilhadas: **Vida** (substitui os corações vanilla), **Reiatsu** e **Transformação** (progresso da carga do R). Spiritual Points e o estágio da Zanpakutō ficam dentro da barra de Transformação. Os corações vanilla somem quando o personagem é criado; fome, hotbar, XP e vignette continuam do Minecraft.
+- HUD de recursos usa um painel compacto e responsivo no canto superior esquerdo, com três barras empilhadas: **Vida** (substitui os corações vanilla), **Reiatsu** e **Transformação** (progresso da carga do R). Reiatsu numérica, alvo/estágio e Spiritual Points aparecem no canto inferior esquerdo, próximos à hotbar. Os corações vanilla somem quando o personagem é criado; fome, hotbar, XP e vignette continuam do Minecraft.
 
 ## 4. Progressão em mundos novos
 

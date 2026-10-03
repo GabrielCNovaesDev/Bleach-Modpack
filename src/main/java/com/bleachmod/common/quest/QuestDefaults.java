@@ -47,7 +47,7 @@ public final class QuestDefaults {
         writeQuest(npcFolder.resolve("ichigo_test.json"), npcKillQuest("ichigo", "bleachmod:hollow", 2));
         writeQuest(npcFolder.resolve("orihime_test.json"), npcItemQuest("orihime", "minecraft:apple", 3));
         writeQuest(npcFolder.resolve("uryuu_test.json"), npcKillQuest("uryuu", "minecraft:skeleton", 3));
-        writeQuest(npcFolder.resolve("rukia_test.json"), npcKillQuest("rukia", "minecraft:zombie", 3));
+        writeQuest(npcFolder.resolve("rukia_test.json"), npcBossQuest("rukia", "bleachmod:hollow_boss"));
         writeQuest(npcFolder.resolve("byakuya_test.json"), npcKillQuest("byakuya", "minecraft:spider", 4));
         writeQuest(npcFolder.resolve("urahara_test.json"), npcItemQuest("urahara", "minecraft:paper", 4));
         writeQuest(npcFolder.resolve("ulquiorra_test.json"), npcKillQuest("ulquiorra", "minecraft:enderman", 3));
@@ -146,6 +146,22 @@ public final class QuestDefaults {
         quest.setCategory("npc_test");
         quest.setQuestGiver(npcId);
         quest.getRewards().add(new TpsReward(100));
+        return quest;
+    }
+
+    private static Quest npcBossQuest(String npcId, String entityId) {
+        Quest quest = npcQuest(npcId);
+
+        quest.setTitle("bleachmod.quest.substitute_in_action.name");
+        quest.setDescription("bleachmod.quest.substitute_in_action.desc");
+
+        quest.getObjectives().add(new KillObjective(
+                entityId,
+                1,
+                KillObjective.SpawnMode.QUEST,
+                KillObjective.CountMode.QUEST_SPAWNED_ONLY
+        ));
+
         return quest;
     }
 }
