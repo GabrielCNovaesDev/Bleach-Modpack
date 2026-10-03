@@ -16,6 +16,26 @@ import java.util.*;
 public final class MvpRegressionTest {
     private static int count;
     public static void main(String[] args) {
+        test("oriented wall rejects behind width height and diagonal query corners", () -> {
+            var origin = net.minecraft.world.phys.Vec3.ZERO;
+            var forward = new net.minecraft.world.phys.Vec3(0, 0, 1);
+            yes(com.bleachmod.common.technique.TechniqueGeometry.intersectsWall(origin, forward, 16, 2, 15,
+                    new net.minecraft.world.phys.AABB(-0.3, 0, 15.9, 0.3, 2, 16.5)));
+            for (var box : List.of(new net.minecraft.world.phys.AABB(2, 0, 2, 3, 2, 3),
+                    new net.minecraft.world.phys.AABB(0, 16, 2, 0.5, 17, 3),
+                    new net.minecraft.world.phys.AABB(0, 0, -2, 0.5, 2, -1))) {
+                yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsWall(origin, forward, 16, 2, 15, box));
+            }
+            var diagonal = new net.minecraft.world.phys.Vec3(1, 0, 1).normalize();
+            yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsWall(origin, diagonal, 16, 2, 15,
+                    new net.minecraft.world.phys.AABB(8, 0, 0, 8.5, 2, 0.5)));
+        });
+        test("tornado phase advances clockwise in Minecraft horizontal coordinates", () -> {
+            double before = com.bleachmod.common.technique.TechniqueGeometry.tornadoAngle(0, 0, 0);
+            double after = com.bleachmod.common.technique.TechniqueGeometry.tornadoAngle(1, 0, 0);
+            yes(after > before);
+            yes(Math.sin(after) > Math.sin(before));
+        });
         test("technique cooldowns survive transformation and count down", () -> {
             StatusData status = new StatusData();
             status.setTechniqueSlot1CooldownTicks(100);

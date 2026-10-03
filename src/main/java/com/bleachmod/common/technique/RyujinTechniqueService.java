@@ -8,7 +8,6 @@ import com.bleachmod.common.network.NetworkHandler;
 import com.bleachmod.common.network.SyncHelper;
 import com.bleachmod.common.network.s2c.ActionFeedbackS2C;
 import com.bleachmod.entity.QuestNpcEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +16,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -40,14 +41,15 @@ import java.util.UUID;
 /** Server-only runtime. No particles, areas or summons are serialized into player progression. */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public final class RyujinTechniqueService {
-    public static final double CIRCLE_RADIUS = 6;
-    public static final int CIRCLE_DURATION = 80;
-    public static final float CIRCLE_COST = 30;
-    public static final float CIRCLE_DAMAGE = 12;
-    public static final float CIRCLE_PERIODIC_DAMAGE = 1;
-    public static final int CIRCLE_COOLDOWN = 200;
-    public static final double TORNADO_RADIUS = 5;
-    public static final double TORNADO_HEIGHT = 8;
+    public static final double WALL_LENGTH = 16;
+    public static final double WALL_WIDTH = 2;
+    public static final double WALL_HEIGHT = 15;
+    public static final int WALL_DURATION = 100;
+    public static final float WALL_COST = 40;
+    public static final float WALL_DAMAGE = 18;
+    public static final int WALL_COOLDOWN = 400;
+    public static final double TORNADO_RADIUS = 6;
+    public static final double TORNADO_HEIGHT = 10;
     public static final int TORNADO_DURATION = 200;
     public static final float TORNADO_COST = 40;
     public static final float TORNADO_DAMAGE = 2;
@@ -75,13 +77,15 @@ public final class RyujinTechniqueService {
     private static final class Area {
         final boolean tornado;
         final Vec3 origin;
+        final Vec3 direction;
         final long expiresAt;
         final Map<UUID, Long> nextDamage = new HashMap<>();
         int age;
-        Area(boolean tornado, Vec3 origin, long now) {
+        Area(boolean tornado, Vec3 origin, Vec3 direction, long now) {
             this.tornado = tornado;
             this.origin = origin;
-            this.expiresAt = now + (tornado ? TORNADO_DURATION : CIRCLE_DURATION);
+            this.direction = direction;
+            this.expiresAt = now + (tornado ? TORNADO_DURATION : WALL_DURATION);
         }
     }
 
@@ -124,18 +128,20 @@ public final class RyujinTechniqueService {
 
     public static void executeArea(ServerPlayer player, PlayerData data) {
         boolean tornado = bankai(data);
-        float cost = tornado ? TORNADO_COST : CIRCLE_COST;
+        float cost = tornado ? TORNADO_COST : WALL_COST;
         if (!ready(player, data, data.getStatus().getTechniqueSlot3CooldownTicks(), cost)) return;
         Runtime runtime = ACTIVE.computeIfAbsent(player.getUUID(), id -> new Runtime(player));
         if (runtime.area != null) { feedback(player, "effect_active"); return; }
         if (!data.getResources().consumeReiatsu(cost)) return;
-        runtime.area = new Area(tornado, player.position(), runtime.level.getGameTime());
-        data.getStatus().setTechniqueSlot3CooldownTicks(tornado ? TORNADO_COOLDOWN : CIRCLE_COOLDOWN);
-        if (!tornado) damageArea(runtime, player.position(), CIRCLE_DAMAGE, 3);
-        drawArea(runtime, player.position());
+        Vec3 direction = Vec3.directionFromRotation(0, player.getYRot()).normalize();
+        Vec3 origin = tornado ? player.position() : player.position().add(direction);
+        runtime.area = new Area(tornado, origin, direction, runtime.level.getGameTime());
+        data.getStatus().setTechniqueSlot3CooldownTicks(tornado ? TORNADO_COOLDOWN : WALL_COOLDOWN);
+        if (!tornado) damageArea(runtime, origin, WALL_DAMAGE, 3);
+        drawArea(runtime, origin);
         runtime.level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT,
                 player.getSoundSource(), 0.8F, tornado ? 0.7F : 1.0F);
-        feedback(player, tornado ? "flame_tornado" : "flame_circle");
+        feedback(player, tornado ? "flame_tornado" : "flame_wall");
         SyncHelper.resources(player);
     }
 
@@ -184,19 +190,27 @@ public final class RyujinTechniqueService {
 
     private static void damageArea(Runtime runtime, Vec3 center, float damage, int fireSeconds) {
         Area area = runtime.area;
-        double radius = area.tornado ? TORNADO_RADIUS : CIRCLE_RADIUS;
-        double below = area.tornado ? 0 : 1;
-        double above = area.tornado ? TORNADO_HEIGHT : 2;
+        double radius = TORNADO_RADIUS;
         long now = runtime.level.getGameTime();
-        AABB box = new AABB(center.x - radius, center.y - below, center.z - radius,
-                center.x + radius, center.y + above, center.z + radius);
+        AABB box = area.tornado ? new AABB(center.x - radius, center.y, center.z - radius,
+                center.x + radius, center.y + TORNADO_HEIGHT, center.z + radius)
+                : TechniqueGeometry.wallBounds(center, area.direction, WALL_LENGTH, WALL_WIDTH, WALL_HEIGHT);
         for (LivingEntity target : runtime.level.getEntitiesOfClass(LivingEntity.class, box,
                 entity -> targetAllowed(runtime.owner, entity))) {
-            if (!TechniqueGeometry.intersectsCylinder(center, radius, below, above, target.getBoundingBox())
+            boolean inside = area.tornado
+                    ? TechniqueGeometry.intersectsCylinder(center, radius, 0, TORNADO_HEIGHT, target.getBoundingBox())
+                    : TechniqueGeometry.intersectsWall(center, area.direction, WALL_LENGTH, WALL_WIDTH,
+                            WALL_HEIGHT, target.getBoundingBox());
+            if (!inside
                     || area.nextDamage.getOrDefault(target.getUUID(), Long.MIN_VALUE) > now
                     || !runtime.owner.hasLineOfSight(target)) continue;
-            area.nextDamage.put(target.getUUID(), now + 10);
-            target.hurt(runtime.owner.damageSources().playerAttack(runtime.owner), damage);
+            area.nextDamage.put(target.getUUID(), now + (area.tornado ? 10 : 20));
+            boolean hurt = target.hurt(runtime.owner.damageSources().playerAttack(runtime.owner), damage);
+            if (!area.tornado && hurt && target instanceof Mob) {
+                Vec3 side = new Vec3(-area.direction.z, 0, area.direction.x);
+                double sign = target.position().subtract(center).dot(side) < 0 ? -1 : 1;
+                target.knockback(0.25, -side.x * sign, -side.z * sign);
+            }
             target.setSecondsOnFire(fireSeconds);
         }
         area.nextDamage.entrySet().removeIf(entry -> entry.getValue() < now);
@@ -205,31 +219,25 @@ public final class RyujinTechniqueService {
     private static void drawArea(Runtime runtime, Vec3 center) {
         Area area = runtime.area;
         if (area.tornado) {
-            // 32 packets / two ticks per caster, independent of damage sampling.
-            for (int i = 0; i < 32; i++) {
-                double height = TORNADO_HEIGHT * i / 31.0;
-                double radius = 1 + 4 * height / TORNADO_HEIGHT;
-                double angle = area.age * 0.25 + i * 0.65;
-                runtime.level.sendParticles(ParticleTypes.FLAME, center.x + Math.cos(angle) * radius,
-                        center.y + height, center.z + Math.sin(angle) * radius, 2, 0.1, 0.1, 0.1, 0.01);
+            // Two clockwise helices (viewed from above), with actual tangential particle velocity.
+            for (int arm = 0; arm < 2; arm++) for (int i = 0; i < 48; i++) {
+                double height = TORNADO_HEIGHT * i / 47.0;
+                double radius = 1 + (TORNADO_RADIUS - 1) * height / TORNADO_HEIGHT;
+                double angle = TechniqueGeometry.tornadoAngle(area.age, i, arm);
+                double x = center.x + Math.cos(angle) * radius;
+                double z = center.z + Math.sin(angle) * radius;
+                runtime.level.sendParticles(ParticleTypes.FLAME, x, center.y + height, z,
+                        0, -Math.sin(angle), 0.18, Math.cos(angle), 0.14);
+                if (i % 3 == 0) runtime.level.sendParticles(ParticleTypes.FLAME, x, center.y + height,
+                        z, 3, 0.18, 0.15, 0.18, 0.02);
             }
         } else {
-            // Local floor lookup supports caves and roofs without changing blocks.
-            for (int i = 0; i < 40; i++) {
-                double angle = i * Math.PI * 2 / 40;
-                double radius = i % 2 == 0 ? CIRCLE_RADIUS : CIRCLE_RADIUS * 0.5;
-                BlockPos pos = BlockPos.containing(center.x + Math.cos(angle) * radius,
-                        center.y, center.z + Math.sin(angle) * radius);
-                for (int offset = 2; offset >= -2; offset--) {
-                    BlockPos floor = pos.offset(0, offset, 0);
-                    if (!runtime.level.hasChunkAt(floor)) break;
-                    if (runtime.level.getBlockState(floor).isCollisionShapeFullBlock(runtime.level, floor)
-                            && runtime.level.getBlockState(floor.above()).isAir()) {
-                        runtime.level.sendParticles(ParticleTypes.FLAME, floor.getX() + 0.5,
-                                floor.getY() + 1.15, floor.getZ() + 0.5, 3, 0.15, 0.1, 0.15, 0.01);
-                        break;
-                    }
-                }
+            // Fixed vertical sheet: 16 x 2 x 15. Samples never apply damage.
+            for (int along = 0; along < 16; along++) for (int height = 0; height < 15; height += 2) {
+                Vec3 point = center.add(area.direction.scale(along + 0.5));
+                runtime.level.sendParticles(ParticleTypes.FLAME, point.x, center.y + height + 0.5,
+                        point.z, 3, Math.abs(area.direction.z) * 0.8 + 0.12, 0.45,
+                        Math.abs(area.direction.x) * 0.8 + 0.12, 0.015);
             }
         }
     }
@@ -240,7 +248,8 @@ public final class RyujinTechniqueService {
         swarm.bats.removeIf(bat -> !bat.isAlive() || bat.isRemoved());
         if (now >= swarm.expiresAt || swarm.bats.isEmpty()) { clearSwarm(runtime); return; }
         List<Mob> targets = runtime.level.getEntitiesOfClass(Mob.class,
-                runtime.owner.getBoundingBox().inflate(8), target -> targetAllowed(runtime.owner, target)
+                runtime.owner.getBoundingBox().inflate(8), target -> target instanceof Enemy
+                        && targetAllowed(runtime.owner, target)
                         && runtime.owner.hasLineOfSight(target));
         for (int i = 0; i < swarm.bats.size(); i++) {
             Bat bat = swarm.bats.get(i);
@@ -248,15 +257,22 @@ public final class RyujinTechniqueService {
             double angle = i * Math.PI * 2 / BAT_COUNT + now * 0.05;
             Vec3 goal = target == null ? runtime.owner.position().add(Math.cos(angle) * 1.5, 1.5, Math.sin(angle) * 1.5)
                     : target.getBoundingBox().getCenter();
-            Vec3 motion = goal.subtract(bat.position());
             if (bat.distanceToSqr(runtime.owner) > 24 * 24) {
                 Vec3 home = runtime.owner.position().add(0, 1.5, 0);
                 if (runtime.level.noCollision(bat, bat.getBoundingBox().move(home.subtract(bat.position())))) {
                     bat.teleportTo(home.x, home.y, home.z);
                 }
             }
+            Vec3 motion = goal.subtract(bat.position());
             Vec3 velocity = motion.lengthSqr() < 0.01 ? Vec3.ZERO : motion.normalize().scale(Math.min(0.35, motion.length()));
-            bat.setDeltaMovement(runtime.level.noCollision(bat, bat.getBoundingBox().move(velocity)) ? velocity : Vec3.ZERO);
+            // NoAI mobs do not run normal authoritative travel. Move explicitly, using vanilla collision.
+            bat.setDeltaMovement(Vec3.ZERO);
+            bat.move(MoverType.SELF, velocity);
+            bat.hasImpulse = true;
+            if (velocity.horizontalDistanceSqr() > 0.0001) {
+                bat.setYRot((float) Math.toDegrees(Math.atan2(-velocity.x, velocity.z)));
+                bat.setYHeadRot(bat.getYRot());
+            }
             bat.setResting(false);
             if (now % 4 == 0) runtime.level.sendParticles(ParticleTypes.FLAME,
                     bat.getX(), bat.getY() + 0.2, bat.getZ(), 2, 0.1, 0.1, 0.1, 0.01);
@@ -281,11 +297,18 @@ public final class RyujinTechniqueService {
         for (Runtime runtime : new ArrayList<>(ACTIVE.values())) {
             ServerPlayer owner = runtime.owner;
             if (ACTIVE.get(owner.getUUID()) != runtime) continue;
+            tickEffects(owner);
+        }
+    }
+
+    /** Same server runtime tick used by integration tests with FakePlayer fixtures. */
+    public static void tickEffects(ServerPlayer owner) {
+            Runtime runtime = ACTIVE.get(owner.getUUID());
+            if (runtime == null) return;
             PlayerData data = PlayerCapability.get(owner).orElse(null);
             if (data == null || !validOwner(owner, data) || owner.serverLevel() != runtime.level
-                    || owner.getServer().getPlayerList().getPlayer(owner.getUUID()) != owner
                     || !TechniqueService.isRyujinJakkaEquipped(owner)) {
-                clearSwarm(runtime); ACTIVE.remove(owner.getUUID(), runtime); continue;
+                clearSwarm(runtime); ACTIVE.remove(owner.getUUID(), runtime); return;
             }
             if (runtime.area != null) {
                 Area area = runtime.area;
@@ -293,7 +316,7 @@ public final class RyujinTechniqueService {
                 else {
                     area.age++;
                     Vec3 center = area.tornado ? owner.position() : area.origin;
-                    damageArea(runtime, center, area.tornado ? TORNADO_DAMAGE : CIRCLE_PERIODIC_DAMAGE, 2);
+                    damageArea(runtime, center, area.tornado ? TORNADO_DAMAGE : WALL_DAMAGE, area.tornado ? 2 : 3);
                     if (area.age % (area.tornado ? 2 : 4) == 0) drawArea(runtime, center);
                 }
             }
@@ -302,7 +325,6 @@ public final class RyujinTechniqueService {
                 else tickSwarm(runtime);
             }
             if (runtime.area == null && runtime.swarm == null) ACTIVE.remove(owner.getUUID(), runtime);
-        }
     }
 
     private static void clearSwarm(Runtime runtime) {

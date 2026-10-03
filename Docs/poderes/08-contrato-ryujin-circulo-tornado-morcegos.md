@@ -5,7 +5,7 @@ Minecraft 1.20.1, Forge 47.4.10, Java 17, protocolo 2.3, schema de jogador 3.
 
 Este contrato substitui o plano anterior de Leque médio, Círculo Bankai e Muralha.
 Essas propostas ficam como histórico, não como tarefas deste ciclo.
-O usuário autorizou implementar o novo conjunto, manter o Corte destrutivo,
+Revisão após teste do usuário: Círculo substituído por Muralha; Tornado ampliado; morcegos corrigidos. O usuário autorizou implementar o novo conjunto, manter o Corte destrutivo,
 restaurar sua recarga para um minuto e aumentar seu dano base para 48.
 Os números das três habilidades novas são valores iniciais de protótipo, sujeitos a teste.
 
@@ -15,7 +15,7 @@ Os números das três habilidades novas são valores iniciais de protótipo, suj
 | --- | --- | --- |
 | H / 1 | Ignição | Dash de chamas |
 | N / 2 | Rajada curta | Leque de fogo |
-| B / 3 | Círculo de Fogo | Tornado de Chamas |
+| B / 3 | Muralha de Chamas | Tornado de Chamas |
 | C / 4 | Invocação de Morcegos | Corte de Vapor Concentrado |
 
 F1 e F2 mantêm seus executores e valores. X continua sendo Flame Burst, fora dos slots.
@@ -28,43 +28,47 @@ normalização por compras/comandos não reiniciam cooldown. Morte, logout e tro
 dimensão mantêm a política transitória do MVP: limpam cooldowns. Não há persistência
 de cooldown neste ciclo; um minuto significa 1.200 ticks de servidor durante a sessão.
 
-## Círculo de Fogo — B base
+## Muralha de Chamas — B base
 
-| Parâmetro | Protótipo |
+Substitui o Círculo após teste do usuário. A forma base deixou de ser uma área circular.
+
+| Parâmetro | Contrato / protótipo |
 | --- | --- |
-| Centro | Posição corporal no momento da ativação; fica fixo |
-| Raio | 6 blocos |
-| Volume | Cilindro, 1 bloco abaixo e 2 acima da origem |
-| Duração | 80 ticks / 4 segundos |
-| Custo | 30 reiatsu |
-| Cooldown F3 | 200 ticks / 10 segundos |
-| Dano inicial base | 12 por alvo |
-| Dano periódico base | 1 por alvo a cada 10 ticks |
-| Fogo | 3 segundos no impacto inicial; 2 nas reaplicações |
-| Visual | FLAME em anel e pontos internos sobre o chão local |
+| Origem | 1 bloco à frente da posição corporal no cast |
+| Direção | Mira horizontal (yaw); fixa, independentemente do pitch |
+| Comprimento | 16 blocos, confirmado pelo usuário |
+| Largura / altura | 2 / 15 blocos |
+| Duração | 100 ticks / 5 segundos |
+| Custo | 40 reiatsu |
+| Cooldown F3 | 400 ticks / 20 segundos |
+| Dano base por contato | 18 por alvo, no máximo a cada 20 ticks |
+| Knockback em mobs | Força 0,25 para o lado mais próximo da muralha, somente com dano aceito |
+| Fogo | 3 segundos por aplicação |
+| Visual | Paredão vertical temporário de FLAME, 128 amostras a cada 4 ticks |
 
-A geometria usa interseção do hitbox com o cilindro, incluindo contato e borda.
-O dano inicial também arma a trava de 10 ticks para não duplicar dano no tick do cast.
-Alvos que entrarem depois são avaliados durante a duração. Partículas não aplicam dano.
-A busca de chão é limitada a ±2 blocos da origem, não ao topo global do heightmap.
-Não há colocação, substituição ou destruição de blocos.
+Dano, custo e recarga são valores iniciais para o teste da Muralha. O intervalo de 20 ticks
+impede dano por amostra/partícula. O hitbox precisa intersectar o volume orientado de
+16 × 2 × 15; não basta estar na caixa que envolve uma muralha diagonal.
+A muralha fica fixa no ponto do cast por 5 segundos. Ela não bloqueia passagem como
+bloco sólido: quem entra recebe dano, fogo e knockback leve. Não altera terreno.
+Alvos que entrarem depois são avaliados durante a duração. O cast já verifica contato.
 
 ## Tornado de Chamas — B Bankai
 
 | Parâmetro | Protótipo |
 | --- | --- |
 | Centro | Posição atual do jogador, recalculada a cada tick |
-| Raio | 5 blocos |
-| Altura | Da altura dos pés até 8 blocos acima |
+| Raio | 6 blocos |
+| Altura | Da altura dos pés até 10 blocos acima |
 | Duração | 200 ticks / 10 segundos |
 | Custo | 40 reiatsu, uma vez |
 | Cooldown F3 | 300 ticks / 15 segundos |
 | Dano base | 2 por alvo a cada 10 ticks |
 | Fogo | 2 segundos por aplicação |
-| Visual | Somente FLAME, espiral vertical, 32 amostras a cada 2 ticks |
+| Visual | Somente FLAME, duas espirais com 48 amostras cada a cada 2 ticks, movimento horário visto de cima |
 
 A caixa de consulta não é a área final de dano: os cantos fora do cilindro são excluídos.
-Não existe entidade invisível para representar o tornado. O terreno não é alterado.
+Não existe entidade invisível para representar o tornado. O terreno não é alterado. As partículas dirigidas usam count=0, velocidade tangencial 0,14 e componente ascendente; a fase avança 0,3 rad/tick. Além das 96 partículas dirigidas, 32 amostras emitem três chamas densas. São 192 partículas a cada dois ticks, antes 64; o dano não aumenta com a densidade.
 
 ## Invocação de Morcegos — C base
 
@@ -75,16 +79,16 @@ Não existe entidade invisível para representar o tornado. O terreno não é al
 | Duração máxima | 800 ticks / 40 segundos |
 | Custo | 25 reiatsu, uma vez por enxame |
 | Cooldown F4 | 200 ticks / 10 segundos |
-| Busca de alvo | Mobs na caixa de 8 blocos ao redor do proprietário |
+| Busca de alvo | Mobs hostis (interface Enemy) na caixa de 8 blocos ao redor do proprietário |
 | Ataque | Até 1,5 bloco de distância, com linha de visão |
 | Dano base | 2 por alvo a cada 20 ticks, compartilhado pelo enxame |
 | Fogo | 2 segundos por ataque |
 | Visual | FLAME nos morcegos e no impacto |
 
-O controlador servidor substitui a IA de voo/combate vanilla. Os morcegos seguem o
+O controlador servidor substitui a IA de voo/combate vanilla. Bat continua sendo uma entidade vanilla com NoAI; o serviço agora aplica move(MoverType.SELF, deslocamento) com colisão, em vez de depender apenas de setDeltaMovement. Os morcegos seguem o
 proprietário quando não há alvo, com velocidade limitada e checagem de colisão.
 Um morcego distante mais de 24 blocos pode voltar para um ponto livre próximo do dono.
-Morcegos não atacam jogadores, NPCs de quest, aliados nem invocações marcadas.
+Morcegos não atacam mobs passivos, jogadores, NPCs de quest, aliados nem invocações marcadas.
 O dano é travado por alvo para impedir cinco impactos simultâneos sobre a mesma entidade.
 
 Não é possível invocar novamente enquanto algum morcego registrado estiver vivo,
@@ -120,7 +124,7 @@ Os valores anteriores (16 de dano, 0/300 ticks, 30/45°) são histórico substit
 As três técnicas novas usam `playerAttack`: os bônus existentes de Zanjutsu/forma e
 Ignição podem alterar o dano efetivo, e armadura/Resistência podem mitigá-lo.
 Os números das tabelas são dano base, não dano final garantido.
-O Círculo e o Tornado excluem o lançador, NPCs de quest, invocações marcadas, espectadores
+A Muralha e o Tornado excluem o lançador, NPCs de quest, invocações marcadas, espectadores
 e aliados reconhecidos pela equipe vanilla. Contra jogadores também respeitam PvP do
 servidor e `canHarmPlayer`. Esses filtros são política inicial das técnicas novas;
 a revisão geral de F1, F2 e Corte permanece fora desta alteração.
@@ -129,7 +133,7 @@ O dano das novas áreas exige linha de visão a partir do lançador; não atrave
 As áreas e os enxames são memória do servidor, fora do NBT de progressão. Expiram por
 tempo do mundo e são cancelados em morte, logout, troca de dimensão, mudança de forma,
 arma inválida, personagem inválido, unload do mundo e parada do servidor.
-O círculo não acompanha o jogador; o tornado acompanha. A troca de forma cancela ambos
+A muralha não acompanha o jogador; o tornado acompanha. A troca de forma cancela ambos
 sem reiniciar cooldown. O comando `/bleachdev cooldowns clear Player` cancela também
 as novas áreas/enxames, além de limpar os cooldowns e o estado anterior de testes.
 
@@ -155,8 +159,8 @@ teste automatizado não equivalem a homologação visual ou multiplayer.
 Roteiro manual obrigatório:
 
 1. H/N preservados em Selada, Shikai e Bankai; Asauchi recusa o kit.
-2. B base atinge contato/centro/borda, recusa fora/altura/parede/aliado e permanece fixo.
-3. B Bankai acompanha corrida/voo, dura 200 ticks e respeita raio/altura/intervalo.
+2. B base forma muralha 16 × 2 × 15, permanece fixa por 100 ticks, causa dano de contato/knockback e exclui fora/aliado.
+3. B Bankai acompanha corrida/voo, dura 200 ticks, usa raio 6/altura 10 e espiral horária com partículas em movimento.
 4. C base cria 5 morcegos, segue/ataca, recusa duplicação e expira em 800 ticks.
 5. Matar morcegos permite novo cast após cooldown; morte/logout/dimensão não deixam órfãos.
 6. Perda de arma ou forma cancela efeitos; transformar/comprar não libera recarga.

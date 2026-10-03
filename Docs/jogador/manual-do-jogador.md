@@ -34,7 +34,7 @@ Todos podem ser remapeados em Opções → Controles → Bleach.
 | X | Executar Flame Burst / Explosão de chamas |
 | H | F1: Ignição em Selada/Shikai; Dash em Bankai |
 | N | F2: Rajada curta em Selada/Shikai; Leque em Bankai |
-| B | F3: Círculo de Fogo em Selada/Shikai; Tornado em Bankai |
+| B | F3: Muralha de Chamas em Selada/Shikai; Tornado em Bankai |
 | C | F4: Morcegos em Selada/Shikai; Corte de Vapor em Bankai |
 
 A técnica Flame Burst não exige Bankai ativo. Ela custa 20 de reiatsu, possui cooldown de 15 segundos e causa dano em uma área curta ao redor do jogador. O dano base provisório é 6 pontos. A tecla X é remapeável.
@@ -51,16 +51,16 @@ Todas as técnicas do kit exigem Ryūjin Jakka na mão principal. Asauchi não a
 | Dash (H Bankai) | 20 | 4 por alvo, uma vez por cast | 5 s |
 | Rajada (N base) | 15 | 4 inicial; 1/10 ticks no solo | 4 s |
 | Leque (N Bankai) | 25 | 8 inicial; 1/10 ticks no solo | 4 s |
-| Círculo (B base) | 30 | 12 inicial; 1/10 ticks | 10 s |
+| Muralha (B base) | 40 | 18 por contato, no máximo a cada 20 ticks | 20 s |
 | Tornado (B Bankai) | 40 | 2/10 ticks por alvo | 15 s |
 | Morcegos (C base) | 25 | 2/20 ticks por alvo, compartilhado pelo enxame | 10 s + enxame encerrado |
 | Corte de Vapor (C Bankai) | 45 | 48 | 60 s |
 
-**Círculo:** raio 6, centro fixo na posição do cast, altura de 1 abaixo a 2 acima, duração 4 s.
-**Tornado:** raio 5, altura 8, segue o jogador durante 10 s, somente chamas vermelhas FLAME.
-**Morcegos:** 5 entidades vanilla com 4 de vida, seguem e atacam mobs; desaparecem após 40 s.
+**Muralha:** comprimento 16, largura 2, altura 15. Começa 1 bloco à frente do jogador, na direção horizontal da mira, fica fixa por 5 s e aplica knockback leve (0,25) em mobs atingidos.
+**Tornado:** raio 6, altura 10, segue o jogador durante 10 s. Duas espirais horárias vistas de cima, chamas FLAME mais densas e com velocidade tangencial para criar sensação de vento.
+**Morcegos:** 5 entidades vanilla com 4 de vida, seguem com deslocamento controlado pelo servidor e atacam apenas mobs hostis; desaparecem após 40 s.
 O enxame bloqueia outra invocação enquanto algum morcego válido estiver vivo. Espaço bloqueado
-recusa o cast sem cobrar recursos. As três técnicas novas não alteram blocos.
+recusa o cast sem cobrar recursos. Muralha, Tornado e Morcegos não alteram blocos.
 
 As novas áreas exigem linha de visão, excluem o lançador e aliados da mesma equipe e respeitam PvP.
 Morcegos não atacam jogadores nem NPCs de quest. A troca de forma cancela efeitos sem zerar

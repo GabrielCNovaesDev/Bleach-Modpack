@@ -1,0 +1,61 @@
+# Revisão após teste em jogo — 03/10/2026
+
+Branch: `Feature-Poderes-bankais`. Base: commit `141205c`.
+
+## Feedback recebido e alteração
+
+O usuário testou a versão inicial: morcegos eram invocados com chamas, mas ficavam
+parados e não atacavam; Círculo foi rejeitado por ser repetitivo; Tornado funcionava,
+mas precisava de maior imponência. Esses relatos não homologam o conjunto inteiro.
+
+- Círculo removido do slot B base, substituído por Muralha de Chamas.
+- Muralha: 16 blocos de comprimento (confirmado), 2 de largura, 15 de altura,
+  duração de 100 ticks, direção horizontal da mira e origem 1 bloco à frente.
+- Dano base 18 por contato, no máximo a cada 20 ticks por alvo; knockback lateral
+  leve 0,25 em mobs com dano aceito; fogo 3 segundos. Custo 40 e recarga 20 segundos.
+  Esses valores de balanceamento são iniciais para teste.
+- Tornado: raio ampliado de 5 para 6 e altura de 8 para 10, mantendo custo/dano/duração.
+  Duas espirais com 48 amostras cada. Fase avança em sentido horário visto de cima.
+  Partículas dirigidas FLAME têm velocidade tangencial e componente ascendente;
+  192 partículas a cada dois ticks, em vez das 64 anteriores.
+- Morcegos: deslocamento explícito `move(MoverType.SELF, ...)`, com colisão vanilla,
+  substitui depender apenas de velocidade de um Bat com NoAI. Seguem o dono e
+  selecionam apenas mobs hostis (`Enemy`), sem atacar animais/NPCs/jogadores/aliados.
+- Corte continua com 48 de dano base e cooldown 60 segundos; seu executor é preservado.
+- H/N, recargas compartilhadas por slot e limpeza dos runtimes permanecem.
+- Nenhum bloco é colocado ou destruído pelas três técnicas alteradas.
+
+## Verificação
+
+```powershell
+.\gradlew.bat --offline --no-daemon check build runGameTestServer
+```
+
+Windows / Java 17 / Forge 47.4.10. **Build aprovado; 45 regressões e 11 GameTests
+obrigatórios aprovados.** JSONs de recursos e diff conferidos.
+
+Os testes exercitam geometria orientada da Muralha, cantos da caixa envolvente,
+contato, largura/altura/posição atrás, custo/recarga, expiração após 105 ticks,
+movimento real dos morcegos por 40 ticks, dano em hostil e exclusão de animal passivo.
+As posições dos morcegos são comparadas individualmente por UUID, não entre morcegos.
+A regressão da fase verifica o sentido horário em coordenadas horizontais Minecraft.
+
+JAR: `build/libs/bleachmod-0.2.0.jar`.
+Log: `build/ryujin-revision-validation.log`.
+
+## Novo teste manual
+
+1. B Selada/Shikai: observar parede 16 × 2 × 15, fixa por 5 s; testar alvos dentro,
+   fora, acima, atrás e em orientação diagonal; conferir knockback e recarga de 20 s.
+2. B Bankai: observar altura 10/raio 6, densidade e fluxo horário da espiral;
+   verificar movimento com o jogador e que o dano manteve seu intervalo.
+3. C Selada/Shikai: verificar voo/seguimento e ataque a zumbi/Hollow hostil; animal,
+   NPC e jogador não devem virar alvo. Repetir perto de obstáculos.
+4. Confirmar limpeza em morte/logout/dimensão/perda de arma, custo único e enxame único.
+5. Testar com dois clientes e medir impacto de partículas antes de homologar o novo visual.
+
+Build e testes automáticos aprovados não significam homologação visual desta revisão.
+O visual novo e seus valores de balanceamento aguardam retorno do usuário.
+
+Contrato vigente: [Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md).
+Manual único: [jogador](../jogador/manual-do-jogador.md).

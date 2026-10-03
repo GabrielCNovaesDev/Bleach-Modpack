@@ -170,6 +170,6 @@ Consulte o [relatório de correções](planejamento/relatorio-implementacao-mvp-
 
 ## Ciclo Ryūjin Jakka — 03/10/2026
 
-Branch de entrega: Feature-Poderes-bankais; protocolo atual 2.3. B resolve Círculo/Tornado e C resolve Morcegos/Corte. O Corte conserva destruição, alcance 100 e abertura 25°, com dano base 48 e recarga de 60 segundos. As três técnicas novas usam partículas, sem alterar terreno. Oito NPCs e quest_giver já existem como protótipos. O design completo de cinco atributos/vínculo de Zanpakutō ainda não substitui o MVP de sete categorias.
+Branch de entrega: Feature-Poderes-bankais; protocolo atual 2.3. B resolve Muralha/Tornado e C resolve Morcegos/Corte. O Corte conserva destruição, alcance 100 e abertura 25°, com dano base 48 e recarga de 60 segundos. As três técnicas novas usam partículas, sem alterar terreno. Oito NPCs e quest_giver já existem como protótipos. O design completo de cinco atributos/vínculo de Zanpakutō ainda não substitui o MVP de sete categorias.
 
 Contrato e critérios: [Ryūjin atual](poderes/08-contrato-ryujin-circulo-tornado-morcegos.md). Manual único: [jogador](jogador/manual-do-jogador.md). As matrizes anteriores são evidências datadas, não homologação das técnicas novas.

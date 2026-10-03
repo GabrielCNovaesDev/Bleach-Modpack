@@ -1,6 +1,10 @@
+# Revisão após teste — 03/10/2026
+
+Muralha substitui Círculo (16 × 2 × 15, 5 s); Tornado atualizado (raio 6, altura 10, fluxo horário); morcegos corrigidos com movimento servidor e alvo hostil. A implementação inicial do Tornado foi testada pelo usuário; o visual desta revisão aguarda novo teste. Detalhes: [relatório atual](10-revisao-muralha-tornado-morcegos-2026-10-03.md).
+
 # Estado operacional — 03/10/2026
 
-Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Círculo/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Implementação nova sujeita à homologação manual.
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Implementação nova sujeita à homologação manual.
 
 ## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
 

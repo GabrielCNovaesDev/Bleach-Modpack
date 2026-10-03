@@ -1,3 +1,7 @@
+# Histórico da primeira entrega — substituída após teste do usuário
+
+A revisão atual substitui Círculo por Muralha, amplia o Tornado e corrige o movimento dos morcegos. Consulte o [relatório da revisão](10-revisao-muralha-tornado-morcegos-2026-10-03.md). Os números e testes abaixo correspondem somente ao commit inicial.
+
 # Entrega inicial — Círculo, Tornado e Morcegos
 
 Data: 03/10/2026. Branch: `Feature-Poderes-bankais`, criada a partir de

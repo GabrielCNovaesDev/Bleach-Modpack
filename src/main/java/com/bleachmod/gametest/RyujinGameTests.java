@@ -30,6 +30,7 @@ public final class RyujinGameTests {
         player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.RYUJIN_JAKKA.get()));
         BlockPos pos = helper.absolutePos(new BlockPos(1, 3, 1));
         player.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+        player.setYRot(0);
         return player;
     }
     private static PlayerData data(FakePlayer player) {
@@ -39,36 +40,37 @@ public final class RyujinGameTests {
         Zombie target = EntityType.ZOMBIE.create(helper.getLevel());
         target.setNoAi(true);
         target.setNoGravity(true);
+        target.setItemSlot(EquipmentSlot.HEAD, new ItemStack(net.minecraft.world.item.Items.IRON_HELMET));
         target.setPos(position);
         helper.getLevel().addFreshEntity(target);
         return target;
     }
 
     @GameTest(template = "empty")
-    public static void circleHitsOnlyInsideAndChargesOnce(GameTestHelper helper) {
+    public static void wallHitsOnlyInsideAndChargesOnce(GameTestHelper helper) {
         FakePlayer player = player(helper);
         PlayerData data = data(player);
-        Zombie inside = target(helper, player.position().add(2, 0, 0));
-        Zombie outside = target(helper, player.position().add(7, 0, 0));
+        Zombie inside = target(helper, player.position().add(0, 0, 3));
+        Zombie outside = target(helper, player.position().add(3, 0, 3));
         try {
             TechniqueService.executeSlot(player, data, 3);
             helper.assertTrue(inside.getHealth() < 20, "Inside target not damaged");
             helper.assertTrue(outside.getHealth() == 20, "Outside target damaged");
             helper.assertTrue(player.getHealth() == player.getMaxHealth(), "Caster damaged");
-            helper.assertTrue(data.getResources().getCurrentReiatsu() == 70, "Wrong circle debit");
+            helper.assertTrue(data.getResources().getCurrentReiatsu() == 60, "Wrong wall debit");
             TechniqueService.executeSlot(player, data, 3);
-            helper.assertTrue(data.getResources().getCurrentReiatsu() == 70, "Cooldown consumed more reiatsu");
+            helper.assertTrue(data.getResources().getCurrentReiatsu() == 60, "Cooldown consumed more reiatsu");
         } finally { RyujinTechniqueService.cancel(player); inside.discard(); outside.discard(); }
         helper.succeed();
     }
 
     @GameTest(template = "empty")
-    public static void invalidCircleDoesNotDebit(GameTestHelper helper) {
+    public static void invalidWallDoesNotDebit(GameTestHelper helper) {
         FakePlayer player = player(helper);
         PlayerData data = data(player);
         player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.ASAUCHI.get()));
         TechniqueService.executeSlot(player, data, 3);
-        helper.assertTrue(data.getResources().getCurrentReiatsu() == 100, "Asauchi authorized circle");
+        helper.assertTrue(data.getResources().getCurrentReiatsu() == 100, "Asauchi authorized wall");
         player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.RYUJIN_JAKKA.get()));
         data.getResources().setCurrentReiatsu(29);
         TechniqueService.executeSlot(player, data, 3);
@@ -128,5 +130,52 @@ public final class RyujinGameTests {
         helper.assertTrue(data.getResources().getCurrentReiatsu() == 100, "Cooldown charged steam cut");
         helper.assertTrue(data.getStatus().getTechniqueSlot4CooldownTicks() == 1200, "Minute cooldown lost");
         helper.succeed();
+    }
+
+    @GameTest(template = "empty", timeoutTicks = 80)
+    public static void batsActuallyMoveAndAttackHostileMobs(GameTestHelper helper) {
+        FakePlayer player = player(helper);
+        Zombie hostile = target(helper, player.position().add(5, 0, 0));
+        hostile.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(100);
+        hostile.setHealth(100);
+        var cow = EntityType.COW.create(helper.getLevel());
+        cow.setNoAi(true);
+        cow.setNoGravity(true);
+        cow.setPos(player.position().add(1, 0, 0));
+        helper.getLevel().addFreshEntity(cow);
+        TechniqueService.executeSlot(player, data(player), 4);
+        var bats = helper.getLevel().getEntitiesOfClass(Bat.class, player.getBoundingBox().inflate(4),
+                bat -> bat.getPersistentData().hasUUID("bleachmod_flame_bat_owner")
+                        && bat.getPersistentData().getUUID("bleachmod_flame_bat_owner").equals(player.getUUID()));
+        var initialPositions = new java.util.HashMap<UUID, Vec3>();
+        bats.forEach(bat -> initialPositions.put(bat.getUUID(), bat.position()));
+        helper.runAtTickTime(40, () -> {
+            try {
+                helper.assertTrue(bats.stream().anyMatch(bat -> bat.position()
+                                .distanceToSqr(initialPositions.get(bat.getUUID())) > 0.25),
+                        "Summons remain stationary after actual world ticks");
+                helper.assertTrue(hostile.getHealth() < 100, "Hostile mob never attacked");
+                helper.assertTrue(cow.getHealth() == cow.getMaxHealth(), "Passive mob attacked");
+                helper.succeed();
+            } finally { RyujinTechniqueService.cancel(player); hostile.discard(); cow.discard(); }
+        });
+    }
+
+    @GameTest(template = "empty", timeoutTicks = 140)
+    public static void wallExpiresAfterFiveSeconds(GameTestHelper helper) {
+        FakePlayer player = player(helper);
+        TechniqueService.executeSlot(player, data(player), 3);
+        helper.runAtTickTime(105, () -> {
+            Zombie late = target(helper, player.position().add(0, 0, 3));
+            try {
+                RyujinTechniqueService.tickEffects(player);
+                helper.assertTrue(late.getHealth() == 20, "Expired wall damaged a new target");
+                data(player).getStatus().setTechniqueSlot3CooldownTicks(0);
+                TechniqueService.executeSlot(player, data(player), 3);
+                helper.assertTrue(data(player).getResources().getCurrentReiatsu() == 20,
+                        "Expired wall still blocks a new cast");
+                helper.succeed();
+            } finally { RyujinTechniqueService.cancel(player); late.discard(); }
+        });
     }
 }
