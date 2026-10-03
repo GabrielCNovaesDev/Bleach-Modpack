@@ -148,12 +148,19 @@ public class StatusData {
         flameDashHitEntities.clear();
     }
 
-    /** Clears only technique cooldown timers; used by the permission-gated dev command. */
-    public void clearTechniqueCooldowns() {
+    /** Clears technique test state without changing form, reiatsu, ignition or progression. */
+    public void clearTechniqueTestState() {
+        lastActionTick = Long.MIN_VALUE;
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
         techniqueSlot4CooldownTicks = 0;
+        flameDashTicks = 0;
+        flameDashHitEntities.clear();
+        flameBarrageGroundTicks = 0;
+        flameBarrageGroundPositions.clear();
+        flameFanGroundTicks = 0;
+        flameFanGroundPositions.clear();
     }
 
     public void tickTransientState() {

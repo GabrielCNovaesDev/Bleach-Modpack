@@ -15,6 +15,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -64,7 +65,12 @@ public final class BleachCommands {
         root.then(literal("reiatsu").then(literal("fill").then(argument("player",EntityArgument.player())
             .executes(ctx->mutate(ctx,(p,d)->d.getResources().setCurrentReiatsu(d.getResources().getMaxReiatsu()))))));
         root.then(literal("cooldowns").then(literal("clear").then(argument("player",EntityArgument.player())
-            .executes(ctx->mutate(ctx,(p,d)->d.getStatus().clearTechniqueCooldowns())))));
+    .executes(ctx -> mutate(ctx, (p, d) -> {
+        d.getStatus().clearTechniqueTestState();
+        p.setDeltaMovement(Vec3.ZERO);
+        p.hurtMarked = true;
+    })))));
+
         root.then(literal("asauchi").then(literal("give").then(argument("player",EntityArgument.player())
             .executes(ctx->mutate(ctx,(p,d)->{
                 ItemStack stack=new ItemStack(ModItems.ASAUCHI.get());
