@@ -16,6 +16,51 @@ import java.util.*;
 public final class MvpRegressionTest {
     private static int count;
     public static void main(String[] args) {
+        test("technique cooldowns survive transformation and count down", () -> {
+            StatusData status = new StatusData();
+            status.setTechniqueSlot1CooldownTicks(100);
+            status.setTechniqueSlot2CooldownTicks(80);
+            status.setTechniqueSlot3CooldownTicks(300);
+            status.setTechniqueSlot4CooldownTicks(1200);
+            status.setIgnitionActive(true);
+            status.setFlameDashTicks(16);
+            status.clearTransformationState();
+            yes(!status.isIgnitionActive());
+            eq(0, status.getFlameDashTicks());
+            status.tickTransientState();
+            eq(99, status.getTechniqueSlot1CooldownTicks());
+            eq(79, status.getTechniqueSlot2CooldownTicks());
+            eq(299, status.getTechniqueSlot3CooldownTicks());
+            eq(1199, status.getTechniqueSlot4CooldownTicks());
+        });
+        test("technique cooldowns are transient and administrative reset clears slot three", () -> {
+            StatusData status = new StatusData();
+            status.setTechniqueSlot3CooldownTicks(300);
+            status.setTechniqueSlot4CooldownTicks(1200);
+            StatusData loaded = new StatusData();
+            loaded.load(status.save());
+            eq(0, loaded.getTechniqueSlot3CooldownTicks());
+            eq(0, loaded.getTechniqueSlot4CooldownTicks());
+            status.clearTechniqueTestState();
+            eq(0, status.getTechniqueSlot3CooldownTicks());
+            eq(0, status.getTechniqueSlot4CooldownTicks());
+        });
+        test("cylinder rejects enclosing box corners and targets above and below", () -> {
+            var center = net.minecraft.world.phys.Vec3.ZERO;
+            yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 5, 0, 8,
+                    new net.minecraft.world.phys.AABB(4, 1, 4, 4.5, 2, 4.5)));
+            yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 5, 0, 8,
+                    new net.minecraft.world.phys.AABB(0, 8.1, 0, 1, 9, 1)));
+            yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 5, 0, 8,
+                    new net.minecraft.world.phys.AABB(0, -2, 0, 1, -0.1, 1)));
+        });
+        test("cylinder includes contact and intersecting edge hitboxes", () -> {
+            var center = net.minecraft.world.phys.Vec3.ZERO;
+            yes(com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 6, 1, 2,
+                    new net.minecraft.world.phys.AABB(-0.3, 0, -0.3, 0.3, 1.8, 0.3)));
+            yes(com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 6, 1, 2,
+                    new net.minecraft.world.phys.AABB(5.9, 0, 0, 6.5, 1.8, 0.5)));
+        });
         test("cleared tracking replaces old client value",()->{
             PlayerQuestData server=new PlayerQuestData(), client=new PlayerQuestData();
             client.setTrackedQuestId("old"); client.load(server.save());
@@ -121,8 +166,17 @@ public final class MvpRegressionTest {
             JsonObject json=forms();json.getAsJsonObject("shinigami").getAsJsonObject("zanpakuto").getAsJsonObject("forms").getAsJsonObject("shikai").addProperty("energyDrain",-1);
             rejects(()->FormRegistry.parse(json.toString()));
         });
-        test("invalid content cannot spawn quest-owned mobs",()->{
-            JsonObject q=quest().toJson();q.getAsJsonArray("objectives").get(0).getAsJsonObject().addProperty("spawn","QUEST");
+        test("quest-owned spawn modes roundtrip for the existing boss quests",()->{
+            JsonObject q=quest().toJson();
+            JsonObject objective=q.getAsJsonArray("objectives").get(0).getAsJsonObject();
+            objective.addProperty("spawn","QUEST");
+            objective.addProperty("count_mode","QUEST_SPAWNED_ONLY");
+            KillObjective parsed=(KillObjective)QuestParser.parseQuest(q,null).getObjectives().get(0);
+            eq(KillObjective.SpawnMode.QUEST,parsed.getSpawnMode());
+            eq(KillObjective.CountMode.QUEST_SPAWNED_ONLY,parsed.getCountMode());
+        });
+        test("unknown quest spawn modes are rejected",()->{
+            JsonObject q=quest().toJson();q.getAsJsonArray("objectives").get(0).getAsJsonObject().addProperty("spawn","INVALID");
             rejects(()->QuestParser.parseQuest(q,null));
         });
         test("empty objectives rejected",()->{

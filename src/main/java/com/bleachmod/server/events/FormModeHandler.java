@@ -27,7 +27,8 @@ public final class FormModeHandler {
 
     public static void attemptTransform(ServerPlayer player, PlayerData data) {
         transform(player, data, false);
-        data.resetTransientState();
+        data.getResources().setActionCharge(0);
+        data.getStatus().clearTransformationState();
         SyncHelper.full(player);
     }
 
@@ -42,7 +43,8 @@ public final class FormModeHandler {
             return;
         }
         transform(player, data, true);
-        data.resetTransientState();
+        data.getResources().setActionCharge(0);
+        data.getStatus().clearTransformationState();
         SyncHelper.full(player);
     }
 

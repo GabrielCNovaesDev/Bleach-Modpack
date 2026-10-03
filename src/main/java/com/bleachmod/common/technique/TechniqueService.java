@@ -64,15 +64,14 @@ public final class TechniqueService {
 
     public static final int SLOT_4 = 4;
     public static final float STEAM_CUT_COST = 45.0F;
-    /** Temporarily disabled to allow repeated manual testing. */
-    public static final int STEAM_CUT_COOLDOWN_TICKS = 0;
+    public static final int STEAM_CUT_COOLDOWN_TICKS = 60 * 20;
     public static final double STEAM_CUT_RANGE = 100.0D;
     /** 25 degrees total horizontal opening, represented by a 12.5 degree half-angle. */
     public static final double STEAM_CUT_HALF_ANGLE_RADIANS = Math.toRadians(12.5D);
     public static final double STEAM_CUT_MIN_HALF_WIDTH = 0.65D;
     public static final int STEAM_CUT_BELOW_PLAYER_BLOCKS = 15;
     public static final int STEAM_CUT_ABOVE_PLAYER_BLOCKS = 20;
-    public static final float STEAM_CUT_DAMAGE = 16.0F;
+    public static final float STEAM_CUT_DAMAGE = 48.0F;
 
     private TechniqueService() {
     }
@@ -82,6 +81,8 @@ public final class TechniqueService {
             executeSlotOne(player, data);
         } else if (slot == SLOT_2) {
             executeSlotTwo(player, data);
+        } else if (slot == 3) {
+            RyujinTechniqueService.executeArea(player, data);
         } else if (slot == SLOT_4) {
             executeSlotFour(player, data);
         }
@@ -114,7 +115,7 @@ public final class TechniqueService {
             return;
         }
         if (!Reference.FORM_BANKAI.equalsIgnoreCase(data.getCharacter().getActiveForm())) {
-            sendFeedback(player, Component.translatable("message.bleachmod.technique.unavailable"));
+            RyujinTechniqueService.executeBats(player, data);
             return;
         }
         executeConcentratedSteamCut(player, data);

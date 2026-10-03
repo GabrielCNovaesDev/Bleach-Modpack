@@ -12,6 +12,7 @@ public class StatusData {
     private int flameBurstCooldownTicks;
     private int techniqueSlot1CooldownTicks;
     private int techniqueSlot2CooldownTicks;
+    private int techniqueSlot3CooldownTicks;
     private int techniqueSlot4CooldownTicks;
     private int flameDashTicks;
     private boolean ignitionActive;
@@ -80,6 +81,29 @@ public class StatusData {
 
     public int getTechniqueSlot4CooldownTicks() {
         return techniqueSlot4CooldownTicks;
+    }
+
+    public int getTechniqueSlot3CooldownTicks() {
+        return techniqueSlot3CooldownTicks;
+    }
+
+    public void setTechniqueSlot3CooldownTicks(int ticks) {
+        techniqueSlot3CooldownTicks = Math.max(0, ticks);
+    }
+
+    /** Changing form cancels active effects but must not allow a cooldown bypass. */
+    public void clearTransformationState() {
+        int burst = flameBurstCooldownTicks;
+        int slot1 = techniqueSlot1CooldownTicks;
+        int slot2 = techniqueSlot2CooldownTicks;
+        int slot3 = techniqueSlot3CooldownTicks;
+        int slot4 = techniqueSlot4CooldownTicks;
+        clearTransientState();
+        flameBurstCooldownTicks = burst;
+        techniqueSlot1CooldownTicks = slot1;
+        techniqueSlot2CooldownTicks = slot2;
+        techniqueSlot3CooldownTicks = slot3;
+        techniqueSlot4CooldownTicks = slot4;
     }
 
     public void setTechniqueSlot4CooldownTicks(int ticks) {
@@ -154,6 +178,7 @@ public class StatusData {
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
+        techniqueSlot3CooldownTicks = 0;
         techniqueSlot4CooldownTicks = 0;
         flameDashTicks = 0;
         flameDashHitEntities.clear();
@@ -164,6 +189,9 @@ public class StatusData {
     }
 
     public void tickTransientState() {
+        if (techniqueSlot3CooldownTicks > 0) {
+            techniqueSlot3CooldownTicks--;
+        }
         if (flameBurstCooldownTicks > 0) {
             flameBurstCooldownTicks--;
         }
@@ -194,6 +222,7 @@ public class StatusData {
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
+        techniqueSlot3CooldownTicks = 0;
         techniqueSlot4CooldownTicks = 0;
         flameBarrageGroundTicks = 0;
         flameBarrageGroundPositions.clear();
@@ -223,6 +252,7 @@ public class StatusData {
         flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
+        techniqueSlot3CooldownTicks = 0;
         techniqueSlot4CooldownTicks = 0;
         flameBarrageGroundTicks = 0;
         flameBarrageGroundPositions.clear();

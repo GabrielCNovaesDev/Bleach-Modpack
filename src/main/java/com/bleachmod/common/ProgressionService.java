@@ -24,7 +24,8 @@ public final class ProgressionService {
             data.getCharacter().setActiveForm("zanpakuto","sealed");
         if (!TransformationsHelper.isSelectable(data,"zanpakuto",data.getCharacter().getSelectedForm()))
             data.getCharacter().setSelectedForm("zanpakuto","sealed");
-        data.resetTransientState();
+        data.getResources().setActionCharge(0);
+        data.getStatus().clearTransformationState();
     }
     public static void normalize(ServerPlayer player, PlayerData data) {
         normalize(data);

@@ -1,0 +1,174 @@
+# Contrato atual — Ryūjin Jakka
+
+Atualizado em 03/10/2026. Branch de entrega: `Feature-Poderes-bankais`.
+Minecraft 1.20.1, Forge 47.4.10, Java 17, protocolo 2.3, schema de jogador 3.
+
+Este contrato substitui o plano anterior de Leque médio, Círculo Bankai e Muralha.
+Essas propostas ficam como histórico, não como tarefas deste ciclo.
+O usuário autorizou implementar o novo conjunto, manter o Corte destrutivo,
+restaurar sua recarga para um minuto e aumentar seu dano base para 48.
+Os números das três habilidades novas são valores iniciais de protótipo, sujeitos a teste.
+
+## Slots e requisitos
+
+| Tecla / slot | Selada / Shikai | Bankai |
+| --- | --- | --- |
+| H / 1 | Ignição | Dash de chamas |
+| N / 2 | Rajada curta | Leque de fogo |
+| B / 3 | Círculo de Fogo | Tornado de Chamas |
+| C / 4 | Invocação de Morcegos | Corte de Vapor Concentrado |
+
+F1 e F2 mantêm seus executores e valores. X continua sendo Flame Burst, fora dos slots.
+O cliente envia apenas o slot pelo pacote já existente. O servidor resolve a variante.
+As técnicas novas exigem personagem Shinigami criado, vivo, não espectador, grupo
+`zanpakuto`, forma válida e Ryūjin Jakka na mão principal. Asauchi não autoriza o kit.
+
+Cooldowns são compartilhados entre variantes do mesmo slot. Transformações e
+normalização por compras/comandos não reiniciam cooldown. Morte, logout e troca de
+dimensão mantêm a política transitória do MVP: limpam cooldowns. Não há persistência
+de cooldown neste ciclo; um minuto significa 1.200 ticks de servidor durante a sessão.
+
+## Círculo de Fogo — B base
+
+| Parâmetro | Protótipo |
+| --- | --- |
+| Centro | Posição corporal no momento da ativação; fica fixo |
+| Raio | 6 blocos |
+| Volume | Cilindro, 1 bloco abaixo e 2 acima da origem |
+| Duração | 80 ticks / 4 segundos |
+| Custo | 30 reiatsu |
+| Cooldown F3 | 200 ticks / 10 segundos |
+| Dano inicial base | 12 por alvo |
+| Dano periódico base | 1 por alvo a cada 10 ticks |
+| Fogo | 3 segundos no impacto inicial; 2 nas reaplicações |
+| Visual | FLAME em anel e pontos internos sobre o chão local |
+
+A geometria usa interseção do hitbox com o cilindro, incluindo contato e borda.
+O dano inicial também arma a trava de 10 ticks para não duplicar dano no tick do cast.
+Alvos que entrarem depois são avaliados durante a duração. Partículas não aplicam dano.
+A busca de chão é limitada a ±2 blocos da origem, não ao topo global do heightmap.
+Não há colocação, substituição ou destruição de blocos.
+
+## Tornado de Chamas — B Bankai
+
+| Parâmetro | Protótipo |
+| --- | --- |
+| Centro | Posição atual do jogador, recalculada a cada tick |
+| Raio | 5 blocos |
+| Altura | Da altura dos pés até 8 blocos acima |
+| Duração | 200 ticks / 10 segundos |
+| Custo | 40 reiatsu, uma vez |
+| Cooldown F3 | 300 ticks / 15 segundos |
+| Dano base | 2 por alvo a cada 10 ticks |
+| Fogo | 2 segundos por aplicação |
+| Visual | Somente FLAME, espiral vertical, 32 amostras a cada 2 ticks |
+
+A caixa de consulta não é a área final de dano: os cantos fora do cilindro são excluídos.
+Não existe entidade invisível para representar o tornado. O terreno não é alterado.
+
+## Invocação de Morcegos — C base
+
+| Parâmetro | Protótipo |
+| --- | --- |
+| Quantidade | Exatamente 5 entidades vanilla Bat |
+| Vida máxima | 4 pontos cada |
+| Duração máxima | 800 ticks / 40 segundos |
+| Custo | 25 reiatsu, uma vez por enxame |
+| Cooldown F4 | 200 ticks / 10 segundos |
+| Busca de alvo | Mobs na caixa de 8 blocos ao redor do proprietário |
+| Ataque | Até 1,5 bloco de distância, com linha de visão |
+| Dano base | 2 por alvo a cada 20 ticks, compartilhado pelo enxame |
+| Fogo | 2 segundos por ataque |
+| Visual | FLAME nos morcegos e no impacto |
+
+O controlador servidor substitui a IA de voo/combate vanilla. Os morcegos seguem o
+proprietário quando não há alvo, com velocidade limitada e checagem de colisão.
+Um morcego distante mais de 24 blocos pode voltar para um ponto livre próximo do dono.
+Morcegos não atacam jogadores, NPCs de quest, aliados nem invocações marcadas.
+O dano é travado por alvo para impedir cinco impactos simultâneos sobre a mesma entidade.
+
+Não é possível invocar novamente enquanto algum morcego registrado estiver vivo,
+mesmo após o cooldown. Entidades mortas/removidas são retiradas da lista.
+O cast falha sem cobrar recursos se não conseguir criar o enxame completo em espaço livre.
+Os marcadores `bleachmod_flame_bat` e `bleachmod_flame_bat_owner` identificam entidades
+temporárias; entidades recarregadas sem runtime válido são descartadas, evitando órfãos.
+
+## Corte de Vapor Concentrado — C Bankai
+
+| Parâmetro | Contrato autorizado |
+| --- | --- |
+| Dano base | 48, antes da mitigação do alvo |
+| Custo | 45 reiatsu |
+| Cooldown F4 | 1.200 ticks / 60 segundos |
+| Alcance | 100 blocos |
+| Abertura horizontal | 25° totais, meia-abertura 12,5° |
+| Altura | 15 abaixo e 20 acima da altura corporal |
+| Direção | Vetor exato da visão; execução instantânea |
+| Entidades | Cada alvo recebe no máximo um impacto por cast |
+| Terreno | Destrói blocos comuns sem drops e atravessa paredes |
+| Proteções existentes | Ar, bedrock, command blocks e dureza negativa |
+
+A geometria, seleção de alvos, partículas, sons e destruição permanecem no executor
+anterior. Não foram adicionadas proteções de região nem filtros de aliados ao Corte.
+O damage source permanece `indirectMagic(player, player)`: ignora armadura vanilla.
+O filtro atual de `CombatEvents` também aplica Resistência Bleach porque as entidades
+direta e atacante são o mesmo jogador; essa regra precisa de homologação em combate real.
+Os valores anteriores (16 de dano, 0/300 ticks, 30/45°) são histórico substituído.
+
+## Dano, aliados e limpeza
+
+As três técnicas novas usam `playerAttack`: os bônus existentes de Zanjutsu/forma e
+Ignição podem alterar o dano efetivo, e armadura/Resistência podem mitigá-lo.
+Os números das tabelas são dano base, não dano final garantido.
+O Círculo e o Tornado excluem o lançador, NPCs de quest, invocações marcadas, espectadores
+e aliados reconhecidos pela equipe vanilla. Contra jogadores também respeitam PvP do
+servidor e `canHarmPlayer`. Esses filtros são política inicial das técnicas novas;
+a revisão geral de F1, F2 e Corte permanece fora desta alteração.
+O dano das novas áreas exige linha de visão a partir do lançador; não atravessa paredes.
+
+As áreas e os enxames são memória do servidor, fora do NBT de progressão. Expiram por
+tempo do mundo e são cancelados em morte, logout, troca de dimensão, mudança de forma,
+arma inválida, personagem inválido, unload do mundo e parada do servidor.
+O círculo não acompanha o jogador; o tornado acompanha. A troca de forma cancela ambos
+sem reiniciar cooldown. O comando `/bleachdev cooldowns clear Player` cancela também
+as novas áreas/enxames, além de limpar os cooldowns e o estado anterior de testes.
+
+## Arquitetura e terreno futuro
+
+- `TechniqueService`: roteamento dos slots existentes e executor preservado do Corte.
+- `RyujinTechniqueService`: casts, áreas, invocações, regras de alvo e limpeza servidor.
+- `TechniqueGeometry`: interseção de hitboxes com cilindros finitos.
+- `StatusData`: cooldown F3 e cancelamento de transformação preservando recargas.
+- `FormModeHandler` / `ProgressionService`: preservação dos cooldowns.
+- Não há pacote novo, mudança de protocolo, renderer customizado ou dependência nova.
+
+`spirit_flame` continua pendente e não bloqueia essas versões visuais.
+Sua entrega futura exige SavedData, proprietário/origem/expiração, regra de sobreposição,
+remoção condicional, chunks descarregados, reinício e preservação de blocos posteriores.
+Nunca substituir esse contrato por um `setBlock(Blocks.FIRE)` simples.
+
+## Validação e aceite
+
+O estado de compilação/testes é registrado no relatório deste ciclo. Implementação e
+teste automatizado não equivalem a homologação visual ou multiplayer.
+
+Roteiro manual obrigatório:
+
+1. H/N preservados em Selada, Shikai e Bankai; Asauchi recusa o kit.
+2. B base atinge contato/centro/borda, recusa fora/altura/parede/aliado e permanece fixo.
+3. B Bankai acompanha corrida/voo, dura 200 ticks e respeita raio/altura/intervalo.
+4. C base cria 5 morcegos, segue/ataca, recusa duplicação e expira em 800 ticks.
+5. Matar morcegos permite novo cast após cooldown; morte/logout/dimensão não deixam órfãos.
+6. Perda de arma ou forma cancela efeitos; transformar/comprar não libera recarga.
+7. C Bankai causa dano base 48 e só permite novo cast após 1.200 ticks.
+8. Corte conserva destruição sem drops, alcance, ângulo, indestrutíveis e vapor.
+9. Servidor dedicado e dois clientes veem efeitos públicos, sem duplicar custo/dano.
+10. Medir partículas e tick com múltiplos jogadores antes de marcar homologado.
+
+## Divergências maiores preservadas como planejamento
+
+NPCs e `quest_giver` já estão implementados como protótipo, assim como Hollow e
+Hollow Boss; isso não significa raça Hollow jogável nem mentores/facções completos.
+O módulo 05 de game design prevê cinco atributos e Stamina, enquanto o MVP usa sete
+categorias. O módulo 06 prevê vínculo de Zanpakutō, ainda não implementado. Esses
+contratos futuros não foram convertidos em mudanças de save/economia neste ciclo.

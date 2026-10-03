@@ -132,7 +132,7 @@ O plano ativo de estabilização do MVP e das próximas entregas está em [`plan
 
 A estabilização já inclui rede direcionada, persistência versionada, comandos de desenvolvimento, tela de status, categorias de pontos e seletor radial. O rework atual substitui Poder por Zanjutsu/Hakuda, adiciona Vitalidade/Resistência/Kidou, exibe BP e reduz o consumo das formas. A inspeção visual final dos assets e o teste dedicado com dois clientes continuam pendentes.
 
-**Inimigos provisórios:** continuamos usando zumbis, com os esqueletos já presentes nas quests atuais. A criação do mob Hollow ficará para estudo posterior e não bloqueia o MVP. Textos e objetivos devem identificar os alvos reais.
+**Inimigos atuais:** Hollow e Hollow Boss existem como protótipos. Quests antigas podem conservar zumbis/esqueletos porque defaults não sobrescrevem JSONs de mundos existentes. Conferir os alvos reais no diário.
 
 **Regra de conclusão:** toda alteração na lógica do jogo deve atualizar, no mesmo trabalho, todos os arquivos `.md` pertinentes em `Docs`, incluindo manual, arquitetura, regras, rede, persistência e UI quando afetados. Pesquisar referências antigas e eliminar contradições. O plano contém uma matriz de documentos por sistema. Preservar a distinção entre a engenharia reversa de Dragon Mine Z e a implementação Bleach; não apresentar planejamento como funcionalidade disponível.
 
@@ -167,3 +167,9 @@ O conteúdo temático de Dragon Ball pertence aos respectivos detentores. Este f
 ## Estado da estabilização — 10/09/2026
 
 Consulte o [relatório de correções](planejamento/relatorio-implementacao-mvp-2026-09-10.md) e a [checklist atual](planejamento/todo-mvp.md). Build 0.2.0 aprovado com 32 regressões; quatro GameTests aprovados. Protocolo 2.1. A transparência dos PNGs e a homologação visual com dois clientes continuam pendentes. Mantidos sete atributos, BP e schema 3.
+
+## Ciclo Ryūjin Jakka — 03/10/2026
+
+Branch de entrega: Feature-Poderes-bankais; protocolo atual 2.3. B resolve Círculo/Tornado e C resolve Morcegos/Corte. O Corte conserva destruição, alcance 100 e abertura 25°, com dano base 48 e recarga de 60 segundos. As três técnicas novas usam partículas, sem alterar terreno. Oito NPCs e quest_giver já existem como protótipos. O design completo de cinco atributos/vínculo de Zanpakutō ainda não substitui o MVP de sete categorias.
+
+Contrato e critérios: [Ryūjin atual](poderes/08-contrato-ryujin-circulo-tornado-morcegos.md). Manual único: [jogador](jogador/manual-do-jogador.md). As matrizes anteriores são evidências datadas, não homologação das técnicas novas.

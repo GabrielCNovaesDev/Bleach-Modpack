@@ -1,3 +1,9 @@
+# Estado operacional — 03/10/2026
+
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Círculo/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Implementação nova sujeita à homologação manual.
+
+## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
+
 # Técnica piloto — Flame Burst
 
 ## Estado

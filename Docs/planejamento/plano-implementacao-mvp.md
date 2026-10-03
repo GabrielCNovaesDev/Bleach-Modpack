@@ -1,3 +1,9 @@
+# Atualização operacional — 03/10/2026
+
+As matrizes de setembro abaixo são baseline histórico do MVP. O ciclo atual de poderes é definido pelo [contrato Ryūjin](../poderes/08-contrato-ryujin-circulo-tornado-morcegos.md), com quatro slots, cooldown preservado em transformações, Círculo/Tornado/Morcegos visuais e Corte destrutivo com 48 de dano base e 60 s de recarga. NPCs/quest_giver e Hollow/Hollow Boss já existem como protótipos. Game design de cinco atributos, Stamina e vínculo é expansão futura, não migração incluída neste ciclo.
+
+## Plano e evidências anteriores do MVP
+
 # Design técnico: estabilização e evolução do MVP Shinigami
 
 ## 1. Resumo

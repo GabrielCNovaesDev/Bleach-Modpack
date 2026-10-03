@@ -129,8 +129,8 @@
   "key.bleachmod.flame_burst": "Technique: Flame Burst",
   "key.bleachmod.technique_slot_1": "Technique H: Ignition",
   "key.bleachmod.technique_slot_2": "Technique N: Short Barrage",
-  "key.bleachmod.technique_slot_3": "Technique B: Slot 3",
-  "key.bleachmod.technique_slot_4": "Technique C: Slot 4",
+  "key.bleachmod.technique_slot_3": "Technique B: Circle / Tornado",
+  "key.bleachmod.technique_slot_4": "Technique C: Bats / Steam Cut",
   "hud.bleachmod.target": "Target: %s",
   "screen.bleachmod.purchase_remaining": "Balance after purchase: %s SP",
   "screen.bleachmod.wheel_chain": "Activate the previous form or reach the mastery needed for free transformation.",
@@ -147,5 +147,11 @@
   "message.bleachmod.technique.flame_barrage": "Short flame barrage executed.",
   "message.bleachmod.technique.flame_fan": "Bankai flame fan executed.",
   "message.bleachmod.technique.steam_cut": "Concentrated Steam Cut executed.",
-  "message.bleachmod.technique.barrage.requires_asauchi": "The short barrage requires the Zanpakuto in the main hand."
+  "message.bleachmod.technique.barrage.requires_asauchi": "The short barrage requires the Zanpakuto in the main hand.",
+  "message.bleachmod.technique.flame_circle": "Flame Circle activated.",
+  "message.bleachmod.technique.flame_tornado": "Flame Tornado activated.",
+  "message.bleachmod.technique.flame_bats": "Flame bats summoned.",
+  "message.bleachmod.technique.effect_active": "This flame area is already active.",
+  "message.bleachmod.technique.bats_active": "Wait until the current bats disappear.",
+  "message.bleachmod.technique.summon_failed": "There is not enough room to summon the full swarm."
 }

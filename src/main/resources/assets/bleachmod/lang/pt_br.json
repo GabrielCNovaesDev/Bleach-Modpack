@@ -129,8 +129,8 @@
   "key.bleachmod.flame_burst": "Técnica: Explosão de chamas",
   "key.bleachmod.technique_slot_1": "Técnica H: Ignição",
   "key.bleachmod.technique_slot_2": "Técnica N: Rajada curta",
-  "key.bleachmod.technique_slot_3": "Técnica B: Slot 3",
-  "key.bleachmod.technique_slot_4": "Técnica C: Slot 4",
+  "key.bleachmod.technique_slot_3": "Técnica B: Círculo / Tornado",
+  "key.bleachmod.technique_slot_4": "Técnica C: Morcegos / Corte",
   "hud.bleachmod.target": "Alvo: %s",
   "screen.bleachmod.purchase_remaining": "Saldo após a compra: %s PE",
   "screen.bleachmod.wheel_chain": "Ative a forma anterior ou alcance o domínio para transformação livre.",
@@ -147,5 +147,11 @@
   "message.bleachmod.technique.flame_barrage": "Rajada curta de chamas executada.",
   "message.bleachmod.technique.flame_fan": "Leque de fogo Bankai executado.",
   "message.bleachmod.technique.steam_cut": "Corte de Vapor Concentrado executado.",
-  "message.bleachmod.technique.barrage.requires_asauchi": "A Rajada curta exige a Zanpakutō na mão principal."
+  "message.bleachmod.technique.barrage.requires_asauchi": "A Rajada curta exige a Zanpakutō na mão principal.",
+  "message.bleachmod.technique.flame_circle": "Círculo de Fogo ativado.",
+  "message.bleachmod.technique.flame_tornado": "Tornado de Chamas ativado.",
+  "message.bleachmod.technique.flame_bats": "Morcegos de fogo invocados.",
+  "message.bleachmod.technique.effect_active": "Essa área de chamas já está ativa.",
+  "message.bleachmod.technique.bats_active": "Espere os morcegos atuais desaparecerem.",
+  "message.bleachmod.technique.summon_failed": "Não há espaço livre para invocar o enxame completo."
 }

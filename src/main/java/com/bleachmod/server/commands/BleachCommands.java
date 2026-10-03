@@ -67,6 +67,7 @@ public final class BleachCommands {
         root.then(literal("cooldowns").then(literal("clear").then(argument("player",EntityArgument.player())
     .executes(ctx -> mutate(ctx, (p, d) -> {
         d.getStatus().clearTechniqueTestState();
+        com.bleachmod.common.technique.RyujinTechniqueService.cancel(p);
         p.setDeltaMovement(Vec3.ZERO);
         p.hurtMarked = true;
     })))));
