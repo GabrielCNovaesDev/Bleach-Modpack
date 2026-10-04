@@ -100,3 +100,7 @@ Para homologar: libere Bankai em terreno aberto, observe focos acenderem e sumir
 saia da forma e confirme fim das emissões; sobreponha dois lançadores; substitua um foco
 por um bloco e confirme que ele permanece; teste salvar/reabrir e descarregar/recarregar
 chunks. Confira contato com hostis, aliados e jogador com PvP desligado.
+
+## Revisão posterior: inicializador auditado
+
+Depois da homologação do usuário, inicializador ganhou validação única para DryRun/execução, enumeração sem entrar em links, preflight de todos os destinos, lock sem links, caminhos literais e código de erro quando a limpeza final falha. [Relatório de segurança](15-auditoria-seguranca-inicializador-2026-10-04.md). O contrato de poderes acima permanece igual.

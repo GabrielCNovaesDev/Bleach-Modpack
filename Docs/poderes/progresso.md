@@ -270,3 +270,9 @@ Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-
 5. Criado Iniciar-Teste.bat com limpeza restrita e script PowerShell que recompila, verifica e abre runClient.
 6. Validado inicializador em DryRun e BuildOnly Offline; build final, 51 regressões e 18 GameTests aprovados.
 7. Visual e abertura interativa aguardam homologação. [Lógica, arquivos e roteiro](14-fogo-ambiental-inicializador-2026-10-04.md).
+
+## Encerramento homologado e auditoria do inicializador — 04/10/2026
+
+Usuário confirmou testes e visuais aprovados e encerrou a Ryujin. Revisão seguinte não altera poderes: endurece limpeza/lock, corrige caminhos com colchetes, alinha DryRun à execução real e retorna erro se restar cache bloqueado. Criada suíte isolada em tools/test-iniciar-teste.ps1. [Lógica, testes, resíduos esperados e limites](15-auditoria-seguranca-inicializador-2026-10-04.md).
+
+Resultado da auditoria: 18 cenários de segurança aprovados, zero falhas e fixtures temporárias removidas; gameplay permanece igual ao homologado.

@@ -42,3 +42,9 @@ Planos antigos, auditorias e relatórios históricos não substituem o contrato 
 ## Entrega atual: fogo ambiental e inicializador
 
 [Relatório 14](14-fogo-ambiental-inicializador-2026-10-04.md) documenta focos temporários de Bankai, persistência, limites e limpeza, e o inicializador Iniciar-Teste.bat. Build, 51 regressões e 18 GameTests aprovados; homologação visual e abertura interativa pendentes.
+
+## Inicializador auditado — 04/10/2026
+
+Feature Ryujin homologada e encerrada pelo usuário. Revisão de segurança limitada ao inicializador; correções de caminhos, links, preflight e sinalização de resíduos. [Auditoria e reprodução dos testes](15-auditoria-seguranca-inicializador-2026-10-04.md).
+
+Resultado da auditoria: 18 cenários de segurança aprovados, zero falhas e fixtures temporárias removidas; gameplay permanece igual ao homologado.

@@ -7,7 +7,11 @@ if (!(Test-Path -LiteralPath $wrapper) -or !(Test-Path -LiteralPath (Join-Path $
 }
 # Exact allowlist. Neither worlds/settings nor the shared Gradle downloads are included.
 $cleanupPaths = @('build', '.test-launcher-cache', 'run\logs', 'run\crash-reports')
-function Remove-TestOutput([string]$relative) {
+function Get-TestPathItem([string]$path) {
+    try { return Get-Item -LiteralPath $path -Force -ErrorAction Stop }
+    catch [System.Management.Automation.ItemNotFoundException] { return $null }
+}
+function Assert-TestOutput([string]$relative) {
     if ($cleanupPaths -notcontains $relative) { throw 'Destino fora da lista de limpeza.' }
     $absolute = [IO.Path]::GetFullPath((Join-Path $repoDir $relative))
     if (!$absolute.StartsWith($repoDir + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
@@ -16,24 +20,40 @@ function Remove-TestOutput([string]$relative) {
     # Reject junctions/symlinks on the target or intermediate directories.
     $part = $absolute
     while ($part -ne $repoDir) {
-        if (Test-Path -LiteralPath $part) {
-            if ((Get-Item -LiteralPath $part -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        $item = Get-TestPathItem $part
+        if ($item) {
+            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
                 throw "Limpeza recusada: link de diretorio em $part"
             }
         }
         $part = Split-Path -Parent $part
     }
-    if ($DryRun) { Write-Host "Limparia: $absolute"; return }
-    if (Test-Path -LiteralPath $absolute) {
-        # Also prevent traversal through links inside an allowed directory.
-        if (Get-ChildItem -LiteralPath $absolute -Recurse -Force | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint }) {
-            throw "Limpeza recusada: link dentro de $absolute"
+    $target = Get-TestPathItem $absolute
+    if ($target) {
+        if (!$target.PSIsContainer) { throw "Limpeza recusada: esperado diretorio em $absolute" }
+        # Inspect one directory at a time: reject links BEFORE descending into them.
+        $pending = New-Object 'System.Collections.Generic.Stack[string]'
+        $pending.Push($absolute)
+        while ($pending.Count -gt 0) {
+            foreach ($child in Get-ChildItem -LiteralPath $pending.Pop() -Force) {
+                if ($child.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+                    throw "Limpeza recusada: link dentro de $absolute"
+                }
+                if ($child.PSIsContainer) { $pending.Push($child.FullName) }
+            }
         }
+    }
+}
+function Remove-TestOutput([string]$relative) {
+    Assert-TestOutput $relative
+    $absolute = [IO.Path]::GetFullPath((Join-Path $repoDir $relative))
+    if (Test-Path -LiteralPath $absolute) {
         Remove-Item -LiteralPath $absolute -Recurse -Force
     }
 }
 if ($DryRun) {
-    foreach ($path in $cleanupPaths) { Remove-TestOutput $path }
+    foreach ($path in $cleanupPaths) { Assert-TestOutput $path }
+    foreach ($path in $cleanupPaths) { Write-Host "Limparia: $(Join-Path $repoDir $path)" }
     Write-Host 'Executaria: Gradle sem daemon/cache -> check build -> runClient; limparia cache temporario ao sair.'
     exit 0
 }
@@ -57,10 +77,18 @@ $env:Path = "$javaDir\bin;$env:Path"
 $lockPath = Join-Path $repoDir '.test-launcher.lock'
 $lock = $null
 $exitCode = 1
-Push-Location $repoDir
+$cleanupStarted = $false
+Push-Location -LiteralPath $repoDir
 try {
+    $lockItem = Get-TestPathItem $lockPath
+    if ($lockItem -and (($lockItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -or $lockItem.PSIsContainer)) {
+        throw 'Lock recusado: esperado arquivo comum, sem links.'
+    }
     try { $lock = [IO.File]::Open($lockPath, 'OpenOrCreate', 'ReadWrite', 'None') }
     catch { throw 'Outro inicializador esta aberto. Feche o jogo e tente novamente.' }
+    # Validate ALL destinations before deleting anything; repeat checks at each removal.
+    foreach ($path in $cleanupPaths) { Assert-TestOutput $path }
+    $cleanupStarted = $true
     foreach ($path in $cleanupPaths) { Remove-TestOutput $path }
     $gradleArgs = @('--no-daemon', '--no-build-cache', '--rerun-tasks', '--project-cache-dir', (Join-Path $repoDir '.test-launcher-cache'))
     if ($Offline) { $gradleArgs += '--offline' }
@@ -76,7 +104,13 @@ try {
 } catch { Write-Host $_.Exception.Message -ForegroundColor Red }
 finally {
     if ($lock) {
-        try { Remove-TestOutput '.test-launcher-cache' } catch { Write-Warning $_.Exception.Message }
+        if ($cleanupStarted) {
+            try { Remove-TestOutput '.test-launcher-cache' }
+            catch {
+                $exitCode = 1
+                Write-Warning ('Cache temporario nao removido. Feche os processos de teste e tente novamente. ' + $_.Exception.Message)
+            }
+        }
         $lock.Dispose()
     }
     Pop-Location
