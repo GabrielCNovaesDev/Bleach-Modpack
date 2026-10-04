@@ -7,7 +7,6 @@ import com.bleachmod.common.events.BleachEvents;
 import com.bleachmod.common.network.NetworkHandler;
 import com.bleachmod.common.network.SyncHelper;
 import com.bleachmod.common.network.s2c.ActionFeedbackS2C;
-import com.bleachmod.entity.QuestNpcEntity;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
@@ -41,9 +39,11 @@ import java.util.UUID;
 /** Server-only runtime. No particles, areas or summons are serialized into player progression. */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public final class RyujinTechniqueService {
-    public static final double WALL_LENGTH = 16;
+    public static final double WALL_LENGTH = 18;
     public static final double WALL_WIDTH = 2;
-    public static final double WALL_HEIGHT = 15;
+    public static final double WALL_HEIGHT = 8;
+    public static final int WALL_PARTICLES_PER_SAMPLE = 3;
+    public static final int WALL_DRAW_INTERVAL = 4;
     public static final int WALL_DURATION = 100;
     public static final float WALL_COST = 40;
     public static final float WALL_DAMAGE = 18;
@@ -186,10 +186,7 @@ public final class RyujinTechniqueService {
     }
 
     private static boolean targetAllowed(ServerPlayer owner, LivingEntity target) {
-        if (target == owner || !target.isAlive() || target.isSpectator() || owner.isAlliedTo(target)
-                || target instanceof QuestNpcEntity || target.getPersistentData().getBoolean(BAT_MARKER)) return false;
-        return !(target instanceof Player other)
-                || (owner.getServer().isPvpAllowed() && owner.canHarmPlayer(other));
+        return TechniqueTargets.allowed(owner, target);
     }
 
     private static void damageArea(Runtime runtime, Vec3 center, float damage, int fireSeconds) {
@@ -215,7 +212,7 @@ public final class RyujinTechniqueService {
                 double sign = target.position().subtract(center).dot(side) < 0 ? -1 : 1;
                 target.knockback(0.25, -side.x * sign, -side.z * sign);
             }
-            target.setSecondsOnFire(fireSeconds);
+            if (hurt) target.setSecondsOnFire(fireSeconds);
         }
         area.nextDamage.entrySet().removeIf(entry -> entry.getValue() < now);
     }
@@ -236,11 +233,11 @@ public final class RyujinTechniqueService {
                         z, 3, 0.18, 0.15, 0.18, 0.02);
             }
         } else {
-            // Fixed vertical sheet: 16 x 2 x 15. Samples never apply damage.
-            for (int along = 0; along < 16; along++) for (int height = 0; height < 15; height++) {
+            // Dense lower wall with a bounded emission budget. Samples never apply damage.
+            for (int along = 0; along < WALL_LENGTH; along++) for (int height = 0; height < WALL_HEIGHT; height++) {
                 Vec3 point = center.add(area.direction.scale(along + 0.5));
                 runtime.level.sendParticles(ParticleTypes.FLAME, point.x, center.y + height + 0.5,
-                        point.z, 5, Math.abs(area.direction.z) * 0.65 + 0.12, 0.3,
+                        point.z, WALL_PARTICLES_PER_SAMPLE, Math.abs(area.direction.z) * 0.65 + 0.12, 0.3,
                         Math.abs(area.direction.x) * 0.8 + 0.12, 0.015);
             }
         }
@@ -284,8 +281,7 @@ public final class RyujinTechniqueService {
                     && swarm.nextDamage.getOrDefault(target.getUUID(), Long.MIN_VALUE) <= now) {
                 // Shared per-target gate prevents five overlapping bats from dealing five hits in a tick.
                 swarm.nextDamage.put(target.getUUID(), now + 20);
-                target.hurt(runtime.owner.damageSources().playerAttack(runtime.owner), BAT_DAMAGE);
-                target.setSecondsOnFire(2);
+                if (target.hurt(runtime.owner.damageSources().playerAttack(runtime.owner), BAT_DAMAGE)) target.setSecondsOnFire(2);
                 runtime.level.sendParticles(ParticleTypes.FLAME, target.getX(), target.getY() + 0.5,
                         target.getZ(), 8, 0.2, 0.2, 0.2, 0.01);
             }
@@ -321,7 +317,7 @@ public final class RyujinTechniqueService {
                     area.age++;
                     Vec3 center = area.tornado ? owner.position() : area.origin;
                     damageArea(runtime, center, area.tornado ? TORNADO_DAMAGE : WALL_DAMAGE, area.tornado ? 2 : 3);
-                    if (area.age % 2 == 0) drawArea(runtime, center);
+                    if (area.age % (area.tornado ? 2 : WALL_DRAW_INTERVAL) == 0) drawArea(runtime, center);
                 }
             }
             if (runtime.swarm != null) {

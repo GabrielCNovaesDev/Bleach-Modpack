@@ -10,6 +10,25 @@ import java.util.UUID;
 public class StatusData {
     private long lastActionTick = Long.MIN_VALUE;
     private boolean cooldownsDisabled;
+    private int[] hudCooldowns = new int[5];
+    private boolean hudCooldownsDisabled;
+
+    /** Separate owner-only network snapshot, never written by save(). */
+    public CompoundTag techniqueHud() {
+        CompoundTag tag = new CompoundTag();
+        tag.putIntArray("cooldowns", new int[]{techniqueSlot1CooldownTicks, techniqueSlot2CooldownTicks,
+                techniqueSlot3CooldownTicks, techniqueSlot4CooldownTicks, flameBurstCooldownTicks});
+        tag.putBoolean("disabled", cooldownsDisabled);
+        return tag;
+    }
+    public void readTechniqueHud(CompoundTag tag) {
+        int[] values = tag.getIntArray("cooldowns");
+        if (values.length != 5) return;
+        hudCooldowns = java.util.Arrays.stream(values).map(value -> Math.max(0, value)).toArray();
+        hudCooldownsDisabled = tag.getBoolean("disabled");
+    }
+    public int[] getHudCooldowns() { return hudCooldowns.clone(); }
+    public boolean areHudCooldownsDisabled() { return hudCooldownsDisabled; }
 
     public boolean areCooldownsDisabled() { return cooldownsDisabled; }
     public void setCooldownsDisabled(boolean disabled) {

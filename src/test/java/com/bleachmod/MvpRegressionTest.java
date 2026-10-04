@@ -28,11 +28,15 @@ public final class MvpRegressionTest {
                 for (String name : List.of("ryujin_jakka", "ryujin_jakka_shikai", "ryujin_jakka_bankai")) {
                     String source = java.nio.file.Files.readString(directory.resolve(name + ".json"));
                     var parsed = net.minecraft.client.renderer.block.model.BlockModel.fromString(source);
-                    eq(14, parsed.getElements().size());
+                    eq(22, parsed.getElements().size());
                     var model = JsonParser.parseString(source).getAsJsonObject();
+                    int edges = 0;
+                    int spines = 0;
                     eq("bleachmod:item/ryujin_katana_handheld", model.get("parent").getAsString());
                     for (var element : model.getAsJsonArray("elements")) {
                         var part = element.getAsJsonObject();
+                        if (part.has("name") && part.get("name").getAsString().equals("single_cutting_edge")) edges++;
+                        if (part.has("name") && part.get("name").getAsString().equals("blunt_spine")) spines++;
                         eq(6, part.getAsJsonObject("faces").size());
                         for (int axis = 0; axis < 3; axis++) {
                             double from = part.getAsJsonArray("from").get(axis).getAsDouble();
@@ -40,8 +44,40 @@ public final class MvpRegressionTest {
                             yes(from >= -16 && to <= 32 && from < to);
                         }
                     }
+                    eq(4, edges);
+                    eq(4, spines);
+                    if (!name.equals("ryujin_jakka")) {
+                        var uv = model.getAsJsonArray("elements").get(8).getAsJsonObject()
+                                .getAsJsonObject("faces").getAsJsonObject("north").getAsJsonArray("uv");
+                        yes(uv.get(2).getAsDouble() - uv.get(0).getAsDouble() > 10);
+                    }
                 }
             } catch (java.io.IOException exception) { throw new IllegalStateException(exception); }
+        });
+        test("HUD cooldown snapshot is isolated from persistence and authoritative state", () -> {
+            StatusData server = new StatusData();
+            server.setTechniqueSlot3CooldownTicks(400);
+            server.setTechniqueSlot4CooldownTicks(1200);
+            StatusData client = new StatusData();
+            client.load(server.save());
+            client.readTechniqueHud(server.techniqueHud());
+            eq(400, client.getHudCooldowns()[2]);
+            eq(1200, client.getHudCooldowns()[3]);
+            eq(0, client.getTechniqueSlot4CooldownTicks());
+            yes(!server.save().contains("cooldowns"));
+            int[] detached = client.getHudCooldowns();
+            detached[3] = 0;
+            eq(1200, client.getHudCooldowns()[3]);
+            server.setCooldownsDisabled(true);
+            client.readTechniqueHud(server.techniqueHud());
+            yes(client.areHudCooldownsDisabled());
+        });
+        test("release effects trigger only when entering or ascending released forms", () -> {
+            yes(com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("sealed", "shikai"));
+            yes(com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("shikai", "bankai"));
+            yes(!com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("bankai", "shikai"));
+            yes(!com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("bankai", "bankai"));
+            yes(!com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("shikai", "sealed"));
         });
         test("free reiatsu accepts zero balance without debit and restore enforces costs", () -> {
             ResourcesData resources = new ResourcesData();

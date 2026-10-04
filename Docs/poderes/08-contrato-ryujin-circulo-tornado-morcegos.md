@@ -1,3 +1,5 @@
+> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+
 > **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
 
 
@@ -30,7 +32,7 @@ Os números das três habilidades novas são os valores vigentes da feature conc
 | B / 3 | Muralha de Chamas | Tornado de Chamas |
 | C / 4 | Invocação de Morcegos | Corte de Vapor Concentrado |
 
-F1 e F2 mantêm seus executores e valores. X continua sendo Flame Burst, fora dos slots.
+F1 e F2 mantêm variantes e valores; a revisão de 04/10 unifica os filtros de alvos. X continua sendo Flame Burst, fora dos slots.
 O cliente envia apenas o slot pelo pacote já existente. O servidor resolve a variante.
 As técnicas novas exigem personagem Shinigami criado, vivo, não espectador, grupo
 `zanpakuto`, forma válida e Ryūjin Jakka na mão principal. Asauchi não autoriza o kit.
@@ -48,19 +50,19 @@ Substitui o Círculo após teste do usuário. A forma base deixou de ser uma ár
 | --- | --- |
 | Origem | 1 bloco à frente da posição corporal no cast |
 | Direção | Mira horizontal (yaw); fixa, independentemente do pitch |
-| Comprimento | 16 blocos, confirmado pelo usuário |
-| Largura / altura | 2 / 15 blocos |
+| Comprimento | 18 blocos, revisão de alcance autorizada em 04/10 |
+| Largura / altura | 2 / 8 blocos |
 | Duração | 100 ticks / 5 segundos |
 | Custo | 40 reiatsu |
 | Cooldown F3 | 400 ticks / 20 segundos |
 | Dano base por contato | 18 por alvo, no máximo a cada 20 ticks |
 | Knockback em mobs | Força 0,25 para o lado mais próximo da muralha, somente com dano aceito |
 | Fogo | 3 segundos por aplicação |
-| Visual | Paredão vertical temporário de FLAME, 240 amostras com 5 partículas cada a cada 2 ticks |
+| Visual | Paredão vertical temporário de FLAME, 144 amostras com 3 partículas cada a cada 4 ticks |
 
 Dano, custo e recarga são valores iniciais para o teste da Muralha. O intervalo de 20 ticks
 impede dano por amostra/partícula. O hitbox precisa intersectar o volume orientado de
-16 × 2 × 15; não basta estar na caixa que envolve uma muralha diagonal.
+18 × 2 × 8; não basta estar na caixa que envolve uma muralha diagonal.
 A muralha fica fixa no ponto do cast por 5 segundos. Ela não bloqueia passagem como
 bloco sólido: quem entra recebe dano, fogo e knockback leve. Não altera terreno.
 Alvos que entrarem depois são avaliados durante a duração. O cast já verifica contato.
@@ -125,7 +127,7 @@ temporárias; entidades recarregadas sem runtime válido são descartadas, evita
 | Proteções existentes | Ar, bedrock, command blocks e dureza negativa |
 
 A geometria, seleção de alvos, partículas, sons e destruição permanecem no executor
-anterior. Não foram adicionadas proteções de região nem filtros de aliados ao Corte.
+anterior. Não foram adicionadas proteções de região ao Corte. Na revisão de 04/10, os filtros de aliados, NPCs, invocações e PvP foram unificados em TechniqueTargets, inclusive para o Corte.
 O damage source permanece `indirectMagic(player, player)`: ignora armadura vanilla.
 O filtro atual de `CombatEvents` também aplica Resistência Bleach porque as entidades
 direta e atacante são o mesmo jogador; essa regra precisa de homologação em combate real.
@@ -139,7 +141,7 @@ Os números das tabelas são dano base, não dano final garantido.
 A Muralha e o Tornado excluem o lançador, NPCs de quest, invocações marcadas, espectadores
 e aliados reconhecidos pela equipe vanilla. Contra jogadores também respeitam PvP do
 servidor e `canHarmPlayer`. Esses filtros são política inicial das técnicas novas;
-a revisão geral de F1, F2 e Corte permanece fora desta alteração.
+a revisão de 04/10 aplica a mesma política de alvos também a F1, F2, Corte e Flame Burst.
 O dano das novas áreas exige linha de visão a partir do lançador; não atravessa paredes.
 
 As áreas e os enxames são memória do servidor, fora do NBT de progressão. Expiram por
@@ -152,7 +154,7 @@ as novas áreas/enxames, além de limpar os cooldowns e o estado anterior de tes
 ## Modelo da katana e comandos de teste
 
 Revisão final: [relatório consolidado](11-fechamento-ryujin-comandos-modelos-2026-10-03.md).
-As três formas usam geometria explícita de katana, cabo com faixas, guarda e lâmina
+Desde 04/10, as três formas usam 22 elementos, fio único, dorso espesso, curva segmentada e UVs completos de superfície em Shikai/Bankai. A geometria conserva cabo com faixas, guarda e lâmina
 alongada com ponta em segmentos. As rotações da antiga Ryujin estavam invertidas
 para a orientação de seu cabo. O modelo compartilhado corrige as duas mãos, primeira
 e terceira pessoa, e ajusta inventário/chão/moldura. Selada usa metal, Shikai borda
@@ -200,7 +202,7 @@ teste automatizado não equivalem a homologação visual ou multiplayer.
 Roteiro de referência para regressões futuras da feature concluída:
 
 1. H/N preservados em Selada, Shikai e Bankai; Asauchi recusa o kit.
-2. B base forma muralha 16 × 2 × 15, permanece fixa por 100 ticks, causa dano de contato/knockback e exclui fora/aliado.
+2. B base forma muralha 18 × 2 × 8, permanece fixa por 100 ticks, causa dano de contato/knockback e exclui fora/aliado.
 3. B Bankai acompanha corrida/voo, dura 200 ticks, usa raio 6/altura 10 e espiral horária com partículas em movimento.
 4. C base cria 5 morcegos, segue/ataca, recusa duplicação e expira em 800 ticks.
 5. Matar morcegos permite novo cast após cooldown; morte/logout/dimensão não deixam órfãos.

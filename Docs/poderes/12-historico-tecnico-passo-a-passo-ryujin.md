@@ -1,3 +1,5 @@
+> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+
 # Ryūjin Jakka — histórico técnico passo a passo
 
 Atualizado em 03/10/2026. Feature concluída por confirmação do usuário após a entrega
@@ -239,3 +241,7 @@ como referência para regressões futuras, sem reabrir a feature aceita.
 Protocolo 2.3, schema 3 e dependências foram preservados. `spirit_flame`, vínculo de
 Zanpakutō, novas raças jogáveis e sistemas de mentores/facções continuam planejamento
 futuro, fora do fechamento da Ryujin. Nenhum commit desta entrega vai para `main`.
+
+## 10. Ciclo posterior de acabamento — 04/10/2026
+
+Após o fechamento anterior, o usuário autorizou uma revisão visual/técnica. A sequência, lógica e lista de arquivos de katana, liberação, Muralha, filtros e HUD estão no [relatório 13](13-polimento-katana-liberacao-muralha-2026-10-04.md). Resultados: 51 regressões e 16 GameTests aprovados; nova homologação visual separada. Os números de 03/10 acima são históricos e foram preservados. Fogo ambiental continua etapa futura.

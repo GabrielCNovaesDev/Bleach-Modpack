@@ -92,7 +92,9 @@ public final class ReiatsuHud {
                 new InfoLine(Component.translatable("hud.bleachmod.target",
                         Component.translatable("form.bleachmod." + data.getCharacter().getActiveForm())), 0xCAB7FF),
                 new InfoLine(Component.translatable("hud.bleachmod.tp",
-                        (int) data.getResources().getTrainingPoints()), 0xA0E8A0)
+                        (int) data.getResources().getTrainingPoints()), 0xA0E8A0),
+                new InfoLine(Component.translatable("hud.bleachmod.cooldowns",
+                        formatCooldowns(data)), 0xFFD090)
         );
         int lineStep = mc.font.lineHeight + 2;
         int blockWidth = lines.stream().mapToInt(line -> mc.font.width(line.text())).max().orElse(0);
@@ -104,6 +106,18 @@ public final class ReiatsuHud {
             g.drawString(mc.font, line.text(), position.x(), position.y() + index * lineStep,
                     line.color(), true);
         }
+    }
+
+    private static String formatCooldowns(PlayerData data) {
+        if (data.getStatus().areHudCooldownsDisabled()) return "TEST";
+        int[] values = data.getStatus().getHudCooldowns();
+        String[] slots = {"1", "2", "3", "4", "X"};
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < slots.length; i++) {
+            if (i > 0) result.append("  ");
+            result.append(slots[i]).append(":").append(values[i] == 0 ? "OK" : (int) Math.ceil(values[i] / 20.0) + "s");
+        }
+        return result.toString();
     }
 
     private static float computeHealthRatio(Minecraft mc, PlayerData data) {

@@ -1,3 +1,19 @@
+# Ciclo de acabamento — 04/10/2026
+
+O kit anterior continua encerrado. Nova revisão implementada e validada: katana de gume único/UVs completos, liberação/aura, Muralha 18 × 2 × 8 e emissão 82% menor, política de alvos e HUD. 51 regressões/16 GameTests passaram; aguarda homologação visual desta versão. Arquivos e sequência no [relatório 13](13-polimento-katana-liberacao-muralha-2026-10-04.md).
+
+1. Modelos: 22 elementos, quatro seções curvas, um fio fino e dorso espesso; superfícies imagegen próprias de Shikai/Bankai.
+2. `RyujinReleaseEffects`: evento de forma produz pulso de chamas/fumaça/som; aura esparsa enquanto válido. Sem terreno/dano.
+3. `RyujinTechniqueService`: dimensões 18/2/8, 432 chamas por emissão/4 ticks; valores de combate preservados.
+4. `TechniqueTargets`, executores e `CombatEvents`: filtros unificados e aplicação de fogo condicionada ao dano.
+5. `StatusData`, rede/client/tick e `ReiatsuHud`: snapshot do proprietário mostra recargas sem persistir em NBT.
+6. Regressões e GameTests cobrem geometria, UVs, HUD, transições de liberação, alcance/altura/dano rejeitado e Leque/aliados.
+
+Próxima etapa separada: contrato e fundação de fogo ambiental persistente; não existe incêndio por ativar Bankai neste JAR. Vínculo segue fora do ciclo. Nenhuma alteração em documentos de outras pastas.
+
+---
+> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+
 # Feature Ryūjin Jakka concluída — 03/10/2026
 
 O usuário confirmou a conclusão após a entrega `5a02b61`, na branch `Feature-Poderes-bankais`. Nenhuma implementação resta neste ciclo. Última validação de código: build, 49 regressões e 14 GameTests aprovados; 22 JSONs válidos. A atualização atual é exclusivamente documental, limitada a `Docs/poderes`.

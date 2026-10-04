@@ -24,6 +24,46 @@ import java.util.UUID;
 @GameTestHolder("bleachmod")
 @PrefixGameTestTemplate(false)
 public final class RyujinGameTests {
+    @GameTest(template = "empty")
+    public static void shorterWallReachesFartherAndNeverBurnsRejectedTargets(GameTestHelper helper) {
+        FakePlayer player = player(helper);
+        // Templates are underground; a long wall must be tested in actual open air, outside the carved cell.
+        player.setPos(player.getX(), helper.getLevel().getMaxBuildHeight() - 64, player.getZ());
+        helper.getLevel().getChunkAt(BlockPos.containing(player.position().add(0, 0, 18)));
+        Zombie distant = target(helper, player.position().add(0, 0, 18));
+        Zombie high = target(helper, player.position().add(0, 9, 3));
+        Zombie immune = target(helper, player.position().add(0, 0, 4));
+        immune.setInvulnerable(true);
+        helper.runAfterDelay(5, () -> { try {
+            helper.assertTrue(player.hasLineOfSight(distant), "Distant fixture has obstructed sight");
+            helper.assertTrue(helper.getLevel().getEntitiesOfClass(Zombie.class, player.getBoundingBox().inflate(20))
+                    .contains(distant), "Distant fixture not accessible in chunk entity lookup");
+            TechniqueService.executeSlot(player, data(player), 3);
+            helper.assertTrue(distant.getHealth() < 20, "Extended wall missed distant target");
+            helper.assertTrue(high.getHealth() == 20, "Lower wall hit target above it");
+            helper.assertTrue(!immune.isOnFire(), "Rejected damage still applied fire");
+            helper.assertTrue(data(player).getResources().getCurrentReiatsu() == 60, "Wall cost changed");
+        } finally { RyujinTechniqueService.cancel(player); distant.discard(); high.discard(); immune.discard(); }
+        helper.succeed(); });
+    }
+
+    @GameTest(template = "empty")
+    public static void bankaiFanUsesSharedAllyPolicy(GameTestHelper helper) {
+        FakePlayer player = player(helper);
+        data(player).getCharacter().setActiveForm("zanpakuto", "bankai");
+        Zombie ally = target(helper, player.position().add(0, 0, 3));
+        Zombie enemy = target(helper, player.position().add(1, 0, 4));
+        var scoreboard = helper.getLevel().getScoreboard();
+        var team = scoreboard.addPlayerTeam("ryu" + UUID.randomUUID().toString().substring(0, 8));
+        scoreboard.addPlayerToTeam(player.getScoreboardName(), team);
+        scoreboard.addPlayerToTeam(ally.getScoreboardName(), team);
+        try {
+            TechniqueService.executeSlot(player, data(player), 2);
+            helper.assertTrue(ally.getHealth() == 20 && !ally.isOnFire(), "Bankai fan harmed ally");
+            helper.assertTrue(enemy.getHealth() < 20, "Bankai fan missed enemy");
+        } finally { scoreboard.removePlayerTeam(team); ally.discard(); enemy.discard(); }
+        helper.succeed();
+    }
     private static void command(FakePlayer player, String command) {
         try {
             int result = player.getServer().getCommands().getDispatcher().execute(

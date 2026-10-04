@@ -1,3 +1,12 @@
+> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+
+## Novidades de 04/10 para homologação
+
+Ryujin com fio único/dorso espesso e superfícies detalhadas; Shikai em chamas e Bankai carbonizada com fissuras. Entrada em formas liberadas emite anel, fumaça e som; aura acompanha a arma de forma esparsa. Não coloca fogo no mapa.
+
+B base agora forma Muralha 18 × 2 × 8 por 5 s. Custos, dano, cooldown e knockback preservados. O HUD mostra slots 1/2/3/4/X com `OK`, segundos ou `TEST`; servidor continua validando casts. Aliados/equipes, NPCs de quest, invocações e PvP são filtrados em todos os ataques do kit. Corte permanece destrutivo contra terreno comum.
+
+Instale o mesmo JAR novo no cliente e servidor. Teste duas mãos, formas, inventário, liberação, aura, recargas e mundo com dois jogadores. Detalhes no [relatório 13](13-polimento-katana-liberacao-muralha-2026-10-04.md).
 # Manual de poderes — referência única
 
 O manual operacional foi consolidado em [Docs/jogador/manual-do-jogador.md](../jogador/manual-do-jogador.md).

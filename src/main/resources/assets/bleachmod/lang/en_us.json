@@ -153,5 +153,6 @@
   "message.bleachmod.technique.flame_bats": "Flame bats summoned.",
   "message.bleachmod.technique.effect_active": "This flame area is already active.",
   "message.bleachmod.technique.bats_active": "Wait until the current bats disappear.",
-  "message.bleachmod.technique.summon_failed": "There is not enough room to summon the full swarm."
+  "message.bleachmod.technique.summon_failed": "There is not enough room to summon the full swarm.",
+  "hud.bleachmod.cooldowns": "Cooldowns: %s"
 }

@@ -153,5 +153,6 @@
   "message.bleachmod.technique.flame_bats": "Morcegos de fogo invocados.",
   "message.bleachmod.technique.effect_active": "Essa área de chamas já está ativa.",
   "message.bleachmod.technique.bats_active": "Espere os morcegos atuais desaparecerem.",
-  "message.bleachmod.technique.summon_failed": "Não há espaço livre para invocar o enxame completo."
+  "message.bleachmod.technique.summon_failed": "Não há espaço livre para invocar o enxame completo.",
+  "hud.bleachmod.cooldowns": "Recargas: %s"
 }

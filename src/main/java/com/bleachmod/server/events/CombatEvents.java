@@ -30,9 +30,6 @@ public final class CombatEvents {
                     event.setAmount(CombatBalance.outgoingDamage(event.getAmount(),
                         data.getAttributes().level(AttributeData.ZANJUTSU),
                         formBonus + ignitionBonus));
-                    if (TechniqueService.isRyujinJakkaEquipped(player)) {
-                        TechniqueService.applyIgnitionHit(player, data, event.getEntity());
-                    }
                 } else if (player.getMainHandItem().isEmpty()) {
                     event.setAmount(CombatBalance.outgoingDamage(event.getAmount(),
                         data.getAttributes().level(AttributeData.HAKUDA), formBonus));
@@ -57,8 +54,10 @@ public final class CombatEvents {
         if (!isPlayerMeleeAttack(event.getSource()) || !(event.getSource().getEntity() instanceof ServerPlayer player)) return;
         if (!isSupportedMeleeWeapon(player)) return;
         PlayerCapability.get(player).ifPresent(data -> {
-            if (data.getStatus().hasCreatedCharacter() && event.getAmount() > 0)
+            if (data.getStatus().hasCreatedCharacter() && event.getAmount() > 0) {
+                TechniqueService.applyIgnitionHit(player, data, event.getEntity());
                 NetworkHandler.sendToPlayer(new DamageIndicatorS2C(event.getAmount()), player);
+            }
         });
     }
 

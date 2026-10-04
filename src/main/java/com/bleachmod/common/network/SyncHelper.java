@@ -18,8 +18,11 @@ public final class SyncHelper {
     }
 
     public static void full(ServerPlayer player) {
-        PlayerCapability.get(player).ifPresent(data ->
-                NetworkHandler.sendToPlayer(new PlayerSyncS2C(player.getId(), data.save()), player));
+        PlayerCapability.get(player).ifPresent(data -> {
+            CompoundTag tag = data.save();
+            tag.put("techniqueHud", data.getStatus().techniqueHud());
+            NetworkHandler.sendToPlayer(new PlayerSyncS2C(player.getId(), tag), player);
+        });
     }
 
     public static void resources(ServerPlayer player) {
@@ -27,6 +30,7 @@ public final class SyncHelper {
             CompoundTag tag = new CompoundTag();
             tag.put("resources", data.getResources().save());
             tag.put("status", data.getStatus().save());
+            tag.put("techniqueHud", data.getStatus().techniqueHud());
             NetworkHandler.sendToPlayer(new ResourceSyncS2C(player.getId(), tag), player);
         });
     }

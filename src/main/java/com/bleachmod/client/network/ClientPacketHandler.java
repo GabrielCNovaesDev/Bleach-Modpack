@@ -65,7 +65,10 @@ public final class ClientPacketHandler {
         }
         Entity entity = mc.level.getEntity(playerId);
         if (entity instanceof Player player) {
-            PlayerCapability.get(player).ifPresent(data -> data.load(nbt));
+            PlayerCapability.get(player).ifPresent(data -> {
+                data.load(nbt);
+                if (nbt.contains("techniqueHud")) data.getStatus().readTechniqueHud(nbt.getCompound("techniqueHud"));
+            });
         }
     }
 }
