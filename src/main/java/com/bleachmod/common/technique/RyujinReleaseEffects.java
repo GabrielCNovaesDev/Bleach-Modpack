@@ -11,7 +11,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/** Public release/aura visuals only: no damage, terrain edits or persisted runtime. */
+/** Release visuals and bounded Bankai world-fire emission. */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public final class RyujinReleaseEffects {
     private RyujinReleaseEffects() { }
@@ -24,6 +24,7 @@ public final class RyujinReleaseEffects {
         if (!Reference.GROUP_ZANPAKUTO.equals(event.getNewGroup()) || !TechniqueService.isRyujinJakkaEquipped(player)
                 || !shouldRelease(event.getOldForm(), event.getNewForm())) return;
         boolean bankai = Reference.FORM_BANKAI.equals(event.getNewForm());
+        if (bankai) SpiritFlameService.emit(player, 8);
         int samples = bankai ? 32 : 20;
         double radius = bankai ? 3 : 1.5;
         for (int i = 0; i < samples; i++) {
@@ -46,6 +47,7 @@ public final class RyujinReleaseEffects {
                     || !Reference.GROUP_ZANPAKUTO.equals(data.getCharacter().getActiveFormGroup())) return;
             String form = data.getCharacter().getActiveForm();
             if (!Reference.FORM_SHIKAI.equals(form) && !Reference.FORM_BANKAI.equals(form)) return;
+            if (Reference.FORM_BANKAI.equals(form) && player.tickCount % 40 == 0) SpiritFlameService.emit(player, 3);
             // Follow the blade side, based on horizontal aim; deliberately sparse during combat.
             Vec3 direction = Vec3.directionFromRotation(0, player.getYRot());
             Vec3 point = player.position().add(direction.scale(0.7)).add(-direction.z * 0.4, 1, direction.x * 0.4);

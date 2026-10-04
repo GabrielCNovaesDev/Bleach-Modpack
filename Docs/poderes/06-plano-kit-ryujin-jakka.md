@@ -1,4 +1,4 @@
-> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
 
 > **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
 
@@ -184,3 +184,7 @@ Uma entrega só será considerada pronta quando:
 As entregas F1 base — Ignição e F1 Bankai — Dash de chamas foram implementadas e homologadas em jogo. O Dash possui como limitação conhecida uma mira menos eficiente quando executado no chão, pois pode encerrar ao encontrar o primeiro bloco do terreno; esse polimento fica registrado para um ciclo futuro e não bloqueia a progressão.
 
 A implementação da **F2 base — Rajada curta** foi iniciada com cone server-side de 3 blocos e 60 graus, dano de 4 pontos, fogo por 3 segundos e partículas de superfície sem alteração de blocos. A etapa atual é compilar e homologar essa implementação. Nenhum código de `spirit_flame`, F3 ou F4 será criado antes da homologação da F2.
+
+## Etapa ambiental e facilitador de testes — atualização 04/10/2026
+
+Executada etapa de spirit_flame persistente, limitada e temporária, acionada pela entrada/manutenção Bankai. Acrescentado ao plano por solicitação do usuário: inicializador na raiz, limpeza restrita dos artefatos, JDK 17, build validada antes do cliente e remoção do cache temporário ao sair. [Contrato, implementação e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Vínculo de Zanpakutō não integra esta etapa.

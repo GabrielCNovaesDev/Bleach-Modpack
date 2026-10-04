@@ -1,3 +1,5 @@
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
+
 # Ciclo de acabamento — 04/10/2026
 
 O kit anterior continua encerrado. Nova revisão implementada e validada: katana de gume único/UVs completos, liberação/aura, Muralha 18 × 2 × 8 e emissão 82% menor, política de alvos e HUD. 51 regressões/16 GameTests passaram; aguarda homologação visual desta versão. Arquivos e sequência no [relatório 13](13-polimento-katana-liberacao-muralha-2026-10-04.md).
@@ -258,3 +260,13 @@ Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-
 - O cooldown do Corte está temporariamente em zero para permitir testes repetidos; o custo de 45 de reiatsu permanece ativo.
 
 - Estado: ajuste implementado; novo teste manual pendente.
+
+## Ciclo seguinte — fogo ambiental e inicializador — 04/10/2026
+
+1. Registrado bloco espiritual temporário com modelo de fogo animado vanilla.
+2. Implementado SavedData por dimensão: proprietário, prazo, sobreposição, chunks e remoção condicional.
+3. Bankai emite focos em raio 6, por 5 s, oito tentativas na entrada e três a cada 40 ticks; limites 32 por jogador/512 por dimensão.
+4. Contato usa política comum de aliados/PvP; não propaga nem consome terreno.
+5. Criado Iniciar-Teste.bat com limpeza restrita e script PowerShell que recompila, verifica e abre runClient.
+6. Validado inicializador em DryRun e BuildOnly Offline; build final, 51 regressões e 18 GameTests aprovados.
+7. Visual e abertura interativa aguardam homologação. [Lógica, arquivos e roteiro](14-fogo-ambiental-inicializador-2026-10-04.md).

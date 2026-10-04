@@ -1,4 +1,4 @@
-> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
 
 # Poderes — referência operacional
 
@@ -38,3 +38,7 @@ Cada documento contém atualização contextual com passos e arquivos; o texto o
 
 Planos antigos, auditorias e relatórios históricos não substituem o contrato vigente.
 `main` não é branch de entrega desta feature.
+
+## Entrega atual: fogo ambiental e inicializador
+
+[Relatório 14](14-fogo-ambiental-inicializador-2026-10-04.md) documenta focos temporários de Bankai, persistência, limites e limpeza, e o inicializador Iniciar-Teste.bat. Build, 51 regressões e 18 GameTests aprovados; homologação visual e abertura interativa pendentes.

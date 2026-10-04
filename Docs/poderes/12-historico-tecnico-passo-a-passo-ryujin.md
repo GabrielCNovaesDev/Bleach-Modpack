@@ -1,4 +1,4 @@
-> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
 
 # Ryūjin Jakka — histórico técnico passo a passo
 
@@ -245,3 +245,7 @@ futuro, fora do fechamento da Ryujin. Nenhum commit desta entrega vai para `main
 ## 10. Ciclo posterior de acabamento — 04/10/2026
 
 Após o fechamento anterior, o usuário autorizou uma revisão visual/técnica. A sequência, lógica e lista de arquivos de katana, liberação, Muralha, filtros e HUD estão no [relatório 13](13-polimento-katana-liberacao-muralha-2026-10-04.md). Resultados: 51 regressões e 16 GameTests aprovados; nova homologação visual separada. Os números de 03/10 acima são históricos e foram preservados. Fogo ambiental continua etapa futura.
+
+## 11. Fogo ambiental e inicializador de testes — 04/10/2026
+
+Após 32024a2, autorização para o ciclo restante e novo inicializador. ModBlocks/BleachCommon registram spirit_flame; SpiritFlameService mantém SavedData por dimensão com UUID/prazo, valida colocação e faz limpeza condicional. RyujinReleaseEffects chama emissão na entrada e manutenção Bankai. Bloco usa modelo vanilla cutout, sem item. Iniciar-Teste.bat delega para tools/iniciar-teste.ps1 com lock, JDK 17, limpeza restrita, build e cliente. Registros anteriores preservados. Resultado: 51 regressões, 18 GameTests, build e teste real do inicializador sem abrir o jogo aprovados. [Detalhamento passo a passo](14-fogo-ambiental-inicializador-2026-10-04.md).

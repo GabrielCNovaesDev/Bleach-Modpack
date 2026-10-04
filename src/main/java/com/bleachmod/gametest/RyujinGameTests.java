@@ -25,6 +25,46 @@ import java.util.UUID;
 @PrefixGameTestTemplate(false)
 public final class RyujinGameTests {
     @GameTest(template = "empty")
+    public static void spiritFlameSurvivesSaveAndPreservesOverlapAndReplacement(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
+        level.setBlock(pos.below(), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 3);
+        level.removeBlock(pos, false);
+        var service = new com.bleachmod.common.technique.SpiritFlameService();
+        UUID first = UUID.randomUUID(), second = UUID.randomUUID();
+        helper.assertTrue(service.place(level, pos, first) && service.place(level, pos, second), "Owners cannot overlap");
+        var tag = service.save(new net.minecraft.nbt.CompoundTag());
+        var owners = tag.getList("flames", 10).getCompound(0).getList("owners", 10);
+        owners.getCompound(0).putLong("expires", level.getGameTime() - 1);
+        var reloaded = com.bleachmod.common.technique.SpiritFlameService.load(tag);
+        reloaded.expire(level);
+        helper.assertTrue(level.getBlockState(pos).is(com.bleachmod.init.ModBlocks.SPIRIT_FLAME.get()), "One expired owner erased another's flame");
+        var remaining = reloaded.save(new net.minecraft.nbt.CompoundTag());
+        remaining.getList("flames", 10).getCompound(0).getList("owners", 10).getCompound(0).putLong("expires", level.getGameTime() - 1);
+        com.bleachmod.common.technique.SpiritFlameService.load(remaining).expire(level);
+        helper.assertTrue(level.getBlockState(pos).isAir(), "Persisted expired flame remains");
+        helper.assertTrue(service.place(level, pos, first), "Could not replace expired flame");
+        level.setBlock(pos, net.minecraft.world.level.block.Blocks.GOLD_BLOCK.defaultBlockState(), 3);
+        service.expire(level);
+        helper.assertTrue(level.getBlockState(pos).is(net.minecraft.world.level.block.Blocks.GOLD_BLOCK), "Cleanup erased a subsequent block");
+        helper.assertTrue(!service.place(level, pos, second), "Flame overwrote solid terrain");
+        level.removeBlock(pos, false);
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty", timeoutTicks = 160)
+    public static void spiritFlameExpiresInWorld(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
+        level.setBlock(pos.below(), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 3);
+        level.removeBlock(pos, false);
+        helper.assertTrue(com.bleachmod.common.technique.SpiritFlameService.get(level).place(level, pos, UUID.randomUUID()), "World flame not placed");
+        helper.runAfterDelay(125, () -> {
+            helper.assertTrue(level.getBlockState(pos).isAir(), "World tick did not remove expired flame");
+            helper.succeed();
+        });
+    }
+    @GameTest(template = "empty")
     public static void shorterWallReachesFartherAndNeverBurnsRejectedTargets(GameTestHelper helper) {
         FakePlayer player = player(helper);
         // Templates are underground; a long wall must be tested in actual open air, outside the carved cell.

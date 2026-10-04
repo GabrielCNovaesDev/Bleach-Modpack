@@ -1,4 +1,4 @@
-> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
 
 > **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
 
@@ -219,3 +219,7 @@ Hollow Boss; isso não significa raça Hollow jogável nem mentores/facções co
 O módulo 05 de game design prevê cinco atributos e Stamina, enquanto o MVP usa sete
 categorias. O módulo 06 prevê vínculo de Zanpakutō, ainda não implementado. Esses
 contratos futuros não foram convertidos em mudanças de save/economia neste ciclo.
+
+## Extensão do contrato: fogo ambiental — 04/10/2026
+
+Bankai equipada emite spirit_flame: raio 6, duração 100 ticks, oito tentativas na entrada/três a cada 40 ticks, limite 32 posições por proprietário/512 por dimensão. Somente ar sobre apoio sólido, sem propagação ou consumo de terreno; respeita doFireTick para colocação. Contato: dano base 4, intervalo 20 ticks, regras comuns de aliados/PvP. SavedData guarda proprietários/prazos; chunks descarregados não são forçados, limpeza posterior preserva blocos substituídos e sobreposição. [Detalhes e inicializador de testes](14-fogo-ambiental-inicializador-2026-10-04.md).

@@ -1,4 +1,4 @@
-> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
 
 ## Novidades de 04/10 para homologação
 
@@ -47,3 +47,9 @@ Este complemento mantém comandos e lógica de poderes nesta pasta, sem editar o
 4. A katana usa geometria nos três JSONs de forma e transformações em `ryujin_katana_handheld.json`; a Muralha densa é desenhada por `drawArea`. PNGs não foram alterados.
 
 Lógica, arquivos e validação por feature: [histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md). Última suíte: 49 regressões e 14 GameTests aprovados.
+
+## Testar a nova Bankai e iniciar pelo atalho
+
+Feche o cliente anterior e clique duas vezes em Iniciar-Teste.bat, na raiz do checkout/ZIP extraído. É necessário JDK 17; o script limpa build/logs/cache temporário, recompila e abre o cliente. Mundos e configurações permanecem. Ao fechar o jogo, remove o cache temporário. Para somente compilar: Iniciar-Teste.bat -BuildOnly.
+
+Bankai com Ryujin equipada agora acende focos temporários no solo em raio de seis blocos; cada foco dura cinco segundos, não se espalha nem consome blocos. Ao sair da forma, param as emissões e focos existentes expiram. Alvos aliados e PvP respeitam regras do kit. [Regras e testes detalhados](14-fogo-ambiental-inicializador-2026-10-04.md).
