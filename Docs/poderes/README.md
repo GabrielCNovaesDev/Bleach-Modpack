@@ -1,5 +1,15 @@
 > **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
 
+## Próximo ciclo em planejamento — 06/10/2026
+
+A Ryujin permanece homologada e encerrada. Esta etapa somente documenta:
+
+1. [Contrato de identidade, vínculo e maestria](16-contrato-identidade-vinculo-maestria-zanpakuto.md): um poder principal ativo, troca especial, progresso próprio e requisitos de liberações; decisões aprovadas distintas de propostas.
+2. [Planejamento de Hyōrinmaru / Hitsugaya](17-plano-hyorinmaru-hitsugaya.md): escolha aprovada pelo usuário, gelo/controle de movimento, protótipo gradual e responsabilidades de história.
+3. [Revisão de escopo e entrega à equipe](18-revisao-escopo-e-entrega-equipe-2026-10-06.md): dependências, diferenças entre protótipo e visão, e inventário das fontes.
+
+Nenhum vínculo novo, técnica de gelo, migração ou campanha foi implementado por esses documentos. História, consequências da troca e números finais continuam abertos para a equipe.
+
 # Poderes — referência operacional
 
 Branch: `Feature-Poderes-bankais`. Atualização: 03/10/2026.

@@ -276,3 +276,12 @@ Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-
 Usuário confirmou testes e visuais aprovados e encerrou a Ryujin. Revisão seguinte não altera poderes: endurece limpeza/lock, corrige caminhos com colchetes, alinha DryRun à execução real e retorna erro se restar cache bloqueado. Criada suíte isolada em tools/test-iniciar-teste.ps1. [Lógica, testes, resíduos esperados e limites](15-auditoria-seguranca-inicializador-2026-10-04.md).
 
 Resultado da auditoria: 18 cenários de segurança aprovados, zero falhas e fixtures temporárias removidas; gameplay permanece igual ao homologado.
+## Planejamento de identidade e próximo poder — 06/10/2026
+
+- Usuário decidiu: poder principal de identidade, troca possível por processo especial, vínculo próprio relacionado à maestria e requisitos para Shikai/Bankai.
+- Escolha do próximo conjunto: Hitsugaya / Hyōrinmaru, gelo e controle de movimento.
+- Escrito [contrato 16](16-contrato-identidade-vinculo-maestria-zanpakuto.md), separando regras decididas, propostas técnicas e decisões de história/balanceamento.
+- Escrito [plano 17](17-plano-hyorinmaru-hitsugaya.md), com fatias H0–H5, técnicas funcionais revisáveis, controle, integração e critérios futuros.
+- Registrada [revisão 18](18-revisao-escopo-e-entrega-equipe-2026-10-06.md): inventário de 48 documentos preexistentes de Docs + reference-code/README, fontes por módulo e riscos de progresso genérico/ganho passivo/migração.
+- Estado: planejamento documental; nenhum código, save, asset ou inicializador alterado. Não existem testes de gameplay novos neste ciclo.
+- História/quests, números finais, consequências da troca e recuperação da arma serão refinados pela equipe. Ryujin continua encerrada, sem reabrir balanceamento ou mecânicas homologadas.
