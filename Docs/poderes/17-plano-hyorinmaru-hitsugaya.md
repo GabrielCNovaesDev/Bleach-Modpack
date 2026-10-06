@@ -1,3 +1,5 @@
+> **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
+
 # Planejamento do segundo poder principal — Hyōrinmaru / Hitsugaya
 
 ## 1. Estado e decisões
@@ -223,3 +225,8 @@ apenas por associação com outros mods; avaliar necessidade quando os assets fo
 Equipe refina referência de cada manifestação e fecha H0/controle/dados. Depois propõe
 o contrato de H1 com números e migração revisáveis, mantendo quests finais em desenvolvimento
 paralelo. **Nenhuma implementação de Hyōrinmaru foi iniciada neste ciclo.**
+
+
+## Entrega inicial autorizada — ciclo 19
+
+Implementados identidade persistida, progresso próprio, acesso administrativo, três modelos da katana e os quatro slots como protótipos revisáveis. H1/H2 têm cortes de gelo com lentidão; H3 variantes Bankai; H4 possui barreira e zona de partículas sem alteração física do mundo. Adulta/voo/armadura/clima e H5 narrativa continuam pendentes. A [tabela vigente](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md#4-hyōrinmaru--parâmetros-provisórios) explicita as adaptações e limitações.

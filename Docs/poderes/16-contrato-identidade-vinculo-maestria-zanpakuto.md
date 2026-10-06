@@ -1,10 +1,12 @@
+> **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
+
 # Contrato de identidade, vínculo e maestria da Zanpakutō
 
 ## 1. Estado, autoridade e revisão
 
 Data: **06/10/2026**. Base analisada: `fa57dfe`, branch `Feature-Poderes-bankais`.
-**Estado: EM ESPECIFICAÇÃO.** Documento de contrato para desenvolvimento pela equipe;
-não representa uma funcionalidade implementada nem aprovação integral do futuro M07.
+**Estado: FUNDAÇÃO PARCIALMENTE IMPLEMENTADA NO CICLO 19.** As seções de desenho abaixo preservam a especificação inicial;
+Identidade, progresso separado, legado e troca administrativa estão implementados. Campanha, marcos narrativos e regras finais do M07 continuam em especificação.
 
 O usuário decidiu nesta conversa: Ryujin e outros poderes principais são escolhas de
 identidade; podem ser trocados; cada identidade tem vínculo próprio, relacionado à

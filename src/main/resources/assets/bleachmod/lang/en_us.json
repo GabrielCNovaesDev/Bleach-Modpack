@@ -126,7 +126,6 @@
   "attribute.bleachmod.control.desc": "Progressively reduces ongoing form drain.",
   "key.bleachmod.status": "Open character",
   "key.bleachmod.wheel": "Select transformation",
-  "key.bleachmod.flame_burst": "Technique: Flame Burst",
   "key.bleachmod.technique_slot_1": "Technique H: Ignition",
   "key.bleachmod.technique_slot_2": "Technique N: Short Barrage",
   "key.bleachmod.technique_slot_3": "Technique B: Wall / Tornado",
@@ -135,7 +134,6 @@
   "screen.bleachmod.purchase_remaining": "Balance after purchase: %s SP",
   "screen.bleachmod.wheel_chain": "Activate the previous form or reach the mastery needed for free transformation.",
   "screen.bleachmod.insufficient_points": "Not enough spirit points.",
-  "message.bleachmod.technique.flame_burst": "Flame Burst executed.",
   "message.bleachmod.technique.no_reiatsu": "Not enough reiatsu (%s).",
   "message.bleachmod.technique.cooldown": "Technique on cooldown: %ss.",
   "message.bleachmod.technique.unavailable": "This technique is not available in the current form.",
@@ -154,5 +152,12 @@
   "message.bleachmod.technique.effect_active": "This flame area is already active.",
   "message.bleachmod.technique.bats_active": "Wait until the current bats disappear.",
   "message.bleachmod.technique.summon_failed": "There is not enough room to summon the full swarm.",
-  "hud.bleachmod.cooldowns": "Cooldowns: %s"
+  "hud.bleachmod.cooldowns": "Cooldowns: %s",
+  "item.bleachmod.hyorinmaru": "Hyōrinmaru",
+  "message.bleachmod.technique.requires_hyorinmaru": "Hold your bound Hyōrinmaru in your main hand.",
+  "message.bleachmod.hyorinmaru.locked": "Unlock Shikai/Bankai for this Zanpakuto to use ice.",
+  "message.bleachmod.hyorinmaru.slot_1": "Slash / Ice Dragon",
+  "message.bleachmod.hyorinmaru.slot_2": "Wide slash / Ice Chain",
+  "message.bleachmod.hyorinmaru.slot_3": "Frost Barrier",
+  "message.bleachmod.hyorinmaru.slot_4": "Glacial Zone"
 }

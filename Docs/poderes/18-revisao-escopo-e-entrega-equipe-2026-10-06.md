@@ -1,3 +1,5 @@
+> **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
+
 # Revisão de escopo e entrega de planejamento à equipe
 
 Data: **06/10/2026**. Referência de implementação: `fa57dfe`, `Feature-Poderes-bankais`.

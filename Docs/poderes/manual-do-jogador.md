@@ -1,3 +1,5 @@
+> **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
+
 > **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
 
 ## Novidades de 04/10 para homologação
@@ -53,3 +55,8 @@ Lógica, arquivos e validação por feature: [histórico técnico passo a passo]
 Feche o cliente anterior e clique duas vezes em Iniciar-Teste.bat, na raiz do checkout/ZIP extraído. É necessário JDK 17; o script limpa build/logs/cache temporário, recompila e abre o cliente. Mundos e configurações permanecem. Ao fechar o jogo, remove o cache temporário. Para somente compilar: Iniciar-Teste.bat -BuildOnly.
 
 Bankai com Ryujin equipada agora acende focos temporários no solo em raio de seis blocos; cada foco dura cinco segundos, não se espalha nem consome blocos. Ao sair da forma, param as emissões e focos existentes expiram. Alvos aliados e PvP respeitam regras do kit. [Regras e testes detalhados](14-fogo-ambiental-inicializador-2026-10-04.md).
+
+
+## Testes do kit de gelo e onda — ciclo 19
+
+O roteiro completo de comandos, desbloqueios provisórios, troca de identidade e restauração está no [relatório 19](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md#5-roteiro-de-homologação-operador). H/N/B/C são os quatro slots atuais; X foi retirado. A katana de gelo deve corresponder à identidade vinculada. A onda N aparece na Ryujin selada, Shikai e Bankai.

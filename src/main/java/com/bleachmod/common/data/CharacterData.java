@@ -9,8 +9,32 @@ import java.util.Map;
 
 public class CharacterData {
     private final java.util.Set<String> unlockedForms = new java.util.HashSet<>();
-    public void unlockForm(String form) { unlockedForms.add(form); }
-    public boolean isFormDiscovered(String form) { return "sealed".equals(form) || unlockedForms.contains(form); }
+    public static final String RYUJIN = "ryujin_jakka";
+    public static final String HYORINMARU = "hyorinmaru";
+    private String zanpakutoIdentity = RYUJIN;
+    public String getZanpakutoIdentity() { return zanpakutoIdentity; }
+    /** Operator prototype switch; each identity retains its own archived progress. */
+    public void bindZanpakuto(String identity) {
+        if (!RYUJIN.equals(identity) && !HYORINMARU.equals(identity)) throw new IllegalArgumentException("Unknown zanpakuto");
+        zanpakutoIdentity = identity;
+        setSelectedForm(Reference.GROUP_ZANPAKUTO, Reference.FORM_SEALED);
+        setActiveForm(Reference.GROUP_ZANPAKUTO, Reference.FORM_SEALED);
+    }
+    private String identityKey(String key) { return RYUJIN.equals(zanpakutoIdentity) ? key : zanpakutoIdentity + "|" + key; }
+    public void unlockZanpakutoForm(String identity, String form) {
+        unlockedForms.add(RYUJIN.equals(identity) ? form : identity + "|" + form);
+    }
+    public double getZanpakutoMastery(String identity, String form) {
+        String key = Reference.GROUP_ZANPAKUTO + ":" + form;
+        return formMasteries.getOrDefault(RYUJIN.equals(identity) ? key : identity + "|" + key, 0.0D);
+    }
+    public void setZanpakutoMastery(String identity, String form, double value) {
+        String key = Reference.GROUP_ZANPAKUTO + ":" + form;
+        formMasteries.put(RYUJIN.equals(identity) ? key : identity + "|" + key,
+                Double.isFinite(value) ? Math.max(0, Math.min(100, value)) : 0);
+    }
+    public void unlockForm(String form) { unlockedForms.add(identityKey(form)); }
+    public boolean isFormDiscovered(String form) { return "sealed".equals(form) || unlockedForms.contains(identityKey(form)); }
     private String race = "";
     private String selectedFormGroup = "";
     private String selectedForm = "";
@@ -79,6 +103,7 @@ public class CharacterData {
     public CompoundTag saveAppearance() {
         CompoundTag tag = new CompoundTag();
         tag.putString("race", race);
+        tag.putString("zanpakutoIdentity", zanpakutoIdentity);
         tag.putString("activeFormGroup", activeFormGroup);
         tag.putString("activeForm", activeForm);
         return tag;
@@ -87,6 +112,7 @@ public class CharacterData {
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.putString("race", race);
+        tag.putString("zanpakutoIdentity", zanpakutoIdentity);
         tag.putString("selectedFormGroup", selectedFormGroup);
         tag.putString("selectedForm", selectedForm);
         tag.putString("activeFormGroup", activeFormGroup);
@@ -101,6 +127,8 @@ public class CharacterData {
     }
 
     public void load(CompoundTag tag) {
+        // Legacy characters belong to Ryujin; never copy their mastery into Hyorinmaru.
+        zanpakutoIdentity = HYORINMARU.equals(tag.getString("zanpakutoIdentity")) ? HYORINMARU : RYUJIN;
         if (tag.contains("unlockedForms")) { unlockedForms.clear(); unlockedForms.addAll(tag.getCompound("unlockedForms").getAllKeys()); }
         if (tag.contains("race")) {
             race = tag.getString("race");
@@ -126,8 +154,9 @@ public class CharacterData {
         }
     }
 
-    private static String masteryKey(String group, String form) {
-        return (group == null ? "" : group.toLowerCase(Locale.ROOT)) + ":"
+    private String masteryKey(String group, String form) {
+        String key = (group == null ? "" : group.toLowerCase(Locale.ROOT)) + ":"
                 + (form == null ? "" : form.toLowerCase(Locale.ROOT));
+        return Reference.GROUP_ZANPAKUTO.equalsIgnoreCase(group) ? identityKey(key) : key;
     }
 }

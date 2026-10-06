@@ -31,7 +31,7 @@ public final class BleachClient {
         event.register(ModKeybinds.CHARGE);
         event.register(ModKeybinds.CYCLE_FORM);
         event.register(ModKeybinds.DESCEND);
-        event.register(ModKeybinds.FLAME_BURST);
+
         event.register(ModKeybinds.TECHNIQUE_SLOT_1);
         event.register(ModKeybinds.TECHNIQUE_SLOT_2);
         event.register(ModKeybinds.TECHNIQUE_SLOT_3);
@@ -52,6 +52,7 @@ public final class BleachClient {
     private static void registerItemProperties() {
         registerFormProperty(ModItems.ASAUCHI.get());
         registerFormProperty(ModItems.RYUJIN_JAKKA.get());
+        registerFormProperty(ModItems.HYORINMARU.get());
     }
 
     private static void registerFormProperty(Item item) {
@@ -61,6 +62,9 @@ public final class BleachClient {
                 return 0.0F;
             }
             return PlayerCapability.get(player).map(data -> {
+                String identity = data.getCharacter().getZanpakutoIdentity();
+                if (item == ModItems.HYORINMARU.get() && !identity.equals(com.bleachmod.common.data.CharacterData.HYORINMARU)) return 0.0F;
+                if (item == ModItems.RYUJIN_JAKKA.get() && !identity.equals(com.bleachmod.common.data.CharacterData.RYUJIN)) return 0.0F;
                 String form = data.getCharacter().getActiveForm();
                 if (Reference.FORM_BANKAI.equals(form)) {
                     return 2.0F;

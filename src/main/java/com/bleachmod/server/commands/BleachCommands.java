@@ -42,6 +42,17 @@ public final class BleachCommands {
                 }
             })));
         var root=literal("bleachdev").requires(s->s.hasPermission(2));
+        root.then(literal("zanpakuto").then(literal("bind").then(argument("player",EntityArgument.player())
+            .then(argument("identity",StringArgumentType.word())
+                .suggests((ctx,b)->SharedSuggestionProvider.suggest(java.util.List.of("ryujin_jakka","hyorinmaru"),b))
+                .executes(ctx->mutate(ctx,(p,d)->{
+                    if (!Reference.RACE_SHINIGAMI.equals(d.getCharacter().getRace())) throw new IllegalArgumentException("Shinigami required");
+                    d.getCharacter().bindZanpakuto(StringArgumentType.getString(ctx,"identity"));
+                    d.getStatus().clearTransformationState();
+                    com.bleachmod.common.technique.RyujinTechniqueService.cancel(p);
+                    d.getResources().setActionCharge(0);
+                    com.bleachmod.common.network.SyncHelper.appearance(p);
+                }))))));
         root.then(literal("points").then(literal("add").then(argument("player",EntityArgument.player())
             .then(argument("amount",IntegerArgumentType.integer(1,1000000)).executes(ctx->mutate(ctx,(p,d)->d.getResources().addTrainingPoints(IntegerArgumentType.getInteger(ctx,"amount"))))))));
         root.then(literal("skill").then(literal("set").then(argument("player",EntityArgument.player())
@@ -91,6 +102,7 @@ public final class BleachCommands {
                 +" | reiatsu="+d.getResources().getCurrentReiatsu()+"/"+d.getResources().getMaxReiatsu()
                 +" | cooldowns="+(d.getStatus().areCooldownsDisabled()?"disabled":"normal")
                 +" | reiatsuCosts="+(d.getResources().areCostsDisabled()?"free":"normal")
+                +" | identity="+d.getCharacter().getZanpakutoIdentity()
                 +" | BP="+Math.round(d.getBattlePower())
                 +" | points="+d.getResources().getTrainingPoints()+" | zanpakuto="+d.getSkills().getLevel("zanpakuto")
                 +" | mastery="+d.getCharacter().getMastery("zanpakuto","shikai")+"/"+d.getCharacter().getMastery("zanpakuto","bankai")),false);

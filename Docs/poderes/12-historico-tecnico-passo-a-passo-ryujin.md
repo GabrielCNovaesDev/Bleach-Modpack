@@ -1,3 +1,5 @@
+> **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
+
 > **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
 
 # Ryūjin Jakka — histórico técnico passo a passo
@@ -249,3 +251,12 @@ Após o fechamento anterior, o usuário autorizou uma revisão visual/técnica. 
 ## 11. Fogo ambiental e inicializador de testes — 04/10/2026
 
 Após 32024a2, autorização para o ciclo restante e novo inicializador. ModBlocks/BleachCommon registram spirit_flame; SpiritFlameService mantém SavedData por dimensão com UUID/prazo, valida colocação e faz limpeza condicional. RyujinReleaseEffects chama emissão na entrada e manutenção Bankai. Bloco usa modelo vanilla cutout, sem item. Iniciar-Teste.bat delega para tools/iniciar-teste.ps1 com lock, JDK 17, limpeza restrita, build e cliente. Registros anteriores preservados. Resultado: 51 regressões, 18 GameTests, build e teste real do inicializador sem abrir o jogo aprovados. [Detalhamento passo a passo](14-fogo-ambiental-inicializador-2026-10-04.md).
+
+## Entrega do ciclo 19 — 06/10/2026
+
+- Ryujin: onda N de quatro blocos na selada/Shikai/Bankai, avanço 8/14 ticks, queda 6 ticks, residual completo 60/80 ticks; dano imediato e custos preservados. Aura contínua da lâmina Bankai com fumaça.
+- X Flame Burst retirado; HUD e comandos de teste cobrem os quatro slots atuais. Protocolo 2.4 exige cliente/servidor atualizados juntos.
+- Hyōrinmaru: novo item/katana de um gume, três modelos, quatro habilidades provisórias de gelo/controle, maestria e formas separadas. Selada com cortes físicos. Bind de operador mantém recargas, guarda progresso por identidade e retorna à selada. NBT schema 4 preserva saves antigos.
+- Recompensas da campanha existente continuam vinculadas à Ryujin. História e desbloqueios definitivos do gelo permanecem com a equipe. Testes gratuitos suspendem ganho passivo de maestria.
+- `check build runGameTestServer --offline`: **55 regressões e 24 GameTests aprovados**, JAR gerado. Geometria e integração automatizadas; aparência/FPS e balanceamento aguardam homologação do usuário.
+- [Passo a passo, pesquisa, arquivos e comandos](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Outros documentos fora de `Docs/poderes` e inicializador preservados.

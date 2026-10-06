@@ -67,7 +67,8 @@ public final class CombatEvents {
 
     private static boolean isZanjutsuWeapon(ServerPlayer player) {
         return player.getMainHandItem().is(ModItems.ASAUCHI.get())
-                || player.getMainHandItem().is(ModItems.RYUJIN_JAKKA.get());
+                || player.getMainHandItem().is(ModItems.RYUJIN_JAKKA.get())
+                || player.getMainHandItem().is(ModItems.HYORINMARU.get());
     }
 
     private static boolean isSupportedMeleeWeapon(ServerPlayer player) {

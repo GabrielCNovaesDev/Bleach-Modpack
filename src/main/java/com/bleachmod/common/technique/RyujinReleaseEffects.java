@@ -51,8 +51,8 @@ public final class RyujinReleaseEffects {
             // Follow the blade side, based on horizontal aim; deliberately sparse during combat.
             Vec3 direction = Vec3.directionFromRotation(0, player.getYRot());
             Vec3 point = player.position().add(direction.scale(0.7)).add(-direction.z * 0.4, 1, direction.x * 0.4);
-            player.serverLevel().sendParticles(ParticleTypes.FLAME, point.x, point.y, point.z,
-                    Reference.FORM_BANKAI.equals(form) ? 1 : 3, 0.1, 0.25, 0.1, 0.01);
+            player.serverLevel().sendParticles(Reference.FORM_BANKAI.equals(form) ? ParticleTypes.SMOKE : ParticleTypes.FLAME,
+                    point.x, point.y, point.z, Reference.FORM_BANKAI.equals(form) ? 2 : 3, 0.1, 0.25, 0.1, 0.01);
         });
     }
 }

@@ -82,7 +82,7 @@ public class PlayerData {
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
-        tag.putInt("schemaVersion", 3);
+        tag.putInt("schemaVersion", 4);
         tag.put("attributes", attributes.save());
         tag.put("character", character.save());
         tag.put("resources", resources.save());
@@ -110,7 +110,8 @@ public class PlayerData {
         }
         if (tag.contains("attributes")) attributes.load(tag.getCompound("attributes"));
         updateTransformationSkillLimits(character.getRace());
-        if (tag.contains("character") && !tag.getCompound("character").contains("unlockedForms")) {
+        if (tag.contains("character") && !tag.getCompound("character").contains("unlockedForms")
+                && CharacterData.RYUJIN.equals(character.getZanpakutoIdentity())) {
             character.unlockForm("sealed");
             if (skills.getLevel("zanpakuto") >= 1 || character.getMastery("zanpakuto", "shikai") > 0) character.unlockForm("shikai");
             if (skills.getLevel("zanpakuto") >= 2 || character.getMastery("zanpakuto", "bankai") > 0) character.unlockForm("bankai");

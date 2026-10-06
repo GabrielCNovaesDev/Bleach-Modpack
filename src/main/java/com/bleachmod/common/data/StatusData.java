@@ -10,20 +10,20 @@ import java.util.UUID;
 public class StatusData {
     private long lastActionTick = Long.MIN_VALUE;
     private boolean cooldownsDisabled;
-    private int[] hudCooldowns = new int[5];
+    private int[] hudCooldowns = new int[4];
     private boolean hudCooldownsDisabled;
 
     /** Separate owner-only network snapshot, never written by save(). */
     public CompoundTag techniqueHud() {
         CompoundTag tag = new CompoundTag();
         tag.putIntArray("cooldowns", new int[]{techniqueSlot1CooldownTicks, techniqueSlot2CooldownTicks,
-                techniqueSlot3CooldownTicks, techniqueSlot4CooldownTicks, flameBurstCooldownTicks});
+                techniqueSlot3CooldownTicks, techniqueSlot4CooldownTicks});
         tag.putBoolean("disabled", cooldownsDisabled);
         return tag;
     }
     public void readTechniqueHud(CompoundTag tag) {
         int[] values = tag.getIntArray("cooldowns");
-        if (values.length != 5) return;
+        if (values.length != 4) return;
         hudCooldowns = java.util.Arrays.stream(values).map(value -> Math.max(0, value)).toArray();
         hudCooldownsDisabled = tag.getBoolean("disabled");
     }
@@ -36,13 +36,11 @@ public class StatusData {
         clearCooldowns();
     }
     public void clearCooldowns() {
-        flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
         techniqueSlot3CooldownTicks = 0;
         techniqueSlot4CooldownTicks = 0;
     }
-    private int flameBurstCooldownTicks;
     private int techniqueSlot1CooldownTicks;
     private int techniqueSlot2CooldownTicks;
     private int techniqueSlot3CooldownTicks;
@@ -78,14 +76,6 @@ public class StatusData {
 
     public void setActionCharging(boolean actionCharging) {
         this.actionCharging = actionCharging;
-    }
-
-    public int getFlameBurstCooldownTicks() {
-        return flameBurstCooldownTicks;
-    }
-
-    public void setFlameBurstCooldownTicks(int ticks) {
-        flameBurstCooldownTicks = cooldownsDisabled ? 0 : Math.max(0, ticks);
     }
 
     public boolean isIgnitionActive() {
@@ -126,13 +116,11 @@ public class StatusData {
 
     /** Changing form cancels active effects but must not allow a cooldown bypass. */
     public void clearTransformationState() {
-        int burst = flameBurstCooldownTicks;
         int slot1 = techniqueSlot1CooldownTicks;
         int slot2 = techniqueSlot2CooldownTicks;
         int slot3 = techniqueSlot3CooldownTicks;
         int slot4 = techniqueSlot4CooldownTicks;
         clearTransientState();
-        flameBurstCooldownTicks = burst;
         techniqueSlot1CooldownTicks = slot1;
         techniqueSlot2CooldownTicks = slot2;
         techniqueSlot3CooldownTicks = slot3;
@@ -208,7 +196,6 @@ public class StatusData {
     /** Clears technique test state without changing form, reiatsu, ignition or progression. */
     public void clearTechniqueTestState() {
         lastActionTick = Long.MIN_VALUE;
-        flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
         techniqueSlot3CooldownTicks = 0;
@@ -225,9 +212,7 @@ public class StatusData {
         if (techniqueSlot3CooldownTicks > 0) {
             techniqueSlot3CooldownTicks--;
         }
-        if (flameBurstCooldownTicks > 0) {
-            flameBurstCooldownTicks--;
-        }
+
         if (techniqueSlot1CooldownTicks > 0) {
             techniqueSlot1CooldownTicks--;
         }
@@ -252,7 +237,6 @@ public class StatusData {
     }
 
     public void clearTransientState() {
-        flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
         techniqueSlot3CooldownTicks = 0;
@@ -283,7 +267,6 @@ public class StatusData {
             actionCharging = tag.getBoolean("actionCharging");
         }
         // Cooldowns, contact targets and temporary flame visuals are intentionally transient and are not loaded from NBT.
-        flameBurstCooldownTicks = 0;
         techniqueSlot1CooldownTicks = 0;
         techniqueSlot2CooldownTicks = 0;
         techniqueSlot3CooldownTicks = 0;

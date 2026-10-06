@@ -111,7 +111,7 @@ public final class ReiatsuHud {
     private static String formatCooldowns(PlayerData data) {
         if (data.getStatus().areHudCooldownsDisabled()) return "TEST";
         int[] values = data.getStatus().getHudCooldowns();
-        String[] slots = {"1", "2", "3", "4", "X"};
+        String[] slots = {"1", "2", "3", "4"};
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < slots.length; i++) {
             if (i > 0) result.append("  ");

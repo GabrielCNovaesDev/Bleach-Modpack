@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-/** Shared target policy for the Ryujin kit, including its older executors. */
+/** Shared target policy for both Zanpakuto kits and the older Ryujin executors. */
 public final class TechniqueTargets {
     private TechniqueTargets() { }
     public static boolean allowed(ServerPlayer owner, LivingEntity target) {

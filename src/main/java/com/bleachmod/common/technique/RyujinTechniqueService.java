@@ -334,6 +334,8 @@ public final class RyujinTechniqueService {
     }
 
     public static void cancel(ServerPlayer player) {
+        FlameWaveService.cancel(player);
+        HyorinmaruTechniqueService.cancel(player);
         Runtime runtime = ACTIVE.remove(player.getUUID());
         if (runtime != null) clearSwarm(runtime);
     }
@@ -349,10 +351,16 @@ public final class RyujinTechniqueService {
     }
     @SubscribeEvent public static void form(BleachEvents.FormChangeEvent event) { cancel(event.getPlayer()); }
     @SubscribeEvent public static void stopping(ServerStoppingEvent event) {
+        FlameWaveService.clear();
+        HyorinmaruTechniqueService.clear();
         ACTIVE.values().forEach(RyujinTechniqueService::clearSwarm);
         ACTIVE.clear();
     }
     @SubscribeEvent public static void unload(LevelEvent.Unload event) {
+        if (event.getLevel() instanceof net.minecraft.server.level.ServerLevel level) {
+            FlameWaveService.unload(level);
+            HyorinmaruTechniqueService.unload(level);
+        }
         ACTIVE.values().removeIf(runtime -> {
             if (runtime.level != event.getLevel()) return false;
             clearSwarm(runtime); return true;

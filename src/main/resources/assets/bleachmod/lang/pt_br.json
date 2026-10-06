@@ -126,7 +126,6 @@
   "attribute.bleachmod.control.desc": "Reduz progressivamente o consumo contínuo das formas.",
   "key.bleachmod.status": "Abrir personagem",
   "key.bleachmod.wheel": "Selecionar transformação",
-  "key.bleachmod.flame_burst": "Técnica: Explosão de chamas",
   "key.bleachmod.technique_slot_1": "Técnica H: Ignição",
   "key.bleachmod.technique_slot_2": "Técnica N: Rajada curta",
   "key.bleachmod.technique_slot_3": "Técnica B: Muralha / Tornado",
@@ -135,7 +134,6 @@
   "screen.bleachmod.purchase_remaining": "Saldo após a compra: %s PE",
   "screen.bleachmod.wheel_chain": "Ative a forma anterior ou alcance o domínio para transformação livre.",
   "screen.bleachmod.insufficient_points": "Pontos espirituais insuficientes.",
-  "message.bleachmod.technique.flame_burst": "Explosão de chamas executada.",
   "message.bleachmod.technique.no_reiatsu": "Reiatsu insuficiente (%s).",
   "message.bleachmod.technique.cooldown": "Técnica em recarga: %ss.",
   "message.bleachmod.technique.unavailable": "Essa técnica ainda não está disponível nessa forma.",
@@ -154,5 +152,12 @@
   "message.bleachmod.technique.effect_active": "Essa área de chamas já está ativa.",
   "message.bleachmod.technique.bats_active": "Espere os morcegos atuais desaparecerem.",
   "message.bleachmod.technique.summon_failed": "Não há espaço livre para invocar o enxame completo.",
-  "hud.bleachmod.cooldowns": "Recargas: %s"
+  "hud.bleachmod.cooldowns": "Recargas: %s",
+  "item.bleachmod.hyorinmaru": "Hyōrinmaru",
+  "message.bleachmod.technique.requires_hyorinmaru": "Segure a Hyōrinmaru vinculada na mão principal.",
+  "message.bleachmod.hyorinmaru.locked": "Desbloqueie Shikai/Bankai dessa Zanpakutō para usar gelo.",
+  "message.bleachmod.hyorinmaru.slot_1": "Corte / Dragão de Gelo",
+  "message.bleachmod.hyorinmaru.slot_2": "Corte amplo / Corrente de Gelo",
+  "message.bleachmod.hyorinmaru.slot_3": "Barreira de Geada",
+  "message.bleachmod.hyorinmaru.slot_4": "Zona Glacial"
 }

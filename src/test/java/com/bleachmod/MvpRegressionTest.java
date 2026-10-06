@@ -16,6 +16,48 @@ import java.util.*;
 public final class MvpRegressionTest {
     private static int count;
     public static void main(String[] args) {
+        test("Zanpakuto identity archives mastery and unlocks across switches and reload", () -> {
+            CharacterData d = new CharacterData(); d.initializeShinigami();
+            d.unlockForm("bankai"); d.setMastery("zanpakuto", "shikai", 75);
+            d.bindZanpakuto("hyorinmaru");
+            yes(!d.isFormDiscovered("bankai")); eq(0D, d.getMastery("zanpakuto", "shikai"));
+            d.unlockForm("shikai"); d.setMastery("zanpakuto", "shikai", 15);
+            CharacterData loaded = new CharacterData(); loaded.load(d.save());
+            eq("hyorinmaru", loaded.getZanpakutoIdentity()); eq(15D, loaded.getMastery("zanpakuto", "shikai"));
+            loaded.bindZanpakuto("ryujin_jakka"); yes(loaded.isFormDiscovered("bankai")); eq(75D, loaded.getMastery("zanpakuto", "shikai"));
+            loaded.bindZanpakuto("hyorinmaru"); yes(loaded.isFormDiscovered("shikai")); yes(!loaded.isFormDiscovered("bankai"));
+            CompoundTag legacy = d.save(); legacy.remove("zanpakutoIdentity"); loaded.load(legacy);
+            eq("ryujin_jakka", loaded.getZanpakutoIdentity()); eq(75D, loaded.getMastery("zanpakuto", "shikai"));
+        });
+        test("Original story reward cannot unlock Hyorinmaru", () -> {
+            PlayerData d = new PlayerData(); d.initializeShinigami(); d.getCharacter().bindZanpakuto("hyorinmaru");
+            new TransformationReward("zanpakuto", "bankai", 40).give(null, d);
+            yes(!d.getCharacter().isFormDiscovered("bankai")); eq(0D, d.getCharacter().getMastery("zanpakuto", "bankai"));
+            d.getCharacter().bindZanpakuto("ryujin_jakka"); yes(d.getCharacter().isFormDiscovered("bankai"));
+            eq(40D, d.getCharacter().getMastery("zanpakuto", "bankai"));
+        });
+        test("Hyorinmaru models load with a single edge and distinct guard", () -> {
+            try {
+                for (String name : List.of("hyorinmaru", "hyorinmaru_shikai", "hyorinmaru_bankai")) {
+                    String source = java.nio.file.Files.readString(java.nio.file.Path.of("src/main/resources/assets/bleachmod/models/item", name + ".json"));
+                    var parsed = net.minecraft.client.renderer.block.model.BlockModel.fromString(source);
+                    yes(parsed.getElements().size() >= 23);
+                    var model = JsonParser.parseString(source).getAsJsonObject(); int edges = 0;
+                    for (var element : model.getAsJsonArray("elements")) {
+                        if (element.getAsJsonObject().get("name").getAsString().equals("single_cutting_edge")) edges++;
+                    }
+                    eq(4, edges); yes(source.contains("four_point_tsuba"));
+                }
+            } catch (java.io.IOException e) { throw new IllegalStateException(e); }
+        });
+        test("Four-block flame front collapses over six ticks in both ranges", () -> {
+            for (int range : List.of(8, 14)) {
+                eq(4D, com.bleachmod.common.technique.FlameWaveService.frontHeight(1, range));
+                eq(4D, com.bleachmod.common.technique.FlameWaveService.frontHeight(range, range));
+                eq(2D, com.bleachmod.common.technique.FlameWaveService.frontHeight(range + 3, range));
+                eq(0D, com.bleachmod.common.technique.FlameWaveService.frontHeight(range + 6, range));
+            }
+        });
         test("Ryujin models parse as explicit geometry with a shared corrected grip", () -> {
             try {
                 var directory = java.nio.file.Path.of("src/main/resources/assets/bleachmod/models/item");
@@ -100,14 +142,12 @@ public final class MvpRegressionTest {
             StatusData status = new StatusData();
             status.setTechniqueSlot4CooldownTicks(1200);
             status.setCooldownsDisabled(true);
-            status.setFlameBurstCooldownTicks(40);
             status.setTechniqueSlot1CooldownTicks(100);
             status.setTechniqueSlot2CooldownTicks(80);
             status.setTechniqueSlot3CooldownTicks(400);
             status.setTechniqueSlot4CooldownTicks(1200);
             status.clearTransformationState();
             yes(status.areCooldownsDisabled());
-            eq(0, status.getFlameBurstCooldownTicks());
             eq(0, status.getTechniqueSlot1CooldownTicks());
             eq(0, status.getTechniqueSlot2CooldownTicks());
             eq(0, status.getTechniqueSlot3CooldownTicks());
