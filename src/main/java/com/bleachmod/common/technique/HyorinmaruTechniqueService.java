@@ -14,7 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.*;
 import java.util.*;
 
-/** Provisional four-slot ice/control kit. No frozen terrain, hard stun or flight. */
+/** Provisional four-slot ice/control kit with bounded, temporary snowy terrain. */
 public final class HyorinmaruTechniqueService {
     private record Field(Vec3 origin, Vec3 forward, boolean barrier, boolean bankai, String form,
                          net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dimension, long expires) { }
@@ -22,9 +22,11 @@ public final class HyorinmaruTechniqueService {
     private static final Map<UUID, com.bleachmod.entity.IceDragonEntity> DRAGONS = new HashMap<>();
     private static final int[] COOLDOWNS = {100, 160, 240, 300};
     private static final float[] COSTS = {15, 20, 25, 30};
+    public static final int SHIKAI_ZONE_RADIUS = 10, BANKAI_ZONE_RADIUS = 30;
     private HyorinmaruTechniqueService() { }
     public static void cancel(ServerPlayer player) {
-        FIELDS.remove(player.getUUID()); IceArmorService.cancel(player); IceControlService.cancel(player); BlizzardWeatherData.cancel(player);
+        FIELDS.remove(player.getUUID()); GlacialSnowData.get(player.serverLevel()).release(player.serverLevel(), player.getUUID());
+        IceArmorService.cancel(player); IceControlService.cancel(player); BlizzardWeatherData.cancel(player);
         var dragon = DRAGONS.remove(player.getUUID()); if (dragon != null) dragon.discard();
     }
     public static void clear() { FIELDS.clear(); DRAGONS.values().forEach(net.minecraft.world.entity.Entity::discard); DRAGONS.clear(); IceArmorService.clear(); IceControlService.clear(); }
@@ -74,6 +76,7 @@ public final class HyorinmaruTechniqueService {
         else {
             Field field = new Field(slot == 3 ? player.position().add(forward.scale(3)) : player.position(), forward,
                     slot == 3, bankai, form, player.level().dimension(), player.level().getGameTime() + (slot == 3 ? 60 : 80));
+            GlacialSnowData.get(player.serverLevel()).release(player.serverLevel(), player.getUUID());
             FIELDS.put(player.getUUID(), field); // One field per owner, including free-cast test mode.
         }
         player.serverLevel().playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.GLASS_BREAK, player.getSoundSource(), 0.7F, bankai ? 0.7F : 1.2F);
@@ -130,20 +133,25 @@ public final class HyorinmaruTechniqueService {
         long time = p.level().getGameTime();
         if (!p.isAlive() || p.isSpectator() || !equipped(p, d) || !d.getStatus().hasCreatedCharacter()
                 || !f.dimension.equals(p.level().dimension()) || !f.form.equals(d.getCharacter().getActiveForm()) || time >= f.expires) {
-            FIELDS.remove(p.getUUID()); return; // Field expiration must not cancel independent Bankai weather or armor.
+            FIELDS.remove(p.getUUID()); GlacialSnowData.get(p.serverLevel()).release(p.serverLevel(), p.getUUID());
+            return; // Field expiration must not cancel independent Bankai weather or armor.
         }
         if (time % 4 == 0) {
-            for (int i = 0; i < 16; i++) {
-                double angle = i * Math.PI * 2 / 16;
+            int samples = f.barrier ? 16 : f.bankai ? 64 : 32;
+            double zoneRadius = f.bankai ? BANKAI_ZONE_RADIUS : SHIKAI_ZONE_RADIUS;
+            for (int i = 0; i < samples; i++) {
+                double angle = i * 2.399963229728653 + time * 0.07;
+                double radius = zoneRadius * Math.sqrt((i + 0.5) / samples);
                 Vec3 point = f.barrier ? f.origin.add(-f.forward.z * (i / 2.5 - 3), (i % 4) * 0.8, f.forward.x * (i / 2.5 - 3))
-                        : f.origin.add(Math.cos(angle) * (f.bankai ? 6 : 4), 0.2, Math.sin(angle) * (f.bankai ? 6 : 4));
+                        : f.origin.add(Math.cos(angle) * radius, 0.2, Math.sin(angle) * radius);
                 if (p.serverLevel().hasChunkAt(net.minecraft.core.BlockPos.containing(point)))
-                    p.serverLevel().sendParticles(ParticleTypes.SNOWFLAKE, point.x, point.y, point.z, f.bankai ? 14 : 8, 0.3, 0.4, 0.3, 0.04);
+                    p.serverLevel().sendParticles(ParticleTypes.SNOWFLAKE, point.x, point.y + (f.bankai ? 1 : 0.5), point.z, f.bankai ? 14 : 8, 0.6, f.bankai ? 2 : 0.8, 0.6, 0.04);
             }
+            if (!f.barrier) snowPatches(p, f, zoneRadius);
         }
         if (time % 10 != 0) return;
-        double range = f.barrier ? 4 : f.bankai ? 6 : 4;
-        for (LivingEntity target : p.serverLevel().getEntitiesOfClass(LivingEntity.class, new AABB(f.origin, f.origin).inflate(range, 3, range),
+        double range = f.barrier ? 4 : f.bankai ? BANKAI_ZONE_RADIUS : SHIKAI_ZONE_RADIUS;
+        for (LivingEntity target : p.serverLevel().getEntitiesOfClass(LivingEntity.class, new AABB(f.origin, f.origin).inflate(range, 5, range),
                 e -> TechniqueTargets.allowed(p, e))) {
             Vec3 delta = target.position().subtract(f.origin);
             if (!p.hasLineOfSight(target)) continue;
@@ -152,9 +160,26 @@ public final class HyorinmaruTechniqueService {
                 if (Math.abs(delta.dot(f.forward)) > 0.8 || lateral > 3 || Math.abs(delta.y) > 3) continue;
                 IceControlService.chill(p, target, 30, f.bankai ? 2 : 1);
                 target.push(f.forward.x * 0.22, 0.04, f.forward.z * 0.22); target.hurtMarked = true;
-            } else if (delta.x * delta.x + delta.z * delta.z <= range * range && Math.abs(delta.y) <= 2
+            } else if (TechniqueGeometry.intersectsCylinder(f.origin, range, 4, 4, target.getBoundingBox())
                     && target.hurt(p.damageSources().playerAttack(p), f.bankai ? 3 : 2)) {
                 IceControlService.chill(p, target, 30, f.bankai ? 2 : 1);
+            }
+        }
+    }
+    private static void snowPatches(ServerPlayer p, Field f, double radius) {
+        // Fixed attempt budget, clustered carpets across the disk; never scans all 2,800 Bankai columns.
+        var level = p.serverLevel(); var snow = GlacialSnowData.get(level);
+        if (snow.ownerCount(p.getUUID()) >= GlacialSnowData.OWNER_LIMIT) return;
+        for (int i = 0; i < (f.bankai ? 12 : 6); i++) {
+            double angle = level.random.nextDouble() * Math.PI * 2;
+            double distance = Math.sqrt(level.random.nextDouble()) * Math.max(0, radius - 2);
+            var center = net.minecraft.core.BlockPos.containing(f.origin.add(Math.cos(angle) * distance, 3, Math.sin(angle) * distance));
+            for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) {
+                var column = center.offset(dx, 0, dz);
+                for (int dy = 0; dy <= 7; dy++) {
+                    var pos = column.below(dy); if (!level.hasChunkAt(pos)) break;
+                    if (snow.place(level, pos, p.getUUID(), f.expires, f.bankai ? 1 + level.random.nextInt(3) : 1)) break;
+                }
             }
         }
     }

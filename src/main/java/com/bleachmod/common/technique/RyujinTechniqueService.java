@@ -48,7 +48,7 @@ public final class RyujinTechniqueService {
     public static final float WALL_COST = 40;
     public static final float WALL_DAMAGE = 18;
     public static final int WALL_COOLDOWN = 400;
-    public static final double TORNADO_RADIUS = 6;
+    public static final double TORNADO_RADIUS = 9;
     public static final double TORNADO_HEIGHT = 10;
     public static final int TORNADO_DURATION = 200;
     public static final float TORNADO_COST = 40;
@@ -136,7 +136,7 @@ public final class RyujinTechniqueService {
         }
         if (!data.getResources().consumeReiatsu(cost)) return;
         Vec3 direction = Vec3.directionFromRotation(0, player.getYRot()).normalize();
-        Vec3 origin = tornado ? player.position().add(direction.scale(3)) : player.position().add(direction);
+        Vec3 origin = tornado ? player.position() : player.position().add(direction);
         runtime.area = new Area(tornado, origin, direction, runtime.level.getGameTime());
         data.getStatus().setTechniqueSlot3CooldownTicks(tornado ? TORNADO_COOLDOWN : WALL_COOLDOWN);
         if (!tornado) damageArea(runtime, origin, WALL_DAMAGE, 3);
@@ -199,7 +199,7 @@ public final class RyujinTechniqueService {
         for (LivingEntity target : runtime.level.getEntitiesOfClass(LivingEntity.class, box,
                 entity -> targetAllowed(runtime.owner, entity))) {
             boolean inside = area.tornado
-                    ? TechniqueGeometry.intersectsCylinder(center, radius, 0, TORNADO_HEIGHT, target.getBoundingBox())
+                    ? TechniqueGeometry.intersectsAnnulus(center, 3, radius, TORNADO_HEIGHT, target.getBoundingBox())
                     : TechniqueGeometry.intersectsWall(center, area.direction, WALL_LENGTH, WALL_WIDTH,
                             WALL_HEIGHT, target.getBoundingBox());
             if (!inside
@@ -223,7 +223,7 @@ public final class RyujinTechniqueService {
             // Two clockwise helices (viewed from above), with actual tangential particle velocity.
             for (int arm = 0; arm < 2; arm++) for (int i = 0; i < 48; i++) {
                 double height = TORNADO_HEIGHT * i / 47.0;
-                double radius = 1 + (TORNADO_RADIUS - 1) * height / TORNADO_HEIGHT;
+                double radius = 3 + (TORNADO_RADIUS - 3) * height / TORNADO_HEIGHT;
                 double angle = TechniqueGeometry.tornadoAngle(area.age, i, arm);
                 double x = center.x + Math.cos(angle) * radius;
                 double z = center.z + Math.sin(angle) * radius;
@@ -315,7 +315,7 @@ public final class RyujinTechniqueService {
                 if (runtime.level.getGameTime() >= area.expiresAt || area.tornado != bankai(data)) runtime.area = null;
                 else {
                     area.age++;
-                    Vec3 center = area.tornado ? owner.position().add(area.direction.scale(3)) : area.origin;
+                    Vec3 center = area.tornado ? owner.position() : area.origin;
                     damageArea(runtime, center, area.tornado ? TORNADO_DAMAGE : WALL_DAMAGE, area.tornado ? 2 : 3);
                     if (area.age % (area.tornado ? 2 : WALL_DRAW_INTERVAL) == 0) drawArea(runtime, center);
                 }

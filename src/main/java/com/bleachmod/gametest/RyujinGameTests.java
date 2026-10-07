@@ -267,7 +267,7 @@ public final class RyujinGameTests {
         helper.succeed();
     }
     @GameTest(template = "empty")
-    public static void tornadoCenterMovesThreeBlocksAheadForParticlesAndDamage(GameTestHelper helper) {
+    public static void tornadoSurroundsPlayerWithThreeBlockClearCenter(GameTestHelper helper) {
         var p = player(helper); data(p).getCharacter().setActiveForm("zanpakuto", "bankai");
         // Other fixtures cast long-range skills in open air at maxHeight-64; isolate this negative control vertically.
         p.setPos(p.getX(), helper.getLevel().getMaxBuildHeight() - 24, p.getZ());
@@ -275,11 +275,16 @@ public final class RyujinGameTests {
         helper.getLevel().getChunkAt(BlockPos.containing(p.position().add(0, 0, -4)));
         var forward = target(helper, p.position().add(0, 0, 8));
         var behind = target(helper, p.position().add(0, 0, -4));
+        var inner = target(helper, p.position().add(0, 0, 1));
+        var outside = target(helper, p.position().add(0, 0, -10));
         helper.runAfterDelay(5, () -> { try {
             TechniqueService.executeSlot(p, data(p), 3); RyujinTechniqueService.tickEffects(p);
-            helper.assertTrue(forward.getHealth() < 20, "Offset tornado missed forward target inside shifted radius");
-            helper.assertTrue(behind.getHealth() == 20, "Tornado damage remained centered on player");
-        } finally { RyujinTechniqueService.cancel(p); forward.discard(); behind.discard(); } helper.succeed(); });
+            helper.assertTrue(forward.getHealth() < 20, "Tornado missed forward annulus target");
+            helper.assertTrue(behind.getHealth() < 20, "Tornado must also hit behind player");
+            helper.assertTrue(inner.getHealth() == 20 && outside.getHealth() == 20, "Tornado hit clear center or exceeded outer radius");
+            p.setPos(p.getX(), p.getY(), p.getZ() + 5); RyujinTechniqueService.tickEffects(p);
+            helper.assertTrue(inner.getHealth() < 20, "Tornado did not follow player movement");
+        } finally { RyujinTechniqueService.cancel(p); forward.discard(); behind.discard(); inner.discard(); outside.discard(); } helper.succeed(); });
     }
 
     @GameTest(template = "empty")

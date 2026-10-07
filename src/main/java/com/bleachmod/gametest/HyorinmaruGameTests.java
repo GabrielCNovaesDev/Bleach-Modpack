@@ -113,7 +113,7 @@ public final class HyorinmaruGameTests {
         h.assertTrue(!FlameWaveService.isActive(p), "Form change left a wave running");
         RyujinTechniqueService.cancel(p); h.succeed();
     }
-    @GameTest(template = "empty", timeoutTicks = 120)
+    @GameTest(template = "empty", batch = "zone_legacy", timeoutTicks = 120)
     public static void iceZoneExpiresAndNeverAffectsAllies(GameTestHelper h) {
         var p = player(h); release(p, "bankai"); var ally = zombie(h, p, 2); var enemy = zombie(h, p, 3);
         var scoreboard = h.getLevel().getScoreboard(); var team = scoreboard.addPlayerTeam("ice" + UUID.randomUUID().toString().substring(0,8));

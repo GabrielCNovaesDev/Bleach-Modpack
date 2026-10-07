@@ -21,9 +21,11 @@ public final class CombatEvents {
     @SubscribeEvent
     public static void hurt(LivingHurtEvent event) {
         if (event.getEntity() instanceof ServerPlayer armored
-                && com.bleachmod.common.technique.IceArmorService.active(armored)
                 && !event.getSource().is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            event.setAmount(event.getAmount() * (1 - com.bleachmod.common.technique.IceArmorService.REDUCTION));
+            float reduction = com.bleachmod.common.technique.IceArmorService.active(armored)
+                    ? com.bleachmod.common.technique.IceArmorService.REDUCTION
+                    : com.bleachmod.common.technique.ReleasePassives.resistance(armored);
+            event.setAmount(event.getAmount() * (1 - reduction));
         }
         if(isPlayerMeleeAttack(event.getSource()) && event.getSource().getEntity() instanceof ServerPlayer player) {
             PlayerCapability.get(player).ifPresent(data->{
@@ -61,6 +63,7 @@ public final class CombatEvents {
         PlayerCapability.get(player).ifPresent(data -> {
             if (data.getStatus().hasCreatedCharacter() && event.getAmount() > 0) {
                 TechniqueService.applyIgnitionHit(player, data, event.getEntity());
+                com.bleachmod.common.technique.ReleasePassives.flameHit(player, data, event.getEntity());
                 NetworkHandler.sendToPlayer(new DamageIndicatorS2C(event.getAmount()), player);
             }
         });

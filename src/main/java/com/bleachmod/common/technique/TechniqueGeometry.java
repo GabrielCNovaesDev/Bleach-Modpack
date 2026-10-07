@@ -11,6 +11,12 @@ public final class TechniqueGeometry {
         return age * 0.3 + sample * 0.5 + arm * Math.PI;
     }
 
+    public static boolean intersectsAnnulus(Vec3 center, double inner, double outer, double height, AABB box) {
+        double x = Math.max(Math.abs(box.minX - center.x), Math.abs(box.maxX - center.x));
+        double z = Math.max(Math.abs(box.minZ - center.z), Math.abs(box.maxZ - center.z));
+        return intersectsCylinder(center, outer, 0, height, box) && x * x + z * z >= inner * inner;
+    }
+
     public static AABB wallBounds(Vec3 origin, Vec3 forward, double length, double width, double height) {
         Vec3 end = origin.add(forward.scale(length));
         double xPad = Math.abs(forward.z) * width / 2;

@@ -1,3 +1,5 @@
+> **Estado vigente — ciclo 21, 07/10/2026:** tornado centrado e móvel com miolo livre de três/raio externo nove; Zona Glacial Shikai dez/Bankai trinta com neve temporária no interior; clima com restauração e prioridade para comando manual; passivas de fogo Ryujin e resistência Hyōrinmaru. [Passo a passo, lógica, arquivos, valores e testes](21-correcao-tornado-zona-clima-passivas-2026-10-07.md). Os ciclos abaixo são históricos; esta revisão substitui o deslocamento frontal do tornado do ciclo 20.
+
 # Ciclo 20 — gelo, proteção, hipotermia, clima e HUD
 
 Data: 06/10/2026. Branch exclusiva: `Feature-Poderes-bankais`. Base: `1376ca0`.

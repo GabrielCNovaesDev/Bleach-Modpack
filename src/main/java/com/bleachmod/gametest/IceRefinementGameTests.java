@@ -93,4 +93,73 @@ public final class IceRefinementGameTests {
             level.setRainLevel(rainLevel);level.setThunderLevel(thunderLevel);
         } h.succeed();
     }
+
+    @GameTest(template="empty",batch="weather_elapsed",timeoutTicks=85)
+    public static void weatherRestoresAfterElapsedTicksAndManualClearStaysClear(GameTestHelper h) {
+        var level = h.getLevel(); var weather = level.getServer().getWorldData().overworldData();
+        var original = new BlizzardWeatherData(); UUID owner = UUID.randomUUID();
+        level.setWeatherParameters(400, 600, false, false); original.acquire(level, owner);
+        h.onEachTick(() -> { if (h.getTick() < 35) original.acquire(level, owner); });
+        h.runAfterDelay(35, () -> {
+            // The vanilla timers can diverge from game time (e.g. sleep/mods); still restore an owned storm.
+            weather.setRainTime(119000); original.release(level, owner);
+            h.assertTrue(!weather.isRaining() && weather.getClearWeatherTime() == 400, "Elapsed storm lost its original snapshot");
+            var shared = BlizzardWeatherData.get(level); shared.acquire(level, owner);
+            level.getServer().getCommands().performPrefixedCommand(level.getServer().createCommandSourceStack(), "weather clear 100");
+            shared.acquire(level, owner); shared.tick(level);
+            h.assertTrue(!weather.isRaining() && !shared.isManaged(), "Caster overwrote manual clear");
+            shared.acquire(level, UUID.randomUUID());
+            h.assertTrue(!weather.isRaining(), "Second Bankai overwrote manual clear");
+            shared.release(level, owner);
+            h.succeed();
+        });
+    }
+
+    @GameTest(template="empty")
+    public static void releasedPassivesTrackIdentityAndFormWithoutItemMutation(GameTestHelper h) {
+        var p=player(h); var z=mob(h,p,2); var d=data(p);
+        d.getCharacter().setActiveForm("zanpakuto","shikai");
+        h.assertTrue(ReleasePassives.resistance(p)==0.15F,"Shikai protection missing");
+        d.getCharacter().setActiveForm("zanpakuto","bankai");
+        var hit=new net.minecraftforge.event.entity.living.LivingHurtEvent(p,p.damageSources().mobAttack(z),10);
+        com.bleachmod.server.events.CombatEvents.hurt(hit); h.assertTrue(hit.getAmount()==7,"Bankai protection missing");
+        d.getCharacter().setActiveForm("zanpakuto","sealed"); h.assertTrue(ReleasePassives.resistance(p)==0,"Protection leaked to sealed form");
+        d.getCharacter().bindZanpakuto("ryujin_jakka"); p.setItemSlot(EquipmentSlot.MAINHAND,new ItemStack(ModItems.RYUJIN_JAKKA.get()));
+        d.getCharacter().setActiveForm("zanpakuto","shikai"); ReleasePassives.flameHit(p,d,z); h.assertTrue(z.isOnFire(),"Shikai passive does not ignite");
+        z.clearFire(); d.getCharacter().setActiveForm("zanpakuto","bankai"); ReleasePassives.flameHit(p,d,z);
+        h.assertTrue(z.getRemainingFireTicks()==160 && !p.getMainHandItem().isEnchanted(),"Bankai fire missing or permanent enchantment added");
+        z.clearFire(); d.getCharacter().setActiveForm("zanpakuto","sealed"); ReleasePassives.flameHit(p,d,z);
+        h.assertTrue(!z.isOnFire(),"Fire passive leaked to sealed form"); z.discard(); h.succeed();
+    }
+
+    @GameTest(template="empty")
+    public static void snowPersistsExpiresAndPreservesOtherBlocks(GameTestHelper h) {
+        var level=h.getLevel(); var pos=h.absolutePos(new BlockPos(1,3,1));
+        level.setBlock(pos.below(),net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(),3);
+        level.setBlock(pos,net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(),3);
+        UUID a=UUID.randomUUID(),b=UUID.randomUUID(); var snow=new GlacialSnowData();
+        h.assertTrue(snow.place(level,pos,a,level.getGameTime()+60,3),"Snow patch missing");
+        h.assertTrue(snow.place(level,pos,b,level.getGameTime()+60,1),"Overlapping snow lease missing");
+        var recovered=GlacialSnowData.load(snow.save(new CompoundTag())); recovered.release(level,a);
+        h.assertTrue(level.getBlockState(pos).is(net.minecraft.world.level.block.Blocks.SNOW),"Overlap removed another owner's snow");
+        recovered.release(level,b); h.assertTrue(level.getBlockState(pos).isAir(),"Snow cleanup left residue");
+        snow=new GlacialSnowData(); snow.place(level,pos,a,level.getGameTime(),2); snow.expire(level);
+        h.assertTrue(level.getBlockState(pos).isAir(),"Expired snow remained");
+        snow.place(level,pos,a,level.getGameTime()+60,2); level.setBlock(pos,net.minecraft.world.level.block.Blocks.DIAMOND_BLOCK.defaultBlockState(),3);
+        snow.release(level,a); h.assertTrue(level.getBlockState(pos).is(net.minecraft.world.level.block.Blocks.DIAMOND_BLOCK),"Cleanup overwrote a player block");
+        h.assertTrue(!snow.place(level,pos,a,level.getGameTime()+60,1),"Snow replaced an occupied block"); h.succeed();
+    }
+
+    @GameTest(template="empty",batch="zone_radius",timeoutTicks=45)
+    public static void bankaiZoneDamagesInteriorAndDistantTargetsButNotOutside(GameTestHelper h) {
+        var p=player(h); p.setPos(p.getX(),h.getLevel().getMaxBuildHeight()-24,p.getZ()); var d=data(p);
+        d.getSkills().get("zanpakuto").setLevel(2); d.getCharacter().unlockForm("shikai"); d.getCharacter().unlockForm("bankai");
+        d.getCharacter().setMastery("zanpakuto","shikai",100); d.getCharacter().setActiveForm("zanpakuto","bankai");
+        var center=mob(h,p,2); var far=mob(h,p,28); var outside=mob(h,p,32);
+        TechniqueService.executeSlot(p,d,4); h.onEachTick(() -> HyorinmaruTechniqueService.tick(p,d));
+        h.runAfterDelay(20,() -> { try {
+            h.assertTrue(center.getHealth()<20 && far.getHealth()<20,"Zone failed to cover interior or 28-block target");
+            h.assertTrue(outside.getHealth()==20,"Zone exceeded 30-block radius");
+        } finally { HyorinmaruTechniqueService.cancel(p); center.discard(); far.discard(); outside.discard(); } h.succeed(); });
+    }
 }

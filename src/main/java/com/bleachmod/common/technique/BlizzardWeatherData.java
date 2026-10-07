@@ -34,7 +34,7 @@ public final class BlizzardWeatherData extends SavedData {
     public static boolean supportsBiome(Biome biome, BlockPos pos) { return biome.getPrecipitationAt(pos) != Biome.Precipitation.NONE; }
     public boolean isManaged() { return managed; }
     public void acquire(ServerLevel level, UUID owner) {
-        boolean existing = owners.containsKey(owner);
+        boolean existing = !owners.isEmpty();
         owners.put(owner, level.getGameTime() + 40);
         if (managed || existing) return;
         var weather = level.getServer().getWorldData().overworldData();
@@ -63,8 +63,8 @@ public final class BlizzardWeatherData extends SavedData {
     }
     private boolean stillOurs(ServerLevel level) {
         var weather = level.getServer().getWorldData().overworldData();
-        return weather.isRaining() && !weather.isThundering() && weather.getClearWeatherTime() == 0
-                && Math.abs(weather.getRainTime() - (level.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE) ? controlledUntil - level.getGameTime() : 120000)) <= 3;
+        // Timers are advanced by vanilla and may diverge from game time; they do not establish ownership.
+        return weather.isRaining() && !weather.isThundering() && weather.getClearWeatherTime() == 0;
     }
     public void tick(ServerLevel level) {
         owners.values().removeIf(until -> until <= level.getGameTime());
@@ -79,7 +79,7 @@ public final class BlizzardWeatherData extends SavedData {
         if (!Level.OVERWORLD.equals(p.level().dimension())) return;
         if (!active) { get(p.serverLevel()).release(p.serverLevel(), p.getUUID()); return; }
         get(p.serverLevel()).acquire(p.serverLevel(), p.getUUID());
-        if (p.tickCount % 4 != 0) return;
+        if (!get(p.serverLevel()).isManaged() || p.tickCount % 4 != 0) return;
         for (int i = 0; i < 12; i++) {
             double x = p.getX() + (p.getRandom().nextDouble() - 0.5) * 24;
             double z = p.getZ() + (p.getRandom().nextDouble() - 0.5) * 24;
@@ -94,6 +94,18 @@ public final class BlizzardWeatherData extends SavedData {
     }
     @SubscribeEvent public static void levelTick(TickEvent.LevelTickEvent event) {
         if (event.phase == TickEvent.Phase.END && event.level instanceof ServerLevel level && Level.OVERWORLD.equals(level.dimension())) get(level).tick(level);
+    }
+    @SubscribeEvent public static void weatherCommand(net.minecraftforge.event.CommandEvent event) {
+        var parse = event.getParseResults(); var context = parse.getContext();
+        if (!parse.getExceptions().isEmpty() || parse.getReader().canRead() || context.getCommand() == null
+                || !context.getSource().hasPermission(2) || context.getNodes().isEmpty()
+                || !"weather".equals(context.getNodes().get(0).getNode().getName())) return;
+        ServerLevel level = context.getSource().getServer().getLevel(Level.OVERWORLD);
+        if (level != null) {
+            var data = get(level);
+            // Preserve active leases so the next caster tick cannot immediately overwrite the command.
+            data.managed = false; data.setDirty();
+        }
     }
     @Override public CompoundTag save(CompoundTag tag) {
         tag.putBoolean("managed", managed); tag.putBoolean("oldRain", oldRain); tag.putBoolean("oldThunder", oldThunder);
