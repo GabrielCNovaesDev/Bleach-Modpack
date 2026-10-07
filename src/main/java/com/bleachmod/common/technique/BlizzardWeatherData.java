@@ -23,6 +23,7 @@ public final class BlizzardWeatherData extends SavedData {
     private int oldClearTime, oldRainTime, oldThunderTime;
     private long controlledUntil;
     private float oldRainLevel, oldThunderLevel;
+    private boolean commandSyncPending;
     public static BlizzardWeatherData get(ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(BlizzardWeatherData::load, BlizzardWeatherData::new, FILE);
     }
@@ -40,7 +41,7 @@ public final class BlizzardWeatherData extends SavedData {
         var weather = level.getServer().getWorldData().overworldData();
         oldRain = weather.isRaining(); oldThunder = weather.isThundering();
         oldClearTime = weather.getClearWeatherTime(); oldRainTime = weather.getRainTime(); oldThunderTime = weather.getThunderTime();
-        oldRainLevel = level.getRainLevel(1); oldThunderLevel = level.getThunderLevel(1);
+        oldRainLevel = level.getRainLevel(1); oldThunderLevel = thunderIntensity(level);
         start(level); managed = true; setDirty();
     }
     private void start(ServerLevel level) {
@@ -58,6 +59,7 @@ public final class BlizzardWeatherData extends SavedData {
             weather.setClearWeatherTime(oldClearTime); weather.setRainTime(oldRainTime); weather.setThunderTime(oldThunderTime);
             weather.setRaining(oldRain); weather.setThundering(oldThunder);
             level.setRainLevel(oldRainLevel); level.setThunderLevel(oldThunderLevel);
+            syncWeather(level);
         }
         managed = false; setDirty();
     }
@@ -67,6 +69,13 @@ public final class BlizzardWeatherData extends SavedData {
         return weather.isRaining() && !weather.isThundering() && weather.getClearWeatherTime() == 0;
     }
     public void tick(ServerLevel level) {
+        if (commandSyncPending) {
+            commandSyncPending = false;
+            var weather = level.getServer().getWorldData().overworldData();
+            // Runs after command execution; clear also repairs a client left raining by older builds.
+            if (!weather.isRaining()) { level.setRainLevel(0); level.setThunderLevel(0); }
+            syncWeather(level);
+        }
         owners.values().removeIf(until -> until <= level.getGameTime());
         if (managed && !stillOurs(level)) { managed = false; setDirty(); } // Respect a subsequent /weather command.
         if (owners.isEmpty()) restore(level); // Also recovers the previous climate after save/restart, before owners rejoin.
@@ -97,20 +106,40 @@ public final class BlizzardWeatherData extends SavedData {
     }
     @SubscribeEvent public static void weatherCommand(net.minecraftforge.event.CommandEvent event) {
         var parse = event.getParseResults(); var context = parse.getContext();
+        while (context.getChild() != null) context = context.getChild(); // Also handles /execute ... run weather.
         if (!parse.getExceptions().isEmpty() || parse.getReader().canRead() || context.getCommand() == null
                 || !context.getSource().hasPermission(2) || context.getNodes().isEmpty()
-                || !"weather".equals(context.getNodes().get(0).getNode().getName())) return;
+                || !("weather".equals(context.getNodes().get(0).getNode().getName())
+                || "minecraft:weather".equals(context.getNodes().get(0).getNode().getName()))) return;
         ServerLevel level = context.getSource().getServer().getLevel(Level.OVERWORLD);
         if (level != null) {
             var data = get(level);
             // Preserve active leases so the next caster tick cannot immediately overwrite the command.
-            data.managed = false; data.setDirty();
+            data.managed = false; data.commandSyncPending = true; data.setDirty();
         }
+    }
+    private static void syncWeather(ServerLevel level) {
+        var players = level.getServer().getPlayerList();
+        var weather = level.getServer().getWorldData().overworldData();
+        // Level setters update both current and previous intensity, so vanilla cannot detect this change.
+        players.broadcastAll(new net.minecraft.network.protocol.game.ClientboundGameEventPacket(weather.isRaining()
+                ? net.minecraft.network.protocol.game.ClientboundGameEventPacket.START_RAINING
+                : net.minecraft.network.protocol.game.ClientboundGameEventPacket.STOP_RAINING, 0), level.dimension());
+        players.broadcastAll(new net.minecraft.network.protocol.game.ClientboundGameEventPacket(
+                net.minecraft.network.protocol.game.ClientboundGameEventPacket.RAIN_LEVEL_CHANGE, level.getRainLevel(1)), level.dimension());
+        players.broadcastAll(new net.minecraft.network.protocol.game.ClientboundGameEventPacket(
+                net.minecraft.network.protocol.game.ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE, thunderIntensity(level)), level.dimension());
+    }
+    private static float thunderIntensity(ServerLevel level) {
+        // getThunderLevel is rain-weighted, while vanilla packets and setters require unweighted intensity.
+        float rain = level.getRainLevel(1);
+        return rain > 0 ? Math.min(1, level.getThunderLevel(1) / rain) : 0;
     }
     @Override public CompoundTag save(CompoundTag tag) {
         tag.putBoolean("managed", managed); tag.putBoolean("oldRain", oldRain); tag.putBoolean("oldThunder", oldThunder);
         tag.putInt("oldClearTime", oldClearTime); tag.putInt("oldRainTime", oldRainTime); tag.putInt("oldThunderTime", oldThunderTime);
         tag.putFloat("oldRainLevel", oldRainLevel); tag.putFloat("oldThunderLevel", oldThunderLevel); tag.putLong("controlledUntil", controlledUntil);
+        tag.putBoolean("rawThunder", true);
         return tag;
     }
     public static BlizzardWeatherData load(CompoundTag tag) {
@@ -118,6 +147,7 @@ public final class BlizzardWeatherData extends SavedData {
         data.managed = tag.getBoolean("managed"); data.oldRain = tag.getBoolean("oldRain"); data.oldThunder = tag.getBoolean("oldThunder");
         data.oldClearTime = tag.getInt("oldClearTime"); data.oldRainTime = tag.getInt("oldRainTime"); data.oldThunderTime = tag.getInt("oldThunderTime");
         data.oldRainLevel = tag.getFloat("oldRainLevel"); data.oldThunderLevel = tag.getFloat("oldThunderLevel"); data.controlledUntil = tag.getLong("controlledUntil");
+        if (!tag.getBoolean("rawThunder") && data.oldRainLevel > 0) data.oldThunderLevel = Math.min(1, data.oldThunderLevel / data.oldRainLevel);
         return data;
     }
 }

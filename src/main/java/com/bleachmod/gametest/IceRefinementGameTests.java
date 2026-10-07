@@ -16,6 +16,65 @@ import java.util.UUID;
 
 @GameTestHolder("bleachmod") @PrefixGameTestTemplate(false)
 public final class IceRefinementGameTests {
+    @GameTest(template="empty",batch="weather_packets")
+    public static void restoringWeatherAndClearCommandSynchronizeConnectedClients(GameTestHelper h) throws ReflectiveOperationException {
+        var level=h.getLevel(); var p=player(h);
+        // The public roster is read-only. Only this fixture accesses the backing list, removing its fake recipient in finally.
+        var field=net.minecraft.server.players.PlayerList.class.getDeclaredField("players"); field.setAccessible(true);
+        @SuppressWarnings("unchecked") var players=(java.util.List<net.minecraft.server.level.ServerPlayer>)field.get(level.getServer().getPlayerList());
+        var packets=new java.util.ArrayList<net.minecraft.network.protocol.game.ClientboundGameEventPacket>();
+        var previous=p.connection;
+        p.connection=new net.minecraft.server.network.ServerGamePacketListenerImpl(level.getServer(),
+                new net.minecraft.network.Connection(net.minecraft.network.protocol.PacketFlow.SERVERBOUND),p) {
+            @Override public void send(net.minecraft.network.protocol.Packet<?> packet) {
+                if (packet instanceof net.minecraft.network.protocol.game.ClientboundGameEventPacket climate) packets.add(climate);
+            }
+        };
+        players.add(p); UUID owner=UUID.randomUUID(); var control=BlizzardWeatherData.get(level);
+        try {
+            level.setWeatherParameters(400,600,false,false); level.setRainLevel(0); level.setThunderLevel(0);
+            control.acquire(level,owner); level.setRainLevel(1); control.release(level,owner);
+            assertDryPackets(h,packets); packets.clear();
+            // No owned storm and server already clear: an older client can still be visually stuck raining.
+            level.getServer().getCommands().performPrefixedCommand(level.getServer().createCommandSourceStack(),"weather clear");
+            control.tick(level); assertDryPackets(h,packets); packets.clear();
+            control.acquire(level,owner); level.setRainLevel(1);
+            level.getServer().getCommands().performPrefixedCommand(level.getServer().createCommandSourceStack(),"execute run weather clear 100");
+            control.tick(level); control.acquire(level,owner);
+            assertDryPackets(h,packets);
+            h.assertTrue(!level.getServer().getWorldData().overworldData().isRaining() && !control.isManaged(),"Manual clear was overwritten");
+            control.release(level,owner); packets.clear();
+            level.setWeatherParameters(0,600,true,true); level.setRainLevel(0.5F); level.setThunderLevel(0.6F);
+            control.acquire(level,owner); level.setRainLevel(1); level.setThunderLevel(0); control.release(level,owner);
+            h.assertTrue(Math.abs(level.getRainLevel(1)-0.5F)<0.001F && Math.abs(level.getThunderLevel(1)-0.3F)<0.001F,"Previous storm intensity was not restored");
+            h.assertTrue(packets.stream().anyMatch(packet -> packet.getEvent()==net.minecraft.network.protocol.game.ClientboundGameEventPacket.START_RAINING)
+                    && packets.stream().anyMatch(packet -> packet.getEvent()==net.minecraft.network.protocol.game.ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE && Math.abs(packet.getParam()-0.6F)<0.001F),"Client received rain-weighted thunder instead of original intensity");
+            level.setWeatherParameters(400,600,false,false); level.setRainLevel(0); level.setThunderLevel(0);
+        } finally { control.release(level,owner); players.remove(p); p.connection=previous; }
+        h.succeed();
+    }
+    private static void assertDryPackets(GameTestHelper h, java.util.List<net.minecraft.network.protocol.game.ClientboundGameEventPacket> packets) {
+        h.assertTrue(packets.stream().anyMatch(p -> p.getEvent()==net.minecraft.network.protocol.game.ClientboundGameEventPacket.STOP_RAINING),"Client never received STOP_RAINING");
+        h.assertTrue(packets.stream().anyMatch(p -> p.getEvent()==net.minecraft.network.protocol.game.ClientboundGameEventPacket.RAIN_LEVEL_CHANGE && p.getParam()==0),"Client still has stale rain intensity");
+        h.assertTrue(packets.stream().anyMatch(p -> p.getEvent()==net.minecraft.network.protocol.game.ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE && p.getParam()==0),"Client still has stale thunder intensity");
+    }
+    @GameTest(template="empty",batch="dragon_range",timeoutTicks=55)
+    public static void bankaiDragonIsLargerReachesTwentyFourBlocksAndExpires(GameTestHelper h) {
+        var p=player(h); var d=data(p);
+        d.getSkills().get("zanpakuto").setLevel(2); d.getCharacter().unlockForm("shikai"); d.getCharacter().unlockForm("bankai");
+        d.getCharacter().setMastery("zanpakuto","shikai",100); d.getCharacter().setActiveForm("zanpakuto","bankai");
+        var inside=mob(h,p,22); var outside=mob(h,p,26);
+        var dragon=new com.bleachmod.entity.IceDragonEntity[1];
+        h.runAfterDelay(5,()->{
+            TechniqueService.executeSlot(p,d,1);
+            h.assertTrue(inside.getHealth()<20 && outside.getHealth()==20,"Bankai dragon strike range must be 24");
+            dragon[0]=h.getLevel().getEntitiesOfClass(com.bleachmod.entity.IceDragonEntity.class,p.getBoundingBox().inflate(5)).get(0);
+            h.assertTrue(dragon[0].getPhantomSize()==12 && !dragon[0].isPickable(),"Dragon is not enlarged or became interactive");
+        });
+        h.runAfterDelay(32,()->h.assertTrue(dragon[0].getZ()-p.getZ()>21 && !dragon[0].isRemoved(),"Visual dragon did not travel its extended range"));
+        h.runAfterDelay(40,()->{ try { h.assertTrue(dragon[0].isRemoved(),"Extended dragon did not expire"); }
+            finally { HyorinmaruTechniqueService.cancel(p); inside.discard(); outside.discard(); } h.succeed(); });
+    }
     private static PlayerData data(FakePlayer p) { return PlayerCapability.get(p).orElseThrow(() -> new IllegalStateException("No data")); }
     private static FakePlayer player(GameTestHelper h) {
         var p = new FakePlayer(h.getLevel(), new GameProfile(UUID.randomUUID(), "IcePolish")); data(p).initializeShinigami();

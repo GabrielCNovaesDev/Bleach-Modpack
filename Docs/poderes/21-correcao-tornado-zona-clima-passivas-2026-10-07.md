@@ -1,3 +1,5 @@
+> **Estado vigente — ciclo 22, 07/10/2026:** restauração do clima agora sincroniza explicitamente os clientes e `/weather clear` corrige chuva visual presa; Ice Dragon Bankai com modelo maior e alcance 24. [Causa, lógica, arquivos, testes e roteiro final](22-clima-sincronizado-dragon-bankai-2026-10-07.md). Demais pontos homologados pelo usuário; encerramento definitivo aguarda este teste visual. Registros anteriores abaixo são históricos.
+
 # Ciclo 21 — tornado centrado, território glacial e passivas
 
 Data: 07/10/2026. Branch exclusiva: `Feature-Poderes-bankais`. Base: `a190264`.

@@ -84,7 +84,7 @@ public final class HyorinmaruTechniqueService {
         SyncHelper.resources(player);
     }
     private static void strike(ServerPlayer p, int slot, boolean released, boolean bankai, Vec3 forward) {
-        double range = !released ? 6 : slot == 1 ? (bankai ? 14 : 10) : (bankai ? 8 : 6);
+        double range = !released ? 6 : slot == 1 ? (bankai ? 24 : 10) : (bankai ? 8 : 6);
         double halfAngle = slot == 1 ? Math.toRadians(15) : Math.toRadians(35);
         for (LivingEntity target : p.serverLevel().getEntitiesOfClass(LivingEntity.class, p.getBoundingBox().inflate(range),
                 e -> TechniqueTargets.allowed(p, e))) {

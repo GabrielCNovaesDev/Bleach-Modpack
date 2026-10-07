@@ -15,12 +15,16 @@ public final class IceDragonEntity extends Phantom {
     private net.minecraft.server.level.ServerPlayer caster;
     private Vec3 origin = Vec3.ZERO, direction = Vec3.ZERO;
     private int life;
+    public static final int BANKAI_SIZE = 12, BANKAI_LIFETIME = 30;
+    public static final double BANKAI_SPEED = 0.8;
+    private double speed = 0.7;
     public IceDragonEntity(EntityType<? extends Phantom> type, Level level) {
         super(type, level); setNoAi(true); setNoGravity(true); noPhysics = true; setSilent(true);
     }
     public void configure(net.minecraft.server.level.ServerPlayer p, Vec3 aim, boolean bankai) {
         owner = p.getUUID(); caster = p; origin = p.position().add(aim.scale(1.5)).add(0, 1.2, 0); direction = aim;
-        life = bankai ? 20 : 14; setPhantomSize(bankai ? 4 : 2); setPos(origin); setYRot(p.getYRot()); setYBodyRot(p.getYRot());
+        life = bankai ? BANKAI_LIFETIME : 14; speed = bankai ? BANKAI_SPEED : 0.7;
+        setPhantomSize(bankai ? BANKAI_SIZE : 2); setPos(origin); setYRot(p.getYRot()); setYBodyRot(p.getYRot());
     }
     @Override public void tick() {
         super.tick();
@@ -30,7 +34,7 @@ public final class IceDragonEntity extends Phantom {
                 || !PlayerCapability.get(p).map(d -> HyorinmaruTechniqueService.equipped(p, d) && !"sealed".equals(d.getCharacter().getActiveForm())).orElse(false)) {
             discard(); return;
         }
-        Vec3 next = origin.add(direction.scale(tickCount * 0.7));
+        Vec3 next = origin.add(direction.scale(tickCount * speed));
         if (!level().hasChunkAt(net.minecraft.core.BlockPos.containing(next))) { discard(); return; }
         setPos(next); setDeltaMovement(Vec3.ZERO);
         ((ServerLevel) level()).sendParticles(net.minecraft.core.particles.ParticleTypes.SNOWFLAKE, getX(), getY(), getZ(), 10, 0.5, 0.4, 0.5, 0.03);
