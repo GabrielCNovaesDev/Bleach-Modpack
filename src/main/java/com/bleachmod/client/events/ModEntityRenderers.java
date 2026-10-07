@@ -32,6 +32,7 @@ public class ModEntityRenderers {
     public static void registerRenderers(
             EntityRenderersEvent.RegisterRenderers event
     ) {
+        event.registerEntityRenderer(ModEntities.ICE_DRAGON.get(), IceDragonRenderer::new);
         event.registerEntityRenderer(
                 ModEntities.HOLLOW.get(),
                 HollowRenderer::new
@@ -111,10 +112,25 @@ public class ModEntityRenderers {
     public static void registerLayerDefinitions(
             EntityRenderersEvent.RegisterLayerDefinitions event
     ) {
+        event.registerLayerDefinition(com.bleachmod.client.model.IceArmorLayer.LAYER, com.bleachmod.client.model.IceArmorLayer::createLayer);
         event.registerLayerDefinition(
                 ModModelLayers.HOLLOW_BOSS,
                 HollowBossModel::createBodyLayer
         );
+    }
+
+    @SubscribeEvent public static void playerLayers(EntityRenderersEvent.AddLayers event) {
+        for (String skin : event.getSkins()) {
+            var renderer = event.getSkin(skin);
+            if (renderer instanceof net.minecraft.client.renderer.entity.player.PlayerRenderer playerRenderer) playerRenderer.addLayer(new com.bleachmod.client.model.IceArmorLayer(playerRenderer,
+                    event.getEntityModels().bakeLayer(com.bleachmod.client.model.IceArmorLayer.LAYER)));
+        }
+    }
+    public static final class IceDragonRenderer extends net.minecraft.client.renderer.entity.PhantomRenderer {
+        public IceDragonRenderer(EntityRendererProvider.Context context) { super(context); layers.clear(); }
+        @Override public ResourceLocation getTextureLocation(net.minecraft.world.entity.monster.Phantom entity) {
+            return new ResourceLocation("minecraft", "textures/block/packed_ice.png");
+        }
     }
 
     public static class QuestNpcRenderer extends MobRenderer<QuestNpcEntity, PlayerModel<QuestNpcEntity>> {

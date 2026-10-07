@@ -20,6 +20,11 @@ import net.minecraftforge.fml.common.Mod;
 public final class CombatEvents {
     @SubscribeEvent
     public static void hurt(LivingHurtEvent event) {
+        if (event.getEntity() instanceof ServerPlayer armored
+                && com.bleachmod.common.technique.IceArmorService.active(armored)
+                && !event.getSource().is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            event.setAmount(event.getAmount() * (1 - com.bleachmod.common.technique.IceArmorService.REDUCTION));
+        }
         if(isPlayerMeleeAttack(event.getSource()) && event.getSource().getEntity() instanceof ServerPlayer player) {
             PlayerCapability.get(player).ifPresent(data->{
                 if(!data.getStatus().hasCreatedCharacter())return;

@@ -136,7 +136,7 @@ public final class RyujinTechniqueService {
         }
         if (!data.getResources().consumeReiatsu(cost)) return;
         Vec3 direction = Vec3.directionFromRotation(0, player.getYRot()).normalize();
-        Vec3 origin = tornado ? player.position() : player.position().add(direction);
+        Vec3 origin = tornado ? player.position().add(direction.scale(3)) : player.position().add(direction);
         runtime.area = new Area(tornado, origin, direction, runtime.level.getGameTime());
         data.getStatus().setTechniqueSlot3CooldownTicks(tornado ? TORNADO_COOLDOWN : WALL_COOLDOWN);
         if (!tornado) damageArea(runtime, origin, WALL_DAMAGE, 3);
@@ -315,7 +315,7 @@ public final class RyujinTechniqueService {
                 if (runtime.level.getGameTime() >= area.expiresAt || area.tornado != bankai(data)) runtime.area = null;
                 else {
                     area.age++;
-                    Vec3 center = area.tornado ? owner.position() : area.origin;
+                    Vec3 center = area.tornado ? owner.position().add(area.direction.scale(3)) : area.origin;
                     damageArea(runtime, center, area.tornado ? TORNADO_DAMAGE : WALL_DAMAGE, area.tornado ? 2 : 3);
                     if (area.age % (area.tornado ? 2 : WALL_DRAW_INTERVAL) == 0) drawArea(runtime, center);
                 }
@@ -351,6 +351,8 @@ public final class RyujinTechniqueService {
     }
     @SubscribeEvent public static void form(BleachEvents.FormChangeEvent event) { cancel(event.getPlayer()); }
     @SubscribeEvent public static void stopping(ServerStoppingEvent event) {
+        var overworld = event.getServer().getLevel(net.minecraft.world.level.Level.OVERWORLD);
+        if (overworld != null) BlizzardWeatherData.get(overworld).restore(overworld);
         FlameWaveService.clear();
         HyorinmaruTechniqueService.clear();
         ACTIVE.values().forEach(RyujinTechniqueService::clearSwarm);

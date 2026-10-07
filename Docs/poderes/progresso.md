@@ -1,3 +1,5 @@
+> **Estado vigente — ciclo 20, 06/10/2026:** Ryujin com onda mais densa e tornado três blocos à frente; Hyōrinmaru com quatro slots selados, armadura temporária, hipotermia, criatura de gelo, asas/cauda Bankai, tempestade com restauração e HUD de habilidades. [Lógica, arquivos, valores e homologação](20-refinamento-gelo-clima-hud-2026-10-06.md). A decisão deste ciclo substitui a antiga selada restrita a dois cortes físicos. Registros anteriores abaixo são históricos.
+
 > **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
 
 > **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
@@ -296,3 +298,14 @@ Resultado da auditoria: 18 cenários de segurança aprovados, zero falhas e fixt
 - Recompensas da campanha existente continuam vinculadas à Ryujin. História e desbloqueios definitivos do gelo permanecem com a equipe. Testes gratuitos suspendem ganho passivo de maestria.
 - `check build runGameTestServer --offline`: **55 regressões e 24 GameTests aprovados**, JAR gerado. Geometria e integração automatizadas; aparência/FPS e balanceamento aguardam homologação do usuário.
 - [Passo a passo, pesquisa, arquivos e comandos](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Outros documentos fora de `Docs/poderes` e inicializador preservados.
+## Entrega do ciclo 20 — 06/10/2026
+
+1. Ryujin: frente N com +150% de partículas por amostra; centro do tornado três blocos à frente para desenho e dano, com alcance/altura/custos preservados.
+2. Hyōrinmaru selada: H/N de alcance seis com neve/som/lentidão; B proteção temporária de 25% por seis segundos; C controle de alvo único com empurrão, lentidão forte e hipotermia vanilla.
+3. Liberações: mais partículas, hipotermia nos golpes/campos, criatura visual de Phantom com material de gelo, armadura em camadas, asas/cauda Bankai e pulso/aura de liberação.
+4. Clima: tempestade durante Bankai no Overworld/biomas permitidos, neve local, referência cooperativa por jogador e restauração do clima anterior. Campos podem expirar sem encerrar o clima. Dados de clima recuperáveis após reinício; alterações posteriores por /weather preservadas.
+5. HUD: nome, forma, maestria atual, quatro habilidades/atalhos reais, requisitos da configuração e próxima liberação. Protocolo 2.5 exige cliente/servidor atualizados juntos.
+6. `check build runGameTestServer --offline`: **57 regressões e 29 GameTests aprovados**, build gerada. A posição do novo teste de tornado foi isolada verticalmente dos demais ataques de longo alcance para evitar interferência entre cenários paralelos. Não foi necessário mudar a lógica do tornado para corrigir a fixture.
+7. Aparência, FPS e equilíbrio de duelo aguardam homologação no cliente. [Relatório com arquivos, decisões e roteiro](20-refinamento-gelo-clima-hud-2026-10-06.md). JAR: `build/libs/bleachmod-0.2.0.jar`; saída local: `build/ice-refinement-validation.log`, não versionada.
+
+Documentação de outras pastas e inicializador preservados. Commit exclusivo na `Feature-Poderes-bankais`.

@@ -16,6 +16,24 @@ import java.util.*;
 public final class MvpRegressionTest {
     private static int count;
     public static void main(String[] args) {
+        test("Ice armor bakes independent body plates, wings and tail", () -> {
+            var root = com.bleachmod.client.model.IceArmorLayer.createLayer().bakeRoot();
+            for (String part : List.of("body", "arm", "leg", "wing", "tail")) yes(!root.getChild(part).isEmpty());
+            CharacterData d = new CharacterData(); d.setIceArmorVisual(true);
+            yes(d.saveAppearance().getBoolean("iceArmorVisual")); yes(!d.save().contains("iceArmorVisual"));
+            CharacterData loaded = new CharacterData(); loaded.load(d.save()); yes(!loaded.isIceArmorVisual());
+            loaded.load(d.saveAppearance()); yes(loaded.isIceArmorVisual());
+        });
+        test("Guide distinguishes sealed armor and duel from released fields", () -> {
+            eq("ability.bleachmod.hyorinmaru.sealed_3", com.bleachmod.client.hud.ZanpakutoHud.abilityKey("hyorinmaru", "sealed", 3));
+            eq("ability.bleachmod.hyorinmaru.slot_3", com.bleachmod.client.hud.ZanpakutoHud.abilityKey("hyorinmaru", "bankai", 3));
+            eq("ability.bleachmod.ryujin.flame_tornado", com.bleachmod.client.hud.ZanpakutoHud.abilityKey("ryujin_jakka", "bankai", 3));
+            try {
+                var lang = JsonParser.parseString(java.nio.file.Files.readString(java.nio.file.Path.of("src/main/resources/assets/bleachmod/lang/pt_br.json"))).getAsJsonObject();
+                for(String identity : List.of("hyorinmaru", "ryujin_jakka")) for(String form : List.of("sealed", "shikai", "bankai")) for(int slot=1;slot<=4;slot++)
+                    yes(lang.has(com.bleachmod.client.hud.ZanpakutoHud.abilityKey(identity,form,slot)));
+            } catch(java.io.IOException e) { throw new IllegalStateException(e); }
+        });
         test("Zanpakuto identity archives mastery and unlocks across switches and reload", () -> {
             CharacterData d = new CharacterData(); d.initializeShinigami();
             d.unlockForm("bankai"); d.setMastery("zanpakuto", "shikai", 75);

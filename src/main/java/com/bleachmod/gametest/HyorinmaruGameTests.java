@@ -127,6 +127,9 @@ public final class HyorinmaruGameTests {
         h.runAfterDelay(95, () -> { try {
             HyorinmaruTechniqueService.tick(p, data(p));
             h.assertTrue(!HyorinmaruTechniqueService.isActive(p), "Expired zone remains active");
+            if (com.bleachmod.common.technique.BlizzardWeatherData.eligible(p.serverLevel(), p.blockPosition())) {
+                h.assertTrue(com.bleachmod.common.technique.BlizzardWeatherData.get(p.serverLevel()).isManaged(), "Zone expiration cancelled ongoing Bankai weather");
+            }
         } finally { scoreboard.removePlayerTeam(team); ally.discard(); enemy.discard(); RyujinTechniqueService.cancel(p); } h.succeed(); });
     }
 }

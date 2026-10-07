@@ -1,3 +1,5 @@
+> **Estado vigente — ciclo 20, 06/10/2026:** Ryujin com onda mais densa e tornado três blocos à frente; Hyōrinmaru com quatro slots selados, armadura temporária, hipotermia, criatura de gelo, asas/cauda Bankai, tempestade com restauração e HUD de habilidades. [Lógica, arquivos, valores e homologação](20-refinamento-gelo-clima-hud-2026-10-06.md). A decisão deste ciclo substitui a antiga selada restrita a dois cortes físicos. Registros anteriores abaixo são históricos.
+
 > **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
 
 # Planejamento do segundo poder principal — Hyōrinmaru / Hitsugaya
@@ -230,3 +232,7 @@ paralelo. **Nenhuma implementação de Hyōrinmaru foi iniciada neste ciclo.**
 ## Entrega inicial autorizada — ciclo 19
 
 Implementados identidade persistida, progresso próprio, acesso administrativo, três modelos da katana e os quatro slots como protótipos revisáveis. H1/H2 têm cortes de gelo com lentidão; H3 variantes Bankai; H4 possui barreira e zona de partículas sem alteração física do mundo. Adulta/voo/armadura/clima e H5 narrativa continuam pendentes. A [tabela vigente](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md#4-hyōrinmaru--parâmetros-provisórios) explicita as adaptações e limitações.
+
+## Revisão autorizada do ciclo 20 — 06/10/2026
+
+A selada passa a ter quatro habilidades básicas de gelo: H/N de alcance seis, B de armadura temporária (25%/6s) e C de controle de alvo único com hipotermia. Isso substitui a proposta anterior de dois cortes sem gelo. Shikai/Bankai recebem mais neve, congelamento, criatura cosmética baseada em Phantom e armadura visual crescente; Bankai inclui asas/cauda e clima com concessão/retorno ao estado anterior. HUD informa habilidades, atalhos reais e requisitos vigentes de formas, sem novos patamares individuais arbitrários. A escala continua 0–100, com história e progressão final sob responsabilidade da equipe. [Implementação e limites do motor vanilla](20-refinamento-gelo-clima-hud-2026-10-06.md).

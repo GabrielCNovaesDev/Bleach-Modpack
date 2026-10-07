@@ -12,6 +12,9 @@ public class CharacterData {
     public static final String RYUJIN = "ryujin_jakka";
     public static final String HYORINMARU = "hyorinmaru";
     private String zanpakutoIdentity = RYUJIN;
+    private boolean iceArmorVisual;
+    public boolean isIceArmorVisual() { return iceArmorVisual; }
+    public void setIceArmorVisual(boolean active) { iceArmorVisual = active; }
     public String getZanpakutoIdentity() { return zanpakutoIdentity; }
     /** Operator prototype switch; each identity retains its own archived progress. */
     public void bindZanpakuto(String identity) {
@@ -102,6 +105,7 @@ public class CharacterData {
 
     public CompoundTag saveAppearance() {
         CompoundTag tag = new CompoundTag();
+        tag.putBoolean("iceArmorVisual", iceArmorVisual);
         tag.putString("race", race);
         tag.putString("zanpakutoIdentity", zanpakutoIdentity);
         tag.putString("activeFormGroup", activeFormGroup);
@@ -127,6 +131,7 @@ public class CharacterData {
     }
 
     public void load(CompoundTag tag) {
+        if (tag.contains("iceArmorVisual")) iceArmorVisual = tag.getBoolean("iceArmorVisual");
         // Legacy characters belong to Ryujin; never copy their mastery into Hyorinmaru.
         zanpakutoIdentity = HYORINMARU.equals(tag.getString("zanpakutoIdentity")) ? HYORINMARU : RYUJIN;
         if (tag.contains("unlockedForms")) { unlockedForms.clear(); unlockedForms.addAll(tag.getCompound("unlockedForms").getAllKeys()); }

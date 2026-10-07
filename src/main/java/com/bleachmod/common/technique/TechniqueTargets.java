@@ -10,6 +10,7 @@ public final class TechniqueTargets {
     private TechniqueTargets() { }
     public static boolean allowed(ServerPlayer owner, LivingEntity target) {
         if (target == owner || !target.isAlive() || target.isSpectator() || owner.isAlliedTo(target)
+                || target instanceof com.bleachmod.entity.IceDragonEntity
                 || target instanceof QuestNpcEntity || target.getPersistentData().getBoolean("bleachmod_flame_bat")) return false;
         return !(target instanceof Player other)
                 || (owner.getServer().isPvpAllowed() && owner.canHarmPlayer(other));

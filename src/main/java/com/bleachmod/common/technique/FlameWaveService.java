@@ -71,7 +71,7 @@ public final class FlameWaveService {
             if (age <= range && supported) wave.ground.add(surface.immutable());
             for (double y = 0; y < height; y += 0.5) {
                 player.serverLevel().sendParticles(ParticleTypes.FLAME, point.x, surface.getY() + y + 0.15, point.z,
-                        2, 0.16, 0.12, 0.16, 0.012);
+                        5, 0.22, 0.16, 0.22, 0.022);
             }
         }
     }

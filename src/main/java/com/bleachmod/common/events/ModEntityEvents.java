@@ -24,6 +24,7 @@ public class ModEntityEvents {
     public static void registerAttributes(
             EntityAttributeCreationEvent event
     ) {
+        event.put(ModEntities.ICE_DRAGON.get(), net.minecraft.world.entity.monster.Monster.createMonsterAttributes().build());
         event.put(
                 ModEntities.HOLLOW.get(),
                 HollowEntity.createAttributes().build()
