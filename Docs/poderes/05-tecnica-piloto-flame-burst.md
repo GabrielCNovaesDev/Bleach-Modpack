@@ -1,3 +1,31 @@
+> **Estado vigente — ciclo 22, 07/10/2026:** restauração do clima agora sincroniza explicitamente os clientes e `/weather clear` corrige chuva visual presa; Ice Dragon Bankai com modelo maior e alcance 24. [Causa, lógica, arquivos, testes e roteiro final](22-clima-sincronizado-dragon-bankai-2026-10-07.md). Demais pontos homologados pelo usuário; encerramento definitivo aguarda este teste visual. Registros anteriores abaixo são históricos.
+
+> **Estado vigente — ciclo 21, 07/10/2026:** tornado centrado e móvel com miolo livre de três/raio externo nove; Zona Glacial Shikai dez/Bankai trinta com neve temporária no interior; clima com restauração e prioridade para comando manual; passivas de fogo Ryujin e resistência Hyōrinmaru. [Passo a passo, lógica, arquivos, valores e testes](21-correcao-tornado-zona-clima-passivas-2026-10-07.md). Os ciclos abaixo são históricos; esta revisão substitui o deslocamento frontal do tornado do ciclo 20.
+
+> **Estado vigente — ciclo 20, 06/10/2026:** Ryujin com onda mais densa e tornado três blocos à frente; Hyōrinmaru com quatro slots selados, armadura temporária, hipotermia, criatura de gelo, asas/cauda Bankai, tempestade com restauração e HUD de habilidades. [Lógica, arquivos, valores e homologação](20-refinamento-gelo-clima-hud-2026-10-06.md). A decisão deste ciclo substitui a antiga selada restrita a dois cortes físicos. Registros anteriores abaixo são históricos.
+
+> **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
+
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
+
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Evolução do Flame Burst
+
+1. X foi preservado em `TechniqueService.executeFlameBurst`: servidor cobra 20, aplica dano base 6 em raio 3 e cooldown 300 ticks.
+2. `141205c`: `StatusData.clearTransformationState` preserva a recarga ao transformar, sem alterar o executor de X.
+3. `5a02b61`: `StatusData.setFlameBurstCooldownTicks` atribui zero no modo de teste; `ResourcesData.consumeReiatsu` dispensa débito no modo gratuito; `BleachCommands` restaura as regras por jogador.
+4. A última suíte passou com 49 regressões e 14 GameTests. O estado «não compilado» abaixo é histórico; não foi adicionado GameTest exclusivo de combate para X nesta revisão.
+
+---
+
+# Estado operacional — 03/10/2026
+
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Feature concluída pelo usuário após `5a02b61`; histórico técnico e arquivos descritos nesta atualização.
+
+## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
+
 # Técnica piloto — Flame Burst
 
 ## Estado

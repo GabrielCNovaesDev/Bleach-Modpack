@@ -16,6 +16,240 @@ import java.util.*;
 public final class MvpRegressionTest {
     private static int count;
     public static void main(String[] args) {
+        test("Ice armor bakes independent body plates, wings and tail", () -> {
+            var root = com.bleachmod.client.model.IceArmorLayer.createLayer().bakeRoot();
+            for (String part : List.of("body", "arm", "leg", "wing", "tail")) yes(!root.getChild(part).isEmpty());
+            CharacterData d = new CharacterData(); d.setIceArmorVisual(true);
+            yes(d.saveAppearance().getBoolean("iceArmorVisual")); yes(!d.save().contains("iceArmorVisual"));
+            CharacterData loaded = new CharacterData(); loaded.load(d.save()); yes(!loaded.isIceArmorVisual());
+            loaded.load(d.saveAppearance()); yes(loaded.isIceArmorVisual());
+        });
+        test("Guide distinguishes sealed armor and duel from released fields", () -> {
+            eq("ability.bleachmod.hyorinmaru.sealed_3", com.bleachmod.client.hud.ZanpakutoHud.abilityKey("hyorinmaru", "sealed", 3));
+            eq("ability.bleachmod.hyorinmaru.slot_3", com.bleachmod.client.hud.ZanpakutoHud.abilityKey("hyorinmaru", "bankai", 3));
+            eq("ability.bleachmod.ryujin.flame_tornado", com.bleachmod.client.hud.ZanpakutoHud.abilityKey("ryujin_jakka", "bankai", 3));
+            try {
+                var lang = JsonParser.parseString(java.nio.file.Files.readString(java.nio.file.Path.of("src/main/resources/assets/bleachmod/lang/pt_br.json"))).getAsJsonObject();
+                for(String identity : List.of("hyorinmaru", "ryujin_jakka")) for(String form : List.of("sealed", "shikai", "bankai")) for(int slot=1;slot<=4;slot++)
+                    yes(lang.has(com.bleachmod.client.hud.ZanpakutoHud.abilityKey(identity,form,slot)));
+            } catch(java.io.IOException e) { throw new IllegalStateException(e); }
+        });
+        test("Zanpakuto identity archives mastery and unlocks across switches and reload", () -> {
+            CharacterData d = new CharacterData(); d.initializeShinigami();
+            d.unlockForm("bankai"); d.setMastery("zanpakuto", "shikai", 75);
+            d.bindZanpakuto("hyorinmaru");
+            yes(!d.isFormDiscovered("bankai")); eq(0D, d.getMastery("zanpakuto", "shikai"));
+            d.unlockForm("shikai"); d.setMastery("zanpakuto", "shikai", 15);
+            CharacterData loaded = new CharacterData(); loaded.load(d.save());
+            eq("hyorinmaru", loaded.getZanpakutoIdentity()); eq(15D, loaded.getMastery("zanpakuto", "shikai"));
+            loaded.bindZanpakuto("ryujin_jakka"); yes(loaded.isFormDiscovered("bankai")); eq(75D, loaded.getMastery("zanpakuto", "shikai"));
+            loaded.bindZanpakuto("hyorinmaru"); yes(loaded.isFormDiscovered("shikai")); yes(!loaded.isFormDiscovered("bankai"));
+            CompoundTag legacy = d.save(); legacy.remove("zanpakutoIdentity"); loaded.load(legacy);
+            eq("ryujin_jakka", loaded.getZanpakutoIdentity()); eq(75D, loaded.getMastery("zanpakuto", "shikai"));
+        });
+        test("Original story reward cannot unlock Hyorinmaru", () -> {
+            PlayerData d = new PlayerData(); d.initializeShinigami(); d.getCharacter().bindZanpakuto("hyorinmaru");
+            new TransformationReward("zanpakuto", "bankai", 40).give(null, d);
+            yes(!d.getCharacter().isFormDiscovered("bankai")); eq(0D, d.getCharacter().getMastery("zanpakuto", "bankai"));
+            d.getCharacter().bindZanpakuto("ryujin_jakka"); yes(d.getCharacter().isFormDiscovered("bankai"));
+            eq(40D, d.getCharacter().getMastery("zanpakuto", "bankai"));
+        });
+        test("Hyorinmaru models load with a single edge and distinct guard", () -> {
+            try {
+                for (String name : List.of("hyorinmaru", "hyorinmaru_shikai", "hyorinmaru_bankai")) {
+                    String source = java.nio.file.Files.readString(java.nio.file.Path.of("src/main/resources/assets/bleachmod/models/item", name + ".json"));
+                    var parsed = net.minecraft.client.renderer.block.model.BlockModel.fromString(source);
+                    yes(parsed.getElements().size() >= 23);
+                    var model = JsonParser.parseString(source).getAsJsonObject(); int edges = 0;
+                    for (var element : model.getAsJsonArray("elements")) {
+                        if (element.getAsJsonObject().get("name").getAsString().equals("single_cutting_edge")) edges++;
+                    }
+                    eq(4, edges); yes(source.contains("four_point_tsuba"));
+                }
+            } catch (java.io.IOException e) { throw new IllegalStateException(e); }
+        });
+        test("Four-block flame front collapses over six ticks in both ranges", () -> {
+            for (int range : List.of(8, 14)) {
+                eq(4D, com.bleachmod.common.technique.FlameWaveService.frontHeight(1, range));
+                eq(4D, com.bleachmod.common.technique.FlameWaveService.frontHeight(range, range));
+                eq(2D, com.bleachmod.common.technique.FlameWaveService.frontHeight(range + 3, range));
+                eq(0D, com.bleachmod.common.technique.FlameWaveService.frontHeight(range + 6, range));
+            }
+        });
+        test("Ryujin models parse as explicit geometry with a shared corrected grip", () -> {
+            try {
+                var directory = java.nio.file.Path.of("src/main/resources/assets/bleachmod/models/item");
+                var parent = JsonParser.parseString(java.nio.file.Files.readString(
+                        directory.resolve("ryujin_katana_handheld.json"))).getAsJsonObject();
+                yes(!parent.has("parent")); // builtin/generated would replace our geometry with the short sprite.
+                var display = parent.getAsJsonObject("display");
+                eq(55, display.getAsJsonObject("thirdperson_righthand").getAsJsonArray("rotation").get(2).getAsInt());
+                eq(-55, display.getAsJsonObject("thirdperson_lefthand").getAsJsonArray("rotation").get(2).getAsInt());
+                for (String name : List.of("ryujin_jakka", "ryujin_jakka_shikai", "ryujin_jakka_bankai")) {
+                    String source = java.nio.file.Files.readString(directory.resolve(name + ".json"));
+                    var parsed = net.minecraft.client.renderer.block.model.BlockModel.fromString(source);
+                    eq(22, parsed.getElements().size());
+                    var model = JsonParser.parseString(source).getAsJsonObject();
+                    int edges = 0;
+                    int spines = 0;
+                    eq("bleachmod:item/ryujin_katana_handheld", model.get("parent").getAsString());
+                    for (var element : model.getAsJsonArray("elements")) {
+                        var part = element.getAsJsonObject();
+                        if (part.has("name") && part.get("name").getAsString().equals("single_cutting_edge")) edges++;
+                        if (part.has("name") && part.get("name").getAsString().equals("blunt_spine")) spines++;
+                        eq(6, part.getAsJsonObject("faces").size());
+                        for (int axis = 0; axis < 3; axis++) {
+                            double from = part.getAsJsonArray("from").get(axis).getAsDouble();
+                            double to = part.getAsJsonArray("to").get(axis).getAsDouble();
+                            yes(from >= -16 && to <= 32 && from < to);
+                        }
+                    }
+                    eq(4, edges);
+                    eq(4, spines);
+                    if (!name.equals("ryujin_jakka")) {
+                        var uv = model.getAsJsonArray("elements").get(8).getAsJsonObject()
+                                .getAsJsonObject("faces").getAsJsonObject("north").getAsJsonArray("uv");
+                        yes(uv.get(2).getAsDouble() - uv.get(0).getAsDouble() > 10);
+                    }
+                }
+            } catch (java.io.IOException exception) { throw new IllegalStateException(exception); }
+        });
+        test("HUD cooldown snapshot is isolated from persistence and authoritative state", () -> {
+            StatusData server = new StatusData();
+            server.setTechniqueSlot3CooldownTicks(400);
+            server.setTechniqueSlot4CooldownTicks(1200);
+            StatusData client = new StatusData();
+            client.load(server.save());
+            client.readTechniqueHud(server.techniqueHud());
+            eq(400, client.getHudCooldowns()[2]);
+            eq(1200, client.getHudCooldowns()[3]);
+            eq(0, client.getTechniqueSlot4CooldownTicks());
+            yes(!server.save().contains("cooldowns"));
+            int[] detached = client.getHudCooldowns();
+            detached[3] = 0;
+            eq(1200, client.getHudCooldowns()[3]);
+            server.setCooldownsDisabled(true);
+            client.readTechniqueHud(server.techniqueHud());
+            yes(client.areHudCooldownsDisabled());
+        });
+        test("release effects trigger only when entering or ascending released forms", () -> {
+            yes(com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("sealed", "shikai"));
+            yes(com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("shikai", "bankai"));
+            yes(!com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("bankai", "shikai"));
+            yes(!com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("bankai", "bankai"));
+            yes(!com.bleachmod.common.technique.RyujinReleaseEffects.shouldRelease("shikai", "sealed"));
+        });
+        test("free reiatsu accepts zero balance without debit and restore enforces costs", () -> {
+            ResourcesData resources = new ResourcesData();
+            resources.setCurrentReiatsu(0);
+            resources.setCostsDisabled(true);
+            yes(resources.canAffordReiatsu(45));
+            yes(resources.consumeReiatsu(45));
+            eq(0F, resources.getCurrentReiatsu());
+            yes(!resources.consumeReiatsu(Float.NaN));
+            yes(!resources.consumeReiatsu(-1));
+            resources.setCurrentReiatsu(50);
+            resources.addReiatsu(-5);
+            eq(50F, resources.getCurrentReiatsu());
+            resources.setCostsDisabled(false);
+            yes(resources.consumeReiatsu(45));
+            eq(5F, resources.getCurrentReiatsu());
+            yes(!resources.consumeReiatsu(6));
+        });
+        test("cooldown test mode covers every slot and survives form cleanup", () -> {
+            StatusData status = new StatusData();
+            status.setTechniqueSlot4CooldownTicks(1200);
+            status.setCooldownsDisabled(true);
+            status.setTechniqueSlot1CooldownTicks(100);
+            status.setTechniqueSlot2CooldownTicks(80);
+            status.setTechniqueSlot3CooldownTicks(400);
+            status.setTechniqueSlot4CooldownTicks(1200);
+            status.clearTransformationState();
+            yes(status.areCooldownsDisabled());
+            eq(0, status.getTechniqueSlot1CooldownTicks());
+            eq(0, status.getTechniqueSlot2CooldownTicks());
+            eq(0, status.getTechniqueSlot3CooldownTicks());
+            eq(0, status.getTechniqueSlot4CooldownTicks());
+            status.setCooldownsDisabled(false);
+            status.setTechniqueSlot4CooldownTicks(1200);
+            eq(1200, status.getTechniqueSlot4CooldownTicks());
+        });
+        test("operator overrides are never restored from NBT", () -> {
+            PlayerData original = new PlayerData();
+            original.getStatus().setCooldownsDisabled(true);
+            original.getResources().setCostsDisabled(true);
+            PlayerData loaded = new PlayerData();
+            loaded.getStatus().setCooldownsDisabled(true);
+            loaded.getResources().setCostsDisabled(true);
+            loaded.load(original.save());
+            yes(!loaded.getStatus().areCooldownsDisabled());
+            yes(!loaded.getResources().areCostsDisabled());
+        });
+        test("oriented wall rejects behind width height and diagonal query corners", () -> {
+            var origin = net.minecraft.world.phys.Vec3.ZERO;
+            var forward = new net.minecraft.world.phys.Vec3(0, 0, 1);
+            yes(com.bleachmod.common.technique.TechniqueGeometry.intersectsWall(origin, forward, 16, 2, 15,
+                    new net.minecraft.world.phys.AABB(-0.3, 0, 15.9, 0.3, 2, 16.5)));
+            for (var box : List.of(new net.minecraft.world.phys.AABB(2, 0, 2, 3, 2, 3),
+                    new net.minecraft.world.phys.AABB(0, 16, 2, 0.5, 17, 3),
+                    new net.minecraft.world.phys.AABB(0, 0, -2, 0.5, 2, -1))) {
+                yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsWall(origin, forward, 16, 2, 15, box));
+            }
+            var diagonal = new net.minecraft.world.phys.Vec3(1, 0, 1).normalize();
+            yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsWall(origin, diagonal, 16, 2, 15,
+                    new net.minecraft.world.phys.AABB(8, 0, 0, 8.5, 2, 0.5)));
+        });
+        test("tornado phase advances clockwise in Minecraft horizontal coordinates", () -> {
+            double before = com.bleachmod.common.technique.TechniqueGeometry.tornadoAngle(0, 0, 0);
+            double after = com.bleachmod.common.technique.TechniqueGeometry.tornadoAngle(1, 0, 0);
+            yes(after > before);
+            yes(Math.sin(after) > Math.sin(before));
+        });
+        test("technique cooldowns survive transformation and count down", () -> {
+            StatusData status = new StatusData();
+            status.setTechniqueSlot1CooldownTicks(100);
+            status.setTechniqueSlot2CooldownTicks(80);
+            status.setTechniqueSlot3CooldownTicks(300);
+            status.setTechniqueSlot4CooldownTicks(1200);
+            status.setIgnitionActive(true);
+            status.setFlameDashTicks(16);
+            status.clearTransformationState();
+            yes(!status.isIgnitionActive());
+            eq(0, status.getFlameDashTicks());
+            status.tickTransientState();
+            eq(99, status.getTechniqueSlot1CooldownTicks());
+            eq(79, status.getTechniqueSlot2CooldownTicks());
+            eq(299, status.getTechniqueSlot3CooldownTicks());
+            eq(1199, status.getTechniqueSlot4CooldownTicks());
+        });
+        test("technique cooldowns are transient and administrative reset clears slot three", () -> {
+            StatusData status = new StatusData();
+            status.setTechniqueSlot3CooldownTicks(300);
+            status.setTechniqueSlot4CooldownTicks(1200);
+            StatusData loaded = new StatusData();
+            loaded.load(status.save());
+            eq(0, loaded.getTechniqueSlot3CooldownTicks());
+            eq(0, loaded.getTechniqueSlot4CooldownTicks());
+            status.clearTechniqueTestState();
+            eq(0, status.getTechniqueSlot3CooldownTicks());
+            eq(0, status.getTechniqueSlot4CooldownTicks());
+        });
+        test("cylinder rejects enclosing box corners and targets above and below", () -> {
+            var center = net.minecraft.world.phys.Vec3.ZERO;
+            yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 5, 0, 8,
+                    new net.minecraft.world.phys.AABB(4, 1, 4, 4.5, 2, 4.5)));
+            yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 5, 0, 8,
+                    new net.minecraft.world.phys.AABB(0, 8.1, 0, 1, 9, 1)));
+            yes(!com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 5, 0, 8,
+                    new net.minecraft.world.phys.AABB(0, -2, 0, 1, -0.1, 1)));
+        });
+        test("cylinder includes contact and intersecting edge hitboxes", () -> {
+            var center = net.minecraft.world.phys.Vec3.ZERO;
+            yes(com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 6, 1, 2,
+                    new net.minecraft.world.phys.AABB(-0.3, 0, -0.3, 0.3, 1.8, 0.3)));
+            yes(com.bleachmod.common.technique.TechniqueGeometry.intersectsCylinder(center, 6, 1, 2,
+                    new net.minecraft.world.phys.AABB(5.9, 0, 0, 6.5, 1.8, 0.5)));
+        });
         test("cleared tracking replaces old client value",()->{
             PlayerQuestData server=new PlayerQuestData(), client=new PlayerQuestData();
             client.setTrackedQuestId("old"); client.load(server.save());
@@ -121,8 +355,17 @@ public final class MvpRegressionTest {
             JsonObject json=forms();json.getAsJsonObject("shinigami").getAsJsonObject("zanpakuto").getAsJsonObject("forms").getAsJsonObject("shikai").addProperty("energyDrain",-1);
             rejects(()->FormRegistry.parse(json.toString()));
         });
-        test("invalid content cannot spawn quest-owned mobs",()->{
-            JsonObject q=quest().toJson();q.getAsJsonArray("objectives").get(0).getAsJsonObject().addProperty("spawn","QUEST");
+        test("quest-owned spawn modes roundtrip for the existing boss quests",()->{
+            JsonObject q=quest().toJson();
+            JsonObject objective=q.getAsJsonArray("objectives").get(0).getAsJsonObject();
+            objective.addProperty("spawn","QUEST");
+            objective.addProperty("count_mode","QUEST_SPAWNED_ONLY");
+            KillObjective parsed=(KillObjective)QuestParser.parseQuest(q,null).getObjectives().get(0);
+            eq(KillObjective.SpawnMode.QUEST,parsed.getSpawnMode());
+            eq(KillObjective.CountMode.QUEST_SPAWNED_ONLY,parsed.getCountMode());
+        });
+        test("unknown quest spawn modes are rejected",()->{
+            JsonObject q=quest().toJson();q.getAsJsonArray("objectives").get(0).getAsJsonObject().addProperty("spawn","INVALID");
             rejects(()->QuestParser.parseQuest(q,null));
         });
         test("empty objectives rejected",()->{

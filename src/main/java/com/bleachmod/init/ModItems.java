@@ -30,6 +30,9 @@ public final class ModItems {
     public static final RegistryObject<Item> RYUJIN_JAKKA = ITEMS.register("ryujin_jakka",
             () -> new SwordItem(Tiers.IRON, 3, -2.4F, new Item.Properties().stacksTo(1)));
 
+    public static final RegistryObject<Item> HYORINMARU = ITEMS.register("hyorinmaru",
+            () -> new SwordItem(Tiers.IRON, 3, -2.4F, new Item.Properties().stacksTo(1)));
+
     public static final RegistryObject<Item> HOLLOW_SPAWN_EGG =
             ITEMS.register(
                     "hollow_spawn_egg",

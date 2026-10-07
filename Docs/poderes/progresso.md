@@ -1,3 +1,66 @@
+> **Estado vigente — ciclo 22, 07/10/2026:** restauração do clima agora sincroniza explicitamente os clientes e `/weather clear` corrige chuva visual presa; Ice Dragon Bankai com modelo maior e alcance 24. [Causa, lógica, arquivos, testes e roteiro final](22-clima-sincronizado-dragon-bankai-2026-10-07.md). Demais pontos homologados pelo usuário; encerramento definitivo aguarda este teste visual. Registros anteriores abaixo são históricos.
+
+> **Estado vigente — ciclo 21, 07/10/2026:** tornado centrado e móvel com miolo livre de três/raio externo nove; Zona Glacial Shikai dez/Bankai trinta com neve temporária no interior; clima com restauração e prioridade para comando manual; passivas de fogo Ryujin e resistência Hyōrinmaru. [Passo a passo, lógica, arquivos, valores e testes](21-correcao-tornado-zona-clima-passivas-2026-10-07.md). Os ciclos abaixo são históricos; esta revisão substitui o deslocamento frontal do tornado do ciclo 20.
+
+> **Estado vigente — ciclo 20, 06/10/2026:** Ryujin com onda mais densa e tornado três blocos à frente; Hyōrinmaru com quatro slots selados, armadura temporária, hipotermia, criatura de gelo, asas/cauda Bankai, tempestade com restauração e HUD de habilidades. [Lógica, arquivos, valores e homologação](20-refinamento-gelo-clima-hud-2026-10-06.md). A decisão deste ciclo substitui a antiga selada restrita a dois cortes físicos. Registros anteriores abaixo são históricos.
+
+> **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
+
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
+
+# Ciclo de acabamento — 04/10/2026
+
+O kit anterior continua encerrado. Nova revisão implementada e validada: katana de gume único/UVs completos, liberação/aura, Muralha 18 × 2 × 8 e emissão 82% menor, política de alvos e HUD. 51 regressões/16 GameTests passaram; aguarda homologação visual desta versão. Arquivos e sequência no [relatório 13](13-polimento-katana-liberacao-muralha-2026-10-04.md).
+
+1. Modelos: 22 elementos, quatro seções curvas, um fio fino e dorso espesso; superfícies imagegen próprias de Shikai/Bankai.
+2. `RyujinReleaseEffects`: evento de forma produz pulso de chamas/fumaça/som; aura esparsa enquanto válido. Sem terreno/dano.
+3. `RyujinTechniqueService`: dimensões 18/2/8, 432 chamas por emissão/4 ticks; valores de combate preservados.
+4. `TechniqueTargets`, executores e `CombatEvents`: filtros unificados e aplicação de fogo condicionada ao dano.
+5. `StatusData`, rede/client/tick e `ReiatsuHud`: snapshot do proprietário mostra recargas sem persistir em NBT.
+6. Regressões e GameTests cobrem geometria, UVs, HUD, transições de liberação, alcance/altura/dano rejeitado e Leque/aliados.
+
+Próxima etapa separada: contrato e fundação de fogo ambiental persistente; não existe incêndio por ativar Bankai neste JAR. Vínculo segue fora do ciclo. Nenhuma alteração em documentos de outras pastas.
+
+---
+> **Revisão vigente — 04/10/2026:** ciclo de acabamento autorizado após o kit anterior: katana de um gume/texturas completas, liberação/aura, Muralha 18 × 2 × 8, alvos unificados e HUD de recargas. Build, 51 regressões e 16 GameTests aprovados; visual desta revisão para homologação no cliente. [Implementação passo a passo e arquivos](13-polimento-katana-liberacao-muralha-2026-10-04.md). Fogo ambiental é etapa seguinte, ainda não implementada. O histórico abaixo preserva as entregas anteriores.
+
+# Feature Ryūjin Jakka concluída — 03/10/2026
+
+O usuário confirmou a conclusão após a entrega `5a02b61`, na branch `Feature-Poderes-bankais`. Nenhuma implementação resta neste ciclo. Última validação de código: build, 49 regressões e 14 GameTests aprovados; 22 JSONs válidos. A atualização atual é exclusivamente documental, limitada a `Docs/poderes`.
+
+## Progresso por feature e entrega
+
+| Etapa | Alteração e lógica | Arquivos principais | Estado |
+| --- | --- | --- | --- |
+| Base existente | H/N resolvidos pela forma servidor; X preservado; Ryujin autoriza o kit | `TechniqueService`, `StatusData`, `TickHandler` | Reaproveitada |
+| `141205c` — B/C | Runtime por UUID para área/enxame, expiração e limpeza; cilindro filtra a caixa de consulta | `RyujinTechniqueService`, `TechniqueGeometry`, `RyujinGameTests` | Concluída; Círculo posteriormente substituído |
+| `141205c` — recargas/Corte | Slot 3 incluído; mudança de forma preserva cooldown; Corte dano 48/custo 45/60 s | `StatusData`, `FormModeHandler`, `ProgressionService`, `TechniqueService` | Concluída |
+| `57966f8` — Muralha | Volume orientado 16 × 2 × 15, fixo por 5 s; contato com intervalo e knockback | `RyujinTechniqueService`, `TechniqueGeometry`, testes | Concluída |
+| `57966f8` — Tornado | Raio 6/altura 10, duas hélices com fase horária e velocidade tangencial | `RyujinTechniqueService`, `TechniqueGeometry` | Concluída |
+| `57966f8` — morcegos | NoAI com movimento explícito e colisão; alvo `Enemy`; ataque compartilhado por alvo | `RyujinTechniqueService`, `RyujinGameTests` | Concluída |
+| `5a02b61` — comandos | Overrides individuais de recarga/custo; restauração das regras; manutenção gratuita das formas | `BleachCommands`, `StatusData`, `ResourcesData`, `FormModeHandler`, `TickHandler` | Concluída |
+| `5a02b61` — modelos/visual | 14 elementos de katana, orientação das duas mãos, variantes; Muralha 1.200 chamas/2 ticks | Quatro modelos JSON de Ryujin, `RyujinTechniqueService`, regressões | Entregue; feature encerrada pelo usuário |
+
+## Sequência da implementação e verificação
+
+1. Compararam-se documentos e executores, separando planejamento antigo do contrato autorizado.
+2. Criou-se o runtime B/C e preservaram-se recargas por slot nas transformações; consolidou-se o Corte.
+3. Após teste do usuário, substituiu-se Círculo, ampliou-se Tornado e corrigiu-se voo/ataque dos morcegos.
+4. Implementaram-se comandos contínuos por jogador e sua restauração, incluindo ignição e formas.
+5. Corrigiram-se orientação/modelos das três formas e intensificaram-se partículas sem mudar dano.
+6. Cada entrega de código passou por build/regressões/GameTests: 43/9, depois 45/11, finalmente 49/14.
+7. O usuário encerrou a feature; documentação desta pasta atualizada com lógica, arquivos e histórico.
+
+Detalhes por passo: [histórico técnico completo](12-historico-tecnico-passo-a-passo-ryujin.md). Referências: [contrato](08-contrato-ryujin-circulo-tornado-morcegos.md), [relatório final](11-fechamento-ryujin-comandos-modelos-2026-10-03.md) e [comandos](manual-do-jogador.md).
+
+O aceite geral não registra uma bateria multiplayer formal ou medição de desempenho específica. Esses roteiros permanecem referências para regressões futuras, sem reabrir a feature. `spirit_flame`, vínculo, outras raças e mentores seguem escopo futuro separado.
+
+# Estado operacional — 03/10/2026
+
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Estado: concluída por confirmação do usuário.
+
+## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
+
 # Progresso do sistema de poderes
 
 ## Estado atual
@@ -205,3 +268,48 @@
 - O cooldown do Corte está temporariamente em zero para permitir testes repetidos; o custo de 45 de reiatsu permanece ativo.
 
 - Estado: ajuste implementado; novo teste manual pendente.
+
+## Ciclo seguinte — fogo ambiental e inicializador — 04/10/2026
+
+1. Registrado bloco espiritual temporário com modelo de fogo animado vanilla.
+2. Implementado SavedData por dimensão: proprietário, prazo, sobreposição, chunks e remoção condicional.
+3. Bankai emite focos em raio 6, por 5 s, oito tentativas na entrada e três a cada 40 ticks; limites 32 por jogador/512 por dimensão.
+4. Contato usa política comum de aliados/PvP; não propaga nem consome terreno.
+5. Criado Iniciar-Teste.bat com limpeza restrita e script PowerShell que recompila, verifica e abre runClient.
+6. Validado inicializador em DryRun e BuildOnly Offline; build final, 51 regressões e 18 GameTests aprovados.
+7. Visual e abertura interativa aguardam homologação. [Lógica, arquivos e roteiro](14-fogo-ambiental-inicializador-2026-10-04.md).
+
+## Encerramento homologado e auditoria do inicializador — 04/10/2026
+
+Usuário confirmou testes e visuais aprovados e encerrou a Ryujin. Revisão seguinte não altera poderes: endurece limpeza/lock, corrige caminhos com colchetes, alinha DryRun à execução real e retorna erro se restar cache bloqueado. Criada suíte isolada em tools/test-iniciar-teste.ps1. [Lógica, testes, resíduos esperados e limites](15-auditoria-seguranca-inicializador-2026-10-04.md).
+
+Resultado da auditoria: 18 cenários de segurança aprovados, zero falhas e fixtures temporárias removidas; gameplay permanece igual ao homologado.
+## Planejamento de identidade e próximo poder — 06/10/2026
+
+- Usuário decidiu: poder principal de identidade, troca possível por processo especial, vínculo próprio relacionado à maestria e requisitos para Shikai/Bankai.
+- Escolha do próximo conjunto: Hitsugaya / Hyōrinmaru, gelo e controle de movimento.
+- Escrito [contrato 16](16-contrato-identidade-vinculo-maestria-zanpakuto.md), separando regras decididas, propostas técnicas e decisões de história/balanceamento.
+- Escrito [plano 17](17-plano-hyorinmaru-hitsugaya.md), com fatias H0–H5, técnicas funcionais revisáveis, controle, integração e critérios futuros.
+- Registrada [revisão 18](18-revisao-escopo-e-entrega-equipe-2026-10-06.md): inventário de 48 documentos preexistentes de Docs + reference-code/README, fontes por módulo e riscos de progresso genérico/ganho passivo/migração.
+- Estado: planejamento documental; nenhum código, save, asset ou inicializador alterado. Não existem testes de gameplay novos neste ciclo.
+- História/quests, números finais, consequências da troca e recuperação da arma serão refinados pela equipe. Ryujin continua encerrada, sem reabrir balanceamento ou mecânicas homologadas.
+
+## Entrega do ciclo 19 — 06/10/2026
+
+- Ryujin: onda N de quatro blocos na selada/Shikai/Bankai, avanço 8/14 ticks, queda 6 ticks, residual completo 60/80 ticks; dano imediato e custos preservados. Aura contínua da lâmina Bankai com fumaça.
+- X Flame Burst retirado; HUD e comandos de teste cobrem os quatro slots atuais. Protocolo 2.4 exige cliente/servidor atualizados juntos.
+- Hyōrinmaru: novo item/katana de um gume, três modelos, quatro habilidades provisórias de gelo/controle, maestria e formas separadas. Selada com cortes físicos. Bind de operador mantém recargas, guarda progresso por identidade e retorna à selada. NBT schema 4 preserva saves antigos.
+- Recompensas da campanha existente continuam vinculadas à Ryujin. História e desbloqueios definitivos do gelo permanecem com a equipe. Testes gratuitos suspendem ganho passivo de maestria.
+- `check build runGameTestServer --offline`: **55 regressões e 24 GameTests aprovados**, JAR gerado. Geometria e integração automatizadas; aparência/FPS e balanceamento aguardam homologação do usuário.
+- [Passo a passo, pesquisa, arquivos e comandos](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Outros documentos fora de `Docs/poderes` e inicializador preservados.
+## Entrega do ciclo 20 — 06/10/2026
+
+1. Ryujin: frente N com +150% de partículas por amostra; centro do tornado três blocos à frente para desenho e dano, com alcance/altura/custos preservados.
+2. Hyōrinmaru selada: H/N de alcance seis com neve/som/lentidão; B proteção temporária de 25% por seis segundos; C controle de alvo único com empurrão, lentidão forte e hipotermia vanilla.
+3. Liberações: mais partículas, hipotermia nos golpes/campos, criatura visual de Phantom com material de gelo, armadura em camadas, asas/cauda Bankai e pulso/aura de liberação.
+4. Clima: tempestade durante Bankai no Overworld/biomas permitidos, neve local, referência cooperativa por jogador e restauração do clima anterior. Campos podem expirar sem encerrar o clima. Dados de clima recuperáveis após reinício; alterações posteriores por /weather preservadas.
+5. HUD: nome, forma, maestria atual, quatro habilidades/atalhos reais, requisitos da configuração e próxima liberação. Protocolo 2.5 exige cliente/servidor atualizados juntos.
+6. `check build runGameTestServer --offline`: **57 regressões e 29 GameTests aprovados**, build gerada. A posição do novo teste de tornado foi isolada verticalmente dos demais ataques de longo alcance para evitar interferência entre cenários paralelos. Não foi necessário mudar a lógica do tornado para corrigir a fixture.
+7. Aparência, FPS e equilíbrio de duelo aguardam homologação no cliente. [Relatório com arquivos, decisões e roteiro](20-refinamento-gelo-clima-hud-2026-10-06.md). JAR: `build/libs/bleachmod-0.2.0.jar`; saída local: `build/ice-refinement-validation.log`, não versionada.
+
+Documentação de outras pastas e inicializador preservados. Commit exclusivo na `Feature-Poderes-bankais`.

@@ -1,3 +1,9 @@
+# Estado conferido — 03/10/2026
+
+A fundação deste plano já existe no código: oito tipos/skins/ovos, QuestNpcEntity, quest_giver no modelo/parser, consultas por NPC, painel, pacote de abertura, validação server-side de ID/distância e defaults de teste. Rukia também possui teste com Hollow Boss; o conteúdo abaixo é a proposta original. Homologação visual/dedicado continua separada da presença no código.
+
+## Plano original — histórico de implementação
+
 # Plano de implementação — NPCs de quests
 
 ## Objetivo do primeiro incremento

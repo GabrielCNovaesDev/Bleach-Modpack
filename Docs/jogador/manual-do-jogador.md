@@ -1,12 +1,12 @@
 # Manual do jogador — Bleach Mod (MVP Shinigami)
 
-Atualizado em 14/09/2026. Minecraft 1.20.1 / Forge 47.4.10 / Java 17.
+Atualizado em 03/10/2026. Minecraft 1.20.1 / Forge 47.4.10 / Java 17.
 
 Este manual descreve o código atual. A verificação visual em jogo e com dois clientes ainda está pendente; consulte o [plano de implementação](../planejamento/plano-implementacao-mvp.md) para o estado de cada entrega. Toda mudança de lógica exige atualizar este manual e os demais `.md` afetados em `Docs`.
 
 ## 1. Começar
 
-Confirme Shinigami na primeira entrada; aguarde a resposta do servidor. Você recebe Asauchi e 100 de reiatsu. Não existe mob Hollow próprio: usamos zumbis e, em uma missão, esqueletos. A interface informa os alvos e itens reais.
+Confirme Shinigami na primeira entrada; aguarde a resposta do servidor. Você recebe Asauchi e 100 de reiatsu. Hollow e Hollow Boss já existem como mobs de teste; isso não libera a raça Hollow. Quests em mundos antigos podem manter alvos anteriores. Consulte os objetivos reais no diário.
 
 O Asauchi pode ser fabricado em uma bancada:
 
@@ -31,11 +31,53 @@ Todos podem ser remapeados em Opções → Controles → Bleach.
 | R, segurar | Carregar e tentar transformar na forma selecionada |
 | Shift+R | Transformação instantânea, se mastery da forma atingir o limiar |
 | V | Retornar um estágio |
-| X | Executar a técnica piloto Flame Burst / Explosão de chamas |
+| X | Executar Flame Burst / Explosão de chamas |
+| H | F1: Ignição em Selada/Shikai; Dash em Bankai |
+| N | F2: Rajada curta em Selada/Shikai; Leque em Bankai |
+| B | F3: Muralha de Chamas em Selada/Shikai; Tornado em Bankai |
+| C | F4: Morcegos em Selada/Shikai; Corte de Vapor em Bankai |
 
 A técnica Flame Burst não exige Bankai ativo. Ela custa 20 de reiatsu, possui cooldown de 15 segundos e causa dano em uma área curta ao redor do jogador. O dano base provisório é 6 pontos. A tecla X é remapeável.
 
 Selecionar uma forma não a ativa. O HUD distingue forma ativa e alvo. A técnica piloto ainda não possui animação óssea nem slot no radial.
+
+### Kit Ryūjin Jakka — contrato atual
+
+Todas as técnicas do kit exigem Ryūjin Jakka na mão principal. Asauchi não autoriza o kit.
+
+| Técnica | Custo de reiatsu | Dano base | Recarga |
+| --- | ---: | --- | --- |
+| Ignição (H base) | 0,05/tick | Bônus +15% Zanjutsu e fogo nos golpes | Toggle |
+| Dash (H Bankai) | 20 | 4 por alvo, uma vez por cast | 5 s |
+| Rajada (N base) | 15 | 4 inicial; 1/10 ticks no solo | 4 s |
+| Leque (N Bankai) | 25 | 8 inicial; 1/10 ticks no solo | 4 s |
+| Muralha (B base) | 40 | 18 por contato, no máximo a cada 20 ticks | 20 s |
+| Tornado (B Bankai) | 40 | 2/10 ticks por alvo | 15 s |
+| Morcegos (C base) | 25 | 2/20 ticks por alvo, compartilhado pelo enxame | 10 s + enxame encerrado |
+| Corte de Vapor (C Bankai) | 45 | 48 | 60 s |
+
+**Muralha:** comprimento 16, largura 2, altura 15. Começa 1 bloco à frente do jogador, na direção horizontal da mira, fica fixa por 5 s e aplica knockback leve (0,25) em mobs atingidos. A revisão final concentra as chamas com 240 amostras verticais e 1.200 partículas por emissão a cada dois ticks, sem aumentar dano.
+**Tornado:** raio 6, altura 10, segue o jogador durante 10 s. Duas espirais horárias vistas de cima, chamas FLAME mais densas e com velocidade tangencial para criar sensação de vento.
+**Morcegos:** 5 entidades vanilla com 4 de vida, seguem com deslocamento controlado pelo servidor e atacam apenas mobs hostis; desaparecem após 40 s.
+O enxame bloqueia outra invocação enquanto algum morcego válido estiver vivo. Espaço bloqueado
+recusa o cast sem cobrar recursos. Muralha, Tornado e Morcegos não alteram blocos.
+
+As novas áreas exigem linha de visão, excluem o lançador e aliados da mesma equipe e respeitam PvP.
+Morcegos não atacam jogadores nem NPCs de quest. A troca de forma cancela efeitos sem zerar
+cooldowns; perder a arma, morrer, desconectar ou mudar de dimensão remove áreas/enxames.
+Cooldowns continuam transitórios: morte, logout e dimensão limpam recargas segundo o MVP.
+
+**Corte:** mantém 100 blocos, abertura total 25°, 15 blocos abaixo e 20 acima da altura corporal,
+direção exata da visão, vapor e execução instantânea. Atravessa paredes e destrói blocos comuns
+sem drops; preserva bedrock, command blocks e blocos de dureza negativa. Usa dano mágico indireto
+para ignorar armadura vanilla. O filtro atual também aplica Resistência Bleach; verificar no teste
+real. Seu dano base passou para 48 e a recarga para 1.200 ticks. A regra antiga de aliados do Corte
+permanece; os filtros das novas áreas não foram aplicados retroativamente ao executor existente.
+
+Rajada: 8 blocos / 60°; Leque: 14 blocos / 90°, chamas azuis SOUL_FIRE_FLAME.
+Os danos base das técnicas com playerAttack passam pelos bônus de forma/Zanjutsu/Ignição e
+pela mitigação existente; não representam dano final garantido. Valores das três técnicas novas
+são protótipos para homologação. Detalhes e roteiro: [contrato atual](../poderes/08-contrato-ryujin-circulo-tornado-morcegos.md).
 
 ## 3. Diário e interface
 
@@ -97,7 +139,7 @@ As categorias não têm mais limite de nível. O próximo nível custa `100 × (
 | Reserva | +20 de reiatsu máxima |
 | Controle | Reduz o consumo contínuo pela fórmula `drain base ÷ (1 + 0,10 × nível)` |
 
-Aumentar reserva preserva a energia atual; não recarrega a barra gratuitamente. Vitalidade aumenta o máximo, mas não reduz o dano recebido; esse é o papel de Resistência. Controle tem retorno decrescente e nunca converte drain em regeneração.
+Aumentar Reserva preserva a energia atual se ela estiver abaixo do máximo; se estiver cheia, também preenche o novo máximo. Vitalidade aumenta o máximo, mas não reduz o dano recebido; esse é o papel de Resistência. Controle tem retorno decrescente e nunca converte drain em regeneração.
 
 O BP (Battle Power) é informativo e aparece na tela K. A fórmula atual é `(soma dos níveis de Zanjutsu, Hakuda, Vitalidade, Resistência, Kidou, Reserva e Controle) × reiatsu máxima ÷ 10`. BP não concede bônus por si só.
 
@@ -118,7 +160,7 @@ Custo de transformação carregada = máximo de reiatsu × 10% × drain base; in
 
 A técnica piloto Flame Burst funciona em qualquer forma ativa, inclusive Selada. Ao pressionar X, o servidor valida a ação, consome 20 de reiatsu, inicia um cooldown de 15 segundos, emite partículas de fogo e som de Blaze e causa 6 pontos de dano provisório às entidades vivas em um raio de 3 blocos. O cooldown não é salvo em NBT.
 
-Bônus de combate se aplica ao golpe direto de jogador com Asauchi na mão principal:
+Bônus de combate se aplica ao golpe direto de jogador com Asauchi ou Ryūjin Jakka na mão principal:
 
 - Shikai: +20%.
 
@@ -126,7 +168,7 @@ Bônus de combate se aplica ao golpe direto de jogador com Asauchi na mão princ
 
 - Zanjutsu: +10% por nível, somado ao percentual da forma.
 
-Exemplo: Bankai com Zanjutsu 2 multiplica o dano original por 1,7. Hakuda usa a mesma progressão de 10% quando o golpe é desarmado, sem bônus de forma. O dano original mantém cooldown, crítico e encantamentos; os percentuais entram no evento de dano antes das etapas posteriores de mitigação. Não há bônus persistente empilhado ao alternar formas.
+Exemplo: Bankai com Zanjutsu 2 multiplica o dano original por 1,7. Hakuda usa a mesma progressão de 10% quando o golpe é desarmado; o código atual também soma o bônus de forma. O dano original mantém cooldown, crítico e encantamentos; os percentuais entram no evento de dano antes das etapas posteriores de mitigação. Não há bônus persistente empilhado ao alternar formas.
 
 Morte retorna à selada e respawn recupera reiatsu. Carga é cancelada ao abrir telas, mudar alvo, morrer, desconectar ou trocar de dimensão. Falhas de transformação não devem ficar repetindo a tentativa por tick.
 
@@ -134,7 +176,7 @@ Morte retorna à selada e respawn recupera reiatsu. Carga é cancelada ao abrir 
 
 | Missão | Objetivos | Novas recompensas padrão |
 | --- | --- | --- |
-| Caça aos Hollows | 5 zumbis | 200 pontos |
+| Caça aos Hollows | 6 Hollows | 200 pontos |
 | Nomeie sua lâmina | Ter 8 carnes podres e matar 3 esqueletos, em paralelo | 400 pontos e despertar Shikai |
 | Limiar do Bankai | 8 zumbis | 600 pontos e despertar Bankai |
 | Treino básico | 10 zumbis | 150 pontos; repetível após receber tudo |
@@ -156,13 +198,20 @@ Exigem permissão 2 e personagem já confirmado. Troque Player pelo nome do joga
 /bleachdev mastery set Player zanpakuto shikai 25
 /bleachdev mastery set Player zanpakuto bankai 50
 /bleachdev reiatsu fill Player
+/bleachdev cooldowns clear Player
+/bleachdev cooldowns disable Player
+/bleachdev cooldowns restore Player
+/bleachdev reiatsu free Player
+/bleachdev reiatsu restore Player
 /bleachdev asauchi give Player
 /bleachdev inspect Player
 ```
 
 skill set aceita 0–2 e pode reduzir nível; valores >=1/2 também descobrem as formas para teste. mastery set não compra skill nem descobre a forma. Os comandos normalizam formas inválidas, cancelam carga e sincronizam o estado.
 
-Não existe reset geral. Para obter itens vanilla de teste, use /give.
+cooldowns clear cancela áreas, Dash e morcegos e limpa recargas uma vez, preservando ignição e os modos de teste. cooldowns disable mantém todos os slots e Flame Burst sem recarga; áreas/enxames recastados substituem a instância anterior. cooldowns restore devolve os tempos programados a partir do próximo uso (incluindo os 60 s do Corte).
+
+reiatsu free zera o custo de habilidades, ignição, ativação e manutenção de Shikai/Bankai, mesmo com saldo zero; não zera nem preenche o saldo. reiatsu restore volta aos custos normais, incluindo os JSONs de formas do mundo. Esses comandos de teste não normalizam formas nem apagam progresso. inspect informa os dois modos. Reconectar, reiniciar ou renascer restaura o modo normal; mudança de dimensão conserva os modos. Requisitos de arma, desbloqueio e domínio continuam valendo. Não existe reset geral. Para obter itens vanilla de teste, use /give.
 
 Reload prepara quests e formas antes de substituí-las. Erros preservam os registries anteriores e são informados ao operador e no log.
 
@@ -188,15 +237,15 @@ Os arquivos ficam em {mundo}/bleachmod/. Defaults só criam arquivos ausentes; n
 
 - Alterações de título/descrição não invalidam progresso.
 
-- O parser aceita somente NATURAL + ANY_MATCHING neste MVP; configurações QUEST incompletas são rejeitadas.
+- O parser suporta NATURAL/QUEST e ANY_MATCHING/QUEST_SPAWNED_ONLY; quests de boss já usam spawn por quest. Modos desconhecidos e contagens inválidas são rejeitados.
 
-- Cliente e servidor precisam usar protocolo 2.1; atualizar ambos.
+- Cliente e servidor precisam usar protocolo 2.3; atualizar ambos.
 
 Faça backup antes de adaptar os JSONs de um mundo existente. A nova economia não é aplicada silenciosamente aos arquivos já configurados.
 
 ## 10. Limites atuais
 
-Sem mob Hollow próprio, outras raças, dimensões, party, NPCs complexos ou técnicas ativas adicionais. A técnica piloto Flame Burst existe como primeiro protótipo de ação, mas ainda não possui homologação visual, GameTest dedicado, indicador de cooldown ou animação óssea. Sem respec. Transparência/orientação dos assets e inspeção visual final devem acompanhar o estado real no plano de implementação.
+Hollow/Hollow Boss e oito NPCs de quest existem como protótipos. Outras raças jogáveis, dimensões, party, facções e mentores completos ainda não existem. O kit Ryūjin possui os quatro slots, com Muralha/Tornado/Morcegos da entrega anterior confirmados pelo usuário. Os novos modelos de katana das três formas corrigem a orientação e alongam a lâmina; a pegada e as partículas mais densas desta revisão aguardam homologação visual/multiplayer. Há 49 regressões e 14 GameTests aprovados, mas não indicador contínuo de cooldown nem animação óssea. Sem respec. Consulte o [relatório consolidado](../poderes/11-fechamento-ryujin-comandos-modelos-2026-10-03.md).
 
 ## 11. Manutenção
 

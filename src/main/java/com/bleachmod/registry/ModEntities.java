@@ -28,6 +28,10 @@ public class ModEntities {
                     Reference.MOD_ID
             );
 
+    public static final RegistryObject<EntityType<com.bleachmod.entity.IceDragonEntity>> ICE_DRAGON = ENTITY_TYPES.register("ice_dragon",
+            () -> EntityType.Builder.of(com.bleachmod.entity.IceDragonEntity::new, MobCategory.MISC)
+                    .sized(2, 0.8F).clientTrackingRange(8).updateInterval(1).noSave().noSummon().build("ice_dragon"));
+
     public static final RegistryObject<EntityType<HollowEntity>> HOLLOW =
             ENTITY_TYPES.register(
                     "hollow",

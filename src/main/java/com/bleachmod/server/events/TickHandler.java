@@ -39,6 +39,8 @@ public class TickHandler {
             float previousEnergy = data.getResources().getCurrentReiatsu();
             int previousCharge = data.getResources().getActionCharge();
             TechniqueService.tickIgnition(player, data);
+            com.bleachmod.common.technique.FlameWaveService.tick(player, data);
+            com.bleachmod.common.technique.HyorinmaruTechniqueService.tick(player, data);
             TechniqueService.tickFlameFanGround(player, data);
             TechniqueService.tickFlameBarrageGround(player, data);
             TechniqueService.tickFlameDash(player, data);
@@ -47,7 +49,8 @@ public class TickHandler {
                     data.getAttributes().level(AttributeData.CONTROL));
             if (drain > 0.0F) {
                 data.getResources().addReiatsu(-drain);
-                if (data.getResources().getCurrentReiatsu() <= data.getResources().getMaxReiatsu() * Reference.REVERT_REIATSU_RATIO) {
+                if (!data.getResources().areCostsDisabled()
+                        && data.getResources().getCurrentReiatsu() <= data.getResources().getMaxReiatsu() * Reference.REVERT_REIATSU_RATIO) {
                     FormModeHandler.revertToSealed(player, data, Component.translatable("message.bleachmod.form.drained_reiatsu"));
                 }
             } else {
@@ -64,11 +67,11 @@ public class TickHandler {
             if (player.tickCount % 4 == 0 || (previousEnergy != data.getResources().getCurrentReiatsu()
                     && (data.getResources().getCurrentReiatsu() == data.getResources().getMaxReiatsu()
                     || data.getResources().getCurrentReiatsu() == 0))) {
-                if (previousEnergy != data.getResources().getCurrentReiatsu() || previousCharge != data.getResources().getActionCharge())
-                    SyncHelper.resources(player);
+                SyncHelper.resources(player); // Owner HUD receives cooldown snapshots even at full reiatsu.
             }
             active = TransformationsHelper.getActiveFormData(data);
-            if (player.tickCount % 100 == 0 && active != null && !Reference.FORM_SEALED.equals(active.getName())) {
+            if (player.tickCount % 100 == 0 && active != null && !Reference.FORM_SEALED.equals(active.getName())
+                    && !data.getStatus().areCooldownsDisabled() && !data.getResources().areCostsDisabled()) {
                 data.getCharacter().addMastery(
                         data.getCharacter().getActiveFormGroup(),
                         active.getName(),
@@ -85,6 +88,10 @@ public class TickHandler {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        PlayerCapability.get(player).ifPresent(data -> data.resetTransientState());
+        PlayerCapability.get(player).ifPresent(data -> {
+            data.getStatus().setCooldownsDisabled(false);
+            data.getResources().setCostsDisabled(false);
+            data.resetTransientState();
+        });
     }
 }

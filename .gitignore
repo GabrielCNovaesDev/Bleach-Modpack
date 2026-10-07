@@ -16,6 +16,8 @@ out
 # gradle
 build
 .gradle
+.test-launcher-cache/
+.test-launcher.lock
 
 # other
 eclipse

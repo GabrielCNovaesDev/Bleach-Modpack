@@ -1,3 +1,32 @@
+> **Estado vigente — ciclo 22, 07/10/2026:** restauração do clima agora sincroniza explicitamente os clientes e `/weather clear` corrige chuva visual presa; Ice Dragon Bankai com modelo maior e alcance 24. [Causa, lógica, arquivos, testes e roteiro final](22-clima-sincronizado-dragon-bankai-2026-10-07.md). Demais pontos homologados pelo usuário; encerramento definitivo aguarda este teste visual. Registros anteriores abaixo são históricos.
+
+> **Estado vigente — ciclo 21, 07/10/2026:** tornado centrado e móvel com miolo livre de três/raio externo nove; Zona Glacial Shikai dez/Bankai trinta com neve temporária no interior; clima com restauração e prioridade para comando manual; passivas de fogo Ryujin e resistência Hyōrinmaru. [Passo a passo, lógica, arquivos, valores e testes](21-correcao-tornado-zona-clima-passivas-2026-10-07.md). Os ciclos abaixo são históricos; esta revisão substitui o deslocamento frontal do tornado do ciclo 20.
+
+> **Estado vigente — ciclo 20, 06/10/2026:** Ryujin com onda mais densa e tornado três blocos à frente; Hyōrinmaru com quatro slots selados, armadura temporária, hipotermia, criatura de gelo, asas/cauda Bankai, tempestade com restauração e HUD de habilidades. [Lógica, arquivos, valores e homologação](20-refinamento-gelo-clima-hud-2026-10-06.md). A decisão deste ciclo substitui a antiga selada restrita a dois cortes físicos. Registros anteriores abaixo são históricos.
+
+> **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
+
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
+
+> **Estado vigente — 03/10/2026:** feature Ryūjin Jakka concluída por confirmação do usuário após `5a02b61`, na branch `Feature-Poderes-bankais`. Última validação de código: build, 49 regressões e 14 GameTests aprovados. [Histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md) · [Contrato vigente](08-contrato-ryujin-circulo-tornado-morcegos.md). Esta revisão modifica somente `Docs/poderes`; registros antigos abaixo descrevem suas respectivas versões.
+
+
+## Plano executado, passo a passo
+
+1. H/N/X foram reaproveitados; `TechniqueService` resolve variantes no servidor e exige Ryujin na mão principal para o kit.
+2. `141205c`: runtime B/C em `RyujinTechniqueService`, cilindros em `TechniqueGeometry`, recarga F3 e preservação por forma em `StatusData`, `FormModeHandler` e `ProgressionService`. Corte consolidado: dano 48/custo 45/cooldown 60 s.
+3. `57966f8`: Muralha substitui Círculo, com volume orientado; Tornado ganha raio 6/altura 10 e espiral horária; `tickSwarm` passa a mover Bat explicitamente e selecionar hostis.
+4. `5a02b61`: comandos contínuos por jogador, centralização de custo/cooldown, quatro JSONs de modelo de katana e Muralha mais densa.
+5. Feature encerrada pelo usuário. Leque médio/Círculo Bankai não são tarefas remanescentes; `spirit_flame` e vínculo permanecem fora do ciclo.
+
+---
+
+# Estado operacional — 03/10/2026
+
+Consulte o [contrato atual de Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md). O kit atual usa B para Muralha/Tornado e C para Morcegos/Corte. Corte: dano base 48, custo 45, cooldown 60 segundos, 100 blocos, 25° e destruição sem drops. Branch: Feature-Poderes-bankais. Feature concluída pelo usuário após `5a02b61`; histórico técnico e arquivos descritos nesta atualização.
+
+## Registro histórico abaixo — valores e próximas tarefas anteriores não são o contrato vigente
+
 # Plano de implementação — Kit Ryūjin Jakka
 
 ## Decisão geral
@@ -163,3 +192,7 @@ Uma entrega só será considerada pronta quando:
 As entregas F1 base — Ignição e F1 Bankai — Dash de chamas foram implementadas e homologadas em jogo. O Dash possui como limitação conhecida uma mira menos eficiente quando executado no chão, pois pode encerrar ao encontrar o primeiro bloco do terreno; esse polimento fica registrado para um ciclo futuro e não bloqueia a progressão.
 
 A implementação da **F2 base — Rajada curta** foi iniciada com cone server-side de 3 blocos e 60 graus, dano de 4 pontos, fogo por 3 segundos e partículas de superfície sem alteração de blocos. A etapa atual é compilar e homologar essa implementação. Nenhum código de `spirit_flame`, F3 ou F4 será criado antes da homologação da F2.
+
+## Etapa ambiental e facilitador de testes — atualização 04/10/2026
+
+Executada etapa de spirit_flame persistente, limitada e temporária, acionada pela entrada/manutenção Bankai. Acrescentado ao plano por solicitação do usuário: inicializador na raiz, limpeza restrita dos artefatos, JDK 17, build validada antes do cliente e remoção do cache temporário ao sair. [Contrato, implementação e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Vínculo de Zanpakutō não integra esta etapa.

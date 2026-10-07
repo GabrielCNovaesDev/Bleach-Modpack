@@ -1,218 +1,72 @@
-# Manual do jogador — Bleach Mod (MVP Shinigami)
+> **Estado vigente — ciclo 22, 07/10/2026:** restauração do clima agora sincroniza explicitamente os clientes e `/weather clear` corrige chuva visual presa; Ice Dragon Bankai com modelo maior e alcance 24. [Causa, lógica, arquivos, testes e roteiro final](22-clima-sincronizado-dragon-bankai-2026-10-07.md). Demais pontos homologados pelo usuário; encerramento definitivo aguarda este teste visual. Registros anteriores abaixo são históricos.
 
-Atualizado em 14/09/2026. Minecraft 1.20.1 / Forge 47.4.10 / Java 17.
+> **Estado vigente — ciclo 21, 07/10/2026:** tornado centrado e móvel com miolo livre de três/raio externo nove; Zona Glacial Shikai dez/Bankai trinta com neve temporária no interior; clima com restauração e prioridade para comando manual; passivas de fogo Ryujin e resistência Hyōrinmaru. [Passo a passo, lógica, arquivos, valores e testes](21-correcao-tornado-zona-clima-passivas-2026-10-07.md). Os ciclos abaixo são históricos; esta revisão substitui o deslocamento frontal do tornado do ciclo 20.
 
-Este manual descreve o código atual. A verificação visual em jogo e com dois clientes ainda está pendente; consulte o [plano de implementação](../planejamento/plano-implementacao-mvp.md) para o estado de cada entrega. Toda mudança de lógica exige atualizar este manual e os demais `.md` afetados em `Docs`.
+> **Estado vigente — ciclo 20, 06/10/2026:** Ryujin com onda mais densa e tornado três blocos à frente; Hyōrinmaru com quatro slots selados, armadura temporária, hipotermia, criatura de gelo, asas/cauda Bankai, tempestade com restauração e HUD de habilidades. [Lógica, arquivos, valores e homologação](20-refinamento-gelo-clima-hud-2026-10-06.md). A decisão deste ciclo substitui a antiga selada restrita a dois cortes físicos. Registros anteriores abaixo são históricos.
 
-## 1. Começar
+> **Estado vigente — ciclo 19, 06/10/2026:** identidade e maestria separadas, protótipo Hyōrinmaru em quatro slots, N da Ryujin com onda de quatro blocos na selada/Shikai/Bankai, aura Bankai de fumaça e retirada do X. [Implementação, arquivos, números, migração e homologação](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md). Os estados e valores anteriores abaixo são históricos; história e balanceamento final continuam em desenvolvimento.
 
-Confirme Shinigami na primeira entrada; aguarde a resposta do servidor. Você recebe Asauchi e 100 de reiatsu. Não existe mob Hollow próprio: usamos zumbis e, em uma missão, esqueletos. A interface informa os alvos e itens reais.
+> **Revisão vigente — fogo ambiental e inicializador, 04/10/2026:** implementados focos temporários de Bankai com persistência/expiração e inicializador clicável na raiz. Katana, Muralha 18 × 2 × 8 e HUD do ciclo anterior preservados. [Arquivos, lógica, limpeza e roteiro de testes](14-fogo-ambiental-inicializador-2026-10-04.md). Os registros abaixo documentam os ciclos anteriores.
 
-O Asauchi pode ser fabricado em uma bancada:
+## Novidades de 04/10 para homologação
 
-```
- I
-PIP
- S
-```
+Ryujin com fio único/dorso espesso e superfícies detalhadas; Shikai em chamas e Bankai carbonizada com fissuras. Entrada em formas liberadas emite anel, fumaça e som; aura acompanha a arma de forma esparsa. Não coloca fogo no mapa.
 
-I = lingote de ferro, P = papel, S = graveto. A receita usa dois ferros, dois papéis e um graveto. A arma continua tendo durabilidade.
+B base agora forma Muralha 18 × 2 × 8 por 5 s. Custos, dano, cooldown e knockback preservados. O HUD mostra slots 1/2/3/4/X com `OK`, segundos ou `TEST`; servidor continua validando casts. Aliados/equipes, NPCs de quest, invocações e PvP são filtrados em todos os ataques do kit. Corte permanece destrutivo contra terreno comum.
 
-## 2. Controles
+Instale o mesmo JAR novo no cliente e servidor. Teste duas mãos, formas, inventário, liberação, aura, recargas e mundo com dois jogadores. Detalhes no [relatório 13](13-polimento-katana-liberacao-muralha-2026-10-04.md).
+# Manual de poderes — referência única
 
-Todos podem ser remapeados em Opções → Controles → Bleach.
+O manual operacional foi consolidado em [Docs/jogador/manual-do-jogador.md](../jogador/manual-do-jogador.md).
 
-| Tecla | Ação |
-| --- | --- |
-| J | Diário: iniciar, receber recompensas, rastrear/desmarcar |
-| K | Personagem: pontos, categorias, compra de Zanpakutō e mastery |
-| Z | Abrir seletor radial; clique numa forma para selecionar, Esc para cancelar |
-| G | Ciclar formas selecionáveis |
-| R, segurar | Carregar e tentar transformar na forma selecionada |
-| Shift+R | Transformação instantânea, se mastery da forma atingir o limiar |
-| V | Retornar um estágio |
-| X | Executar a técnica piloto Flame Burst / Explosão de chamas |
-| H | Slot F1: Ignição em Selada/Shikai ou Dash de chamas em Bankai |
-| N | Slot F2: Rajada curta em Selada/Shikai ou Leque de fogo em Bankai |
-| C | Slot F4: Corte de Vapor Concentrado em Bankai |
+Para slots, valores, regras de dano, ciclo de vida e critérios de teste, consulte o
+[contrato atual Ryūjin Jakka](08-contrato-ryujin-circulo-tornado-morcegos.md).
 
-A técnica Flame Burst não exige Bankai ativo. Ela custa 20 de reiatsu, possui cooldown de 15 segundos e causa dano em uma área curta ao redor do jogador. O dano base provisório é 6 pontos. A tecla X é remapeável.
+Atualizado em 03/10/2026. As versões anteriores deste manual permanecem no histórico Git.
 
-Selecionar uma forma não a ativa. O HUD distingue forma ativa e alvo. A técnica piloto ainda não possui animação óssea nem slot no radial.
+## Fechamento e controles do kit
 
-### Rajada curta de chamas — F2
+Feature concluída pelo usuário após `5a02b61`, na `Feature-Poderes-bankais`.
+Este complemento mantém comandos e lógica de poderes nesta pasta, sem editar o manual de outra pasta.
 
-A Rajada curta usa o slot N e exige Ryūjin Jakka na mão principal. Funciona em Selada ou Shikai, custa 15 de reiatsu, possui cooldown de 4 segundos e calcula no servidor um cone de 8 blocos com abertura de 60 graus. Entidades no cone, inclusive em contato imediato, recebem dano e ficam em chamas por 3 segundos. Partículas densas permanecem sobre as posições de superfície por 3 segundos e reaplicam dano periódico, sem alterar blocos.
-
-### Leque de fogo Bankai — F2 evoluída
-
-Durante Bankai, o mesmo slot N resolve para o Leque de fogo. A técnica exige Ryūjin Jakka na mão principal, custa 25 de reiatsu, usa o cooldown compartilhado do slot F2 e calcula no servidor um leque de 14 blocos com abertura total de 90 graus. Cada entidade viva válida dentro do leque recebe 8 pontos de dano e fica em chamas por 4 segundos. O ataque usa exclusivamente `SOUL_FIRE_FLAME`, com partículas azuis densas no impacto e na superfície. As posições do solo permanecem ativas por 4 segundos, reaplicam dano de 1 ponto a cada 10 ticks e não colocam, substituem ou alteram blocos.
-
-### Corte de Vapor Concentrado — F4 Bankai
-
-O slot C executa um corte instantâneo de até 100 blocos, iniciado no primeiro bloco à frente da posição corporal do jogador e projetado na direção exata da visão. A lâmina é vertical, com 15 blocos abaixo e 20 blocos acima da altura do jogador, totalizando 35 blocos de altura. A abertura horizontal total foi ampliada para 45 graus. A primeira versão causa 16 pontos de dano e custa 45 de reiatsu; o cooldown está temporariamente zerado para testes. O golpe atravessa paredes, ignora armadura vanilla, respeita a Resistência do Bleach e destrói blocos comuns na trajetória sem gerar drops. O bloco sob o jogador não é incluído no primeiro segmento do corte. Bedrock, blocos de comando e blocos indestrutíveis são preservados. O visual prioriza `CLOUD`/vapor denso, com `SOUL_FIRE_FLAME` azul reduzido, `END_ROD`, `CRIT`, o som do Ender Dragon e uma explosão secundária de vapor no impacto final; o carregamento curto fica reservado para uma etapa posterior.
-
-## 3. Diário e interface
-
-- Lista paginada de cinco missões; < e > mudam a página.
-
-- Marcadores: > em andamento, + concluída, ! falhada.
-
-- Detalhes à direita incluem alvo real, progresso, recompensas e aviso de pré-requisitos.
-
-- Use a roda do mouse para rolar detalhes longos.
-
-- Iniciar, Receber e Rastrear se atualizam com o estado recebido.
-
-- Rastrear alterna para Desmarcar quando a missão já é a rastreada.
-
-- Personagem abre a tela de compras; as compras deixaram o diário.
-
-- Missões rastreadas desaparecem ao concluir/falhar. O painel resume até oito linhas; o diário contém os detalhes completos.
-
-- Notificações são enfileiradas com limite para evitar acúmulo.
-
-- HUD de recursos usa um painel compacto e responsivo no canto superior esquerdo, com três barras empilhadas: **Vida** (substitui os corações vanilla), **Reiatsu** e **Transformação** (progresso da carga do R). Reiatsu numérica, alvo/estágio e Spiritual Points aparecem no canto inferior esquerdo, próximos à hotbar. Os corações vanilla somem quando o personagem é criado; fome, hotbar, XP e vignette continuam do Minecraft.
-
-## 4. Progressão em mundos novos
-
-As missões despertam as formas. Pontos compram a skill e aprimoramentos. Mastery cresce com uso.
-
-| Requisito | Shikai | Bankai |
+| Tecla | Selada / Shikai | Bankai |
 | --- | --- | --- |
-| Descoberta | Receber transformação da missão 2 | Receber transformação da missão 3 |
-| Zanpakutō | Nível 1, custa 200 pontos | Nível 2, custa mais 500 pontos |
-| Domínio prévio | Sem exigência adicional | Pelo menos 25 em Shikai |
+| H | Ignição | Dash de chamas |
+| N | Rajada curta | Leque de fogo |
+| B | Muralha de Chamas | Tornado de Chamas |
+| C | Cinco morcegos | Corte de Vapor Concentrado |
+| X | Flame Burst | Flame Burst |
 
-As recompensas padrão novas começam com mastery 0, sem baixar valores já conquistados. Os custos são cobrados na tela K. Não é possível comprar o próximo nível antes de despertar sua forma.
+## Testar sem recarga ou custo, passo a passo
 
-Mastery padrão vai de 0 a 100:
+1. Confirme o personagem e equipe Ryujin na mão principal. Comandos exigem operador nível 2; use `@s` ou nome do jogador.
+2. Execute `/bleachdev cooldowns disable @s`: zera recargas e efeitos anteriores; novos casts ficam sem espera. Recast de área/enxame substitui a instância anterior.
+3. Execute `/bleachdev reiatsu free @s`: dispensa custo/dreno de técnicas, ignição e ativação/manutenção de Shikai/Bankai, inclusive com saldo zero. Não libera formas/skills/domínio.
+4. Use `/bleachdev inspect @s` para consultar `cooldowns=disabled` e `reiatsuCosts=free`.
+5. Para limpar recargas uma única vez, use `/bleachdev cooldowns clear @s`. Cancela Dash/áreas/morcegos, preservando ignição, forma, saldo, progressão e modos de teste.
+6. Restaure com `/bleachdev cooldowns restore @s` e `/bleachdev reiatsu restore @s`. O próximo uso aplica recarga exata do executor; custo/dreno voltam ao normal sem alterar o saldo.
+7. Reconectar/reiniciar ou renascer retorna ao modo normal; mudança de dimensão conserva overrides da sessão. Limites de pacotes e requisitos do kit continuam valendo.
 
-- +1 a cada cinco segundos enquanto a forma não selada está ativa.
+## Como esses comportamentos foram implementados
 
-- 40 permite Shift+R naquela forma.
+1. `141205c`: `TechniqueService` roteia slots; `RyujinTechniqueService` controla runtime e `StatusData` preserva recargas em transformações.
+2. `57966f8`: `TechniqueGeometry` testa parede orientada; o serviço move morcegos com colisão e emite espiral horária do Tornado.
+3. `5a02b61`: `BleachCommands` registra comandos; `StatusData` controla setters de cooldown; `ResourcesData` centraliza custos; `FormModeHandler`/`TickHandler` cobrem transformação/dreno. `mutateTest` sincroniza sem desligar a ignição.
+4. A katana usa geometria nos três JSONs de forma e transformações em `ryujin_katana_handheld.json`; a Muralha densa é desenhada por `drawArea`. PNGs não foram alterados.
 
-- 50 permite selecioná-la fora do próximo degrau imediato.
+Lógica, arquivos e validação por feature: [histórico técnico passo a passo](12-historico-tecnico-passo-a-passo-ryujin.md). Última suíte: 49 regressões e 14 GameTests aprovados.
 
-- A transição é verificada novamente ao transformar, mesmo se o alvo tiver sido selecionado antes de descer.
+## Testar a nova Bankai e iniciar pelo atalho
 
-A seleção pode permanecer visível mesmo quando uma exigência ainda falta; use a tela K para conferir a progressão e G/Z para selecionar uma opção válida.
+Feche o cliente anterior e clique duas vezes em Iniciar-Teste.bat, na raiz do checkout/ZIP extraído. É necessário JDK 17; o script limpa build/logs/cache temporário, recompila e abre o cliente. Mundos e configurações permanecem. Ao fechar o jogo, remove o cache temporário. Para somente compilar: Iniciar-Teste.bat -BuildOnly.
 
-## 5. Categorias de pontos
+Bankai com Ryujin equipada agora acende focos temporários no solo em raio de seis blocos; cada foco dura cinco segundos, não se espalha nem consome blocos. Ao sair da forma, param as emissões e focos existentes expiram. Alvos aliados e PvP respeitam regras do kit. [Regras e testes detalhados](14-fogo-ambiental-inicializador-2026-10-04.md).
 
-As categorias não têm mais limite de nível. O próximo nível custa `100 × (nível atual + 1)` pontos; por segurança numérica, o preço individual deixa de crescer ao atingir 1.000.000. Não há respec implementado.
 
-| Categoria | Efeito por nível |
-| --- | --- |
-| Zanjutsu | +10% do dano físico com Zanpakutō selada ou liberada |
-| Hakuda | +10% do dano físico quando a mão principal está vazia |
-| Vitalidade | +2 pontos de vida máxima (um coração) |
-| Resistência | Reduz golpes físicos diretos pela fórmula `dano ÷ (1 + 0,05 × nível)` |
-| Kidou | +10% no dano de ataques de feitiço; a fórmula está pronta, mas ainda não existem ataques Kidou |
-| Reserva | +20 de reiatsu máxima |
-| Controle | Reduz o consumo contínuo pela fórmula `drain base ÷ (1 + 0,10 × nível)` |
+## Testes do kit de gelo e onda — ciclo 19
 
-Aumentar reserva preserva a energia atual; não recarrega a barra gratuitamente. Vitalidade aumenta o máximo, mas não reduz o dano recebido; esse é o papel de Resistência. Controle tem retorno decrescente e nunca converte drain em regeneração.
+O roteiro completo de comandos, desbloqueios provisórios, troca de identidade e restauração está no [relatório 19](19-hyorinmaru-identidade-onda-fogo-2026-10-06.md#5-roteiro-de-homologação-operador). H/N/B/C são os quatro slots atuais; X foi retirado. A katana de gelo deve corresponder à identidade vinculada. A onda N aparece na Ryujin selada, Shikai e Bankai.
 
-O BP (Battle Power) é informativo e aparece na tela K. A fórmula atual é `(soma dos níveis de Zanjutsu, Hakuda, Vitalidade, Resistência, Kidou, Reserva e Controle) × reiatsu máxima ÷ 10`. BP não concede bônus por si só.
+## Revisão autorizada do ciclo 20 — 06/10/2026
 
-## 6. Reiatsu, combate e técnica piloto
-
-Valores base das formas continuam configuráveis nos JSONs do mundo:
-
-| Situação | Valor base |
-| --- | --- |
-| Selada | +0,25 reiatsu/tick, cerca de 5/s |
-| Shikai | -0,08/tick, cerca de 1,6/s |
-| Bankai | -0,16/tick, cerca de 3,2/s |
-| Reiatsu chega a 5% do máximo | Reversão automática à selada |
-
-Controle afeta apenas drain contínuo: `drain efetivo = drain base ÷ (1 + 0,10 × nível de Controle)`.
-
-Custo de transformação carregada = máximo de reiatsu × 10% × drain base; instantânea = drain base × 4. Com máximo 100: Shikai custa 0,8 carregado/0,32 instantâneo; Bankai custa 1,6/0,64.
-
-A técnica piloto Flame Burst funciona em qualquer forma ativa, inclusive Selada. Ao pressionar X, o servidor valida a ação, consome 20 de reiatsu, inicia um cooldown de 15 segundos, emite partículas de fogo e som de Blaze e causa 6 pontos de dano provisório às entidades vivas em um raio de 3 blocos. O cooldown não é salvo em NBT.
-
-Bônus de combate se aplica ao golpe direto de jogador com Asauchi na mão principal:
-
-- Shikai: +20%.
-
-- Bankai: +50%.
-
-- Zanjutsu: +10% por nível, somado ao percentual da forma.
-
-Exemplo: Bankai com Zanjutsu 2 multiplica o dano original por 1,7. Hakuda usa a mesma progressão de 10% quando o golpe é desarmado, sem bônus de forma. O dano original mantém cooldown, crítico e encantamentos; os percentuais entram no evento de dano antes das etapas posteriores de mitigação. Não há bônus persistente empilhado ao alternar formas.
-
-Morte retorna à selada e respawn recupera reiatsu. Carga é cancelada ao abrir telas, mudar alvo, morrer, desconectar ou trocar de dimensão. Falhas de transformação não devem ficar repetindo a tentativa por tick.
-
-## 7. Missões
-
-| Missão | Objetivos | Novas recompensas padrão |
-| --- | --- | --- |
-| Caça aos Hollows | 5 zumbis | 200 pontos |
-| Nomeie sua lâmina | Ter 8 carnes podres e matar 3 esqueletos, em paralelo | 400 pontos e despertar Shikai |
-| Limiar do Bankai | 8 zumbis | 600 pontos e despertar Bankai |
-| Treino básico | 10 zumbis | 150 pontos; repetível após receber tudo |
-
-Missões da saga seguem ordem. Receber é uma ação explícita: completar não deposita automaticamente os prêmios. Missões com objetivo KILL falham se o jogador morrer, mesmo que a etapa KILL já tenha terminado.
-
-ITEM é posse, sem consumo: o inventário é conferido periodicamente e revalidado antes da conclusão. Uma morte não conta para duas etapas sequenciais da mesma quest; pode contar para quests distintas ou objetivos paralelos.
-
-Rota: concluir missão 1 → concluir/receber missão 2 → comprar Zanpakutō 1 na tela K → usar Shikai e treinar → concluir/receber missão 3 → comprar Zanpakutō 2 → atingir domínio 25 de Shikai → selecionar/ativar Bankai.
-
-## 8. Operador e desenvolvimento
-
-Exigem permissão 2 e personagem já confirmado. Troque Player pelo nome do jogador:
-
-```
-/bleachreload quests
-/bleachdev points add Player 1000
-/bleachdev skill set Player zanpakuto 2
-/bleachdev mastery set Player zanpakuto shikai 25
-/bleachdev mastery set Player zanpakuto bankai 50
-/bleachdev reiatsu fill Player
-/bleachdev asauchi give Player
-/bleachdev inspect Player
-```
-
-skill set aceita 0–2 e pode reduzir nível; valores >=1/2 também descobrem as formas para teste. mastery set não compra skill nem descobre a forma. Os comandos normalizam formas inválidas, cancelam carga e sincronizam o estado.
-
-Não existe reset geral. Para obter itens vanilla de teste, use /give.
-
-Reload prepara quests e formas antes de substituí-las. Erros preservam os registries anteriores e são informados ao operador e no log.
-
-## 9. JSONs e saves existentes
-
-Os arquivos ficam em {mundo}/bleachmod/. Defaults só criam arquivos ausentes; não sobrescrevem configurações existentes.
-
-- Mundos antigos podem conservar recompensas de skill/mastery 100; consulte as recompensas reais do diário.
-
-- Hakuda, Vitalidade, Resistência e Kidou começam em zero. O antigo Poder migra integralmente para Zanjutsu; Reserva, Controle, pontos, skill, quests e mastery são preservados.
-
-- A descoberta de formas de saves legados é inferida do nível da skill/mastery.
-
-- O estado usa schemaVersion 3. Não abra save migrado com versão antiga sem backup compatível.
-
-- JSONs de forma existentes não são sobrescritos. Para adotar o novo balanceamento, ajuste `energyDrain` de Shikai/Bankai para `0.08`/`0.16`; mundos novos já usam esses valores.
-
-- Progresso de quest passa a guardar assinatura dos objetivos/recompensas e versão.
-
-- No primeiro login atualizado, quests antigas sem assinatura vinculam-se ao conteúdo carregado naquele momento. Não é possível detectar retroativamente edições feitas antes dessa vinculação.
-
-- Depois disso, mudanças estruturais incompatíveis bloqueiam início/progresso/resgate, preservando os dados. Restaure o JSON compatível ou faça migração explícita.
-
-- Alterações de título/descrição não invalidam progresso.
-
-- O parser aceita somente NATURAL + ANY_MATCHING neste MVP; configurações QUEST incompletas são rejeitadas.
-
-- Cliente e servidor precisam usar protocolo 2.1; atualizar ambos.
-
-Faça backup antes de adaptar os JSONs de um mundo existente. A nova economia não é aplicada silenciosamente aos arquivos já configurados.
-
-## 10. Limites atuais
-
-Sem mob Hollow próprio, outras raças, dimensões, party ou NPCs complexos. Flame Burst, F1 Ignição, F1 Bankai Dash e F2 base Rajada curta estão implementados; a F2 ainda aguarda homologação visual. Não há GameTests dedicados para as técnicas, indicador contínuo de cooldown ou animação óssea. Sem respec. Transparência/orientação dos assets e inspeção visual final devem acompanhar o estado real no plano de implementação.
-
-## 11. Manutenção
-
-Toda alteração de lógica deve revisar os .md relacionados em Docs, além deste manual. Atualize controles, UI, custos, quests, migrações e limites no mesmo trabalho. Os documentos numerados mantêm a referência do Dragon Mine Z e incluem notas separadas da implementação Bleach.
+A selada passa a ter quatro habilidades básicas de gelo: H/N de alcance seis, B de armadura temporária (25%/6s) e C de controle de alvo único com hipotermia. Isso substitui a proposta anterior de dois cortes sem gelo. Shikai/Bankai recebem mais neve, congelamento, criatura cosmética baseada em Phantom e armadura visual crescente; Bankai inclui asas/cauda e clima com concessão/retorno ao estado anterior. HUD informa habilidades, atalhos reais e requisitos vigentes de formas, sem novos patamares individuais arbitrários. A escala continua 0–100, com história e progressão final sob responsabilidade da equipe. [Implementação e limites do motor vanilla](20-refinamento-gelo-clima-hud-2026-10-06.md).

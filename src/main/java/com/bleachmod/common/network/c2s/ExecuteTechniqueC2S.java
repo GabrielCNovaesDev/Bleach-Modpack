@@ -1,9 +1,6 @@
 package com.bleachmod.common.network.c2s;
 
-import com.bleachmod.common.data.PlayerCapability;
-import com.bleachmod.common.technique.TechniqueService;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -19,17 +16,8 @@ public record ExecuteTechniqueC2S(String techniqueId) {
 
     public static void handle(ExecuteTechniqueC2S message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player == null || !TechniqueService.FLAME_BURST_ID.equals(message.techniqueId)) {
-                return;
-            }
-            PlayerCapability.get(player).ifPresent(data -> {
-                if (data.getStatus().allowAction(player.level().getGameTime())) {
-                    TechniqueService.executeFlameBurst(player, data);
-                }
-            });
-        });
+        // Reserved legacy packet registration: retired X cannot execute or consume resources.
+        // Keep its discriminator so subsequent packet IDs do not move.
         context.setPacketHandled(true);
     }
 }

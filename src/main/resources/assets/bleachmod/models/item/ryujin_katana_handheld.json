@@ -1,11 +1,114 @@
 {
-    "parent": "minecraft:item/handheld",
-    "display": {
-      "thirdperson_righthand": { "rotation": [0, -90, 235], "translation": [0, 4, 0.5], "scale": [1.05, 1.05, 1.05] },
-      "thirdperson_lefthand": { "rotation": [0, 90, 125], "translation": [0, 4, 0.5], "scale": [1.05, 1.05, 1.05] },
-      "firstperson_righthand": { "rotation": [0, -90, 205], "translation": [1.13, 3.2, 1.13], "scale": [0.90, 0.90, 0.90] },
-      "firstperson_lefthand": { "rotation": [0, 90, 155], "translation": [1.13, 3.2, 1.13], "scale": [0.90, 0.90, 0.90] },
-      "gui": { "rotation": [0, 0, 180], "scale": [1.0, 1.0, 1.0] }
+  "display": {
+    "ground": {
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ]
+    },
+    "fixed": {
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "translation": [
+        -3,
+        -3,
+        0
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        55
+      ],
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "translation": [
+        0,
+        4,
+        0.5
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        25
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        -55
+      ],
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "translation": [
+        0,
+        4,
+        0.5
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        -25
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ]
+    },
+    "gui": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "translation": [
+        -3,
+        -3,
+        0
+      ]
     }
-  }
-  
+  },
+  "gui_light": "front"
+}

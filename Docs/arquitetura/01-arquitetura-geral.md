@@ -1,3 +1,9 @@
+# Atualização Bleach — ciclo Ryūjin de 03/10/2026
+
+O protocolo atual é 2.3, schema do jogador 3. TechniqueService resolve os quatro slots; RyujinTechniqueService mantém áreas e enxames transitórios fora do NBT. StatusData inclui recarga F3. Trocas de forma e normalização preservam cooldowns; eventos de morte/logout/dimensão, forma, unload e parada limpam efeitos/invocações. Não há pacote novo. Partículas não aplicam dano. Contrato: [Ryūjin atual](../poderes/08-contrato-ryujin-circulo-tornado-morcegos.md).
+
+## Referência e notas anteriores — interpretar conforme a data e a origem
+
 # Arquitetura geral (Dragon Mine Z)
 
 ## Estado da implementação Bleach — 10/09/2026

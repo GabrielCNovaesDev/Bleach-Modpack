@@ -15,7 +15,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.Heightmap;
+
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -23,16 +23,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-
 public final class TechniqueService {
     public static final int SLOT_1 = 1;
     public static final int SLOT_2 = 2;
-    public static final String FLAME_BURST_ID = "flame_burst";
-    public static final float FLAME_BURST_COST = 20.0F;
-    public static final int FLAME_BURST_COOLDOWN_TICKS = 15 * 20;
-    public static final double FLAME_BURST_RADIUS = 3.0D;
-    public static final float FLAME_BURST_DAMAGE = 6.0F;
-
     public static final float IGNITION_DRAIN_PER_TICK = 0.05F;
     public static final float IGNITION_ZANJUTSU_BONUS = 0.15F;
     public static final int IGNITION_FIRE_SECONDS = 3;
@@ -64,24 +57,28 @@ public final class TechniqueService {
 
     public static final int SLOT_4 = 4;
     public static final float STEAM_CUT_COST = 45.0F;
-    /** Temporarily disabled to allow repeated manual testing. */
-    public static final int STEAM_CUT_COOLDOWN_TICKS = 0;
+    public static final int STEAM_CUT_COOLDOWN_TICKS = 60 * 20;
     public static final double STEAM_CUT_RANGE = 100.0D;
     /** 25 degrees total horizontal opening, represented by a 12.5 degree half-angle. */
     public static final double STEAM_CUT_HALF_ANGLE_RADIANS = Math.toRadians(12.5D);
     public static final double STEAM_CUT_MIN_HALF_WIDTH = 0.65D;
     public static final int STEAM_CUT_BELOW_PLAYER_BLOCKS = 15;
     public static final int STEAM_CUT_ABOVE_PLAYER_BLOCKS = 20;
-    public static final float STEAM_CUT_DAMAGE = 16.0F;
+    public static final float STEAM_CUT_DAMAGE = 48.0F;
 
     private TechniqueService() {
     }
 
     public static void executeSlot(ServerPlayer player, PlayerData data, int slot) {
+        if (com.bleachmod.common.data.CharacterData.HYORINMARU.equals(data.getCharacter().getZanpakutoIdentity())) {
+            HyorinmaruTechniqueService.executeSlot(player, data, slot); return;
+        }
         if (slot == SLOT_1) {
             executeSlotOne(player, data);
         } else if (slot == SLOT_2) {
             executeSlotTwo(player, data);
+        } else if (slot == 3) {
+            RyujinTechniqueService.executeArea(player, data);
         } else if (slot == SLOT_4) {
             executeSlotFour(player, data);
         }
@@ -114,7 +111,7 @@ public final class TechniqueService {
             return;
         }
         if (!Reference.FORM_BANKAI.equalsIgnoreCase(data.getCharacter().getActiveForm())) {
-            sendFeedback(player, Component.translatable("message.bleachmod.technique.unavailable"));
+            RyujinTechniqueService.executeBats(player, data);
             return;
         }
         executeConcentratedSteamCut(player, data);
@@ -162,7 +159,7 @@ public final class TechniqueService {
                     center.y + STEAM_CUT_ABOVE_PLAYER_BLOCKS,
                     center.z + halfWidth);
             for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, entityArea,
-                    entity -> entity != player && entity.isAlive())) {
+                    entity -> TechniqueTargets.allowed(player, entity))) {
                 if (hitEntities.add(target.getUUID())) {
                     target.hurt(source, STEAM_CUT_DAMAGE);
                 }
@@ -258,7 +255,7 @@ public final class TechniqueService {
         AABB area = player.getBoundingBox().inflate(FLAME_FAN_RANGE);
 
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area,
-                entity -> entity != player && entity.isAlive())) {
+                entity -> TechniqueTargets.allowed(player, entity))) {
             Vec3 toTarget = target.getBoundingBox().getCenter().subtract(origin);
             double distance = toTarget.length();
             boolean pointBlankContact = distance <= 0.75D;
@@ -266,13 +263,11 @@ public final class TechniqueService {
                     && (distance == 0.0D || toTarget.normalize().dot(direction) < minimumDot))) {
                 continue;
             }
-            target.hurt(source, FLAME_FAN_DAMAGE);
-            target.setSecondsOnFire(FLAME_FAN_FIRE_SECONDS);
+            if (target.hurt(source, FLAME_FAN_DAMAGE)) target.setSecondsOnFire(FLAME_FAN_FIRE_SECONDS);
             spawnFlameFanImpact(level, target);
         }
 
-        Set<BlockPos> groundPositions = spawnFlameFanParticles(level, player, direction);
-        data.getStatus().setFlameFanGroundPositions(groundPositions, FLAME_FAN_GROUND_DURATION_TICKS);
+        FlameWaveService.begin(player, data, true);
         level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT,
                 player.getSoundSource(), 1.0F, 0.9F);
     }
@@ -280,32 +275,6 @@ public final class TechniqueService {
     private static void spawnFlameFanImpact(ServerLevel level, LivingEntity target) {
         level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, target.getX(), target.getY() + target.getBbHeight() * 0.5D,
                 target.getZ(), 32, 0.45D, 0.55D, 0.45D, 0.045D);
-    }
-
-    private static Set<BlockPos> spawnFlameFanParticles(ServerLevel level, ServerPlayer player, Vec3 direction) {
-        Set<BlockPos> groundPositions = new HashSet<>();
-        Vec3 horizontal = new Vec3(direction.x, 0.0D, direction.z);
-        if (horizontal.lengthSqr() < 0.0001D) {
-            horizontal = new Vec3(0.0D, 0.0D, 1.0D);
-        } else {
-            horizontal = horizontal.normalize();
-        }
-        Vec3 side = new Vec3(-horizontal.z, 0.0D, horizontal.x);
-        for (int step = 1; step <= (int) FLAME_FAN_RANGE; step++) {
-            double halfWidth = step * Math.tan(FLAME_FAN_HALF_ANGLE_RADIANS);
-            int sideSamples = Math.max(2, (int) Math.ceil(halfWidth));
-            for (int sideStep = -sideSamples; sideStep <= sideSamples; sideStep++) {
-                Vec3 point = player.position().add(horizontal.scale(step))
-                        .add(side.scale(sideStep * halfWidth / sideSamples));
-                BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                        BlockPos.containing(point.x, player.getY(), point.z));
-                groundPositions.add(surface);
-                level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, surface.getX() + 0.5D,
-                        surface.getY() + 0.35D, surface.getZ() + 0.5D,
-                        18, 0.34D, 0.18D, 0.34D, 0.04D);
-            }
-        }
-        return groundPositions;
     }
 
     private static void executeFlameBarrage(ServerPlayer player, PlayerData data) {
@@ -339,7 +308,7 @@ public final class TechniqueService {
         AABB area = player.getBoundingBox().inflate(FLAME_BARRAGE_RANGE);
 
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area,
-                entity -> entity != player && entity.isAlive())) {
+                entity -> TechniqueTargets.allowed(player, entity))) {
             Vec3 toTarget = target.getBoundingBox().getCenter().subtract(origin);
             double distance = toTarget.length();
             boolean pointBlankContact = distance <= 0.75D;
@@ -347,13 +316,11 @@ public final class TechniqueService {
                     && (distance == 0.0D || toTarget.normalize().dot(direction) < minimumDot))) {
                 continue;
             }
-            target.hurt(source, FLAME_BARRAGE_DAMAGE);
-            target.setSecondsOnFire(FLAME_BARRAGE_FIRE_SECONDS);
+            if (target.hurt(source, FLAME_BARRAGE_DAMAGE)) target.setSecondsOnFire(FLAME_BARRAGE_FIRE_SECONDS);
             spawnBarrageImpact(level, target);
         }
 
-        Set<BlockPos> groundPositions = spawnBarrageSurface(level, player, direction, true);
-        data.getStatus().setFlameBarrageGroundPositions(groundPositions, FLAME_BARRAGE_GROUND_DURATION_TICKS);
+        FlameWaveService.begin(player, data, false);
         level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT,
                 player.getSoundSource(), 0.7F, 1.3F);
     }
@@ -363,29 +330,6 @@ public final class TechniqueService {
                 12, 0.3D, 0.08D, 0.3D, 0.03D);
         level.sendParticles(ParticleTypes.SMOKE, target.getX(), target.getY() + 0.4D, target.getZ(),
                 4, 0.18D, 0.12D, 0.18D, 0.01D);
-    }
-
-    private static Set<BlockPos> spawnBarrageSurface(ServerLevel level, ServerPlayer player, Vec3 direction,
-                                                      boolean dense) {
-        Set<BlockPos> positions = new HashSet<>();
-        Vec3 horizontal = new Vec3(direction.x, 0.0D, direction.z);
-        if (horizontal.lengthSqr() < 0.0001D) {
-            return positions;
-        }
-        horizontal = horizontal.normalize();
-        Vec3 side = new Vec3(-horizontal.z, 0.0D, horizontal.x);
-        for (int step = 0; step <= (int) FLAME_BARRAGE_RANGE; step++) {
-            double halfWidth = step * Math.tan(FLAME_BARRAGE_HALF_ANGLE_RADIANS);
-            int sideSamples = dense ? Math.max(1, (int) Math.ceil(halfWidth)) : 1;
-            for (int sideStep = -sideSamples; sideStep <= sideSamples; sideStep++) {
-                Vec3 point = player.position().add(horizontal.scale(step)).add(side.scale(sideStep * halfWidth / sideSamples));
-                BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                        BlockPos.containing(point.x, player.getY(), point.z));
-                positions.add(surface);
-                sendBarrageGroundParticles(level, surface, dense);
-            }
-        }
-        return positions;
     }
 
     private static void sendBarrageGroundParticles(ServerLevel level, BlockPos surface, boolean dense) {
@@ -485,9 +429,8 @@ public final class TechniqueService {
             AABB area = new AABB(surface).inflate(0.65D, 0.6D, 0.65D);
             DamageSource source = player.damageSources().playerAttack(player);
             for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area,
-                    entity -> entity != player && entity.isAlive())) {
-                target.hurt(source, FLAME_FAN_GROUND_DAMAGE);
-                target.setSecondsOnFire(1);
+                    entity -> TechniqueTargets.allowed(player, entity))) {
+                if (target.hurt(source, FLAME_FAN_GROUND_DAMAGE)) target.setSecondsOnFire(1);
             }
         }
     }
@@ -513,9 +456,8 @@ public final class TechniqueService {
             AABB area = new AABB(surface).inflate(0.65D, 0.6D, 0.65D);
             DamageSource source = player.damageSources().playerAttack(player);
             for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area,
-                    entity -> entity != player && entity.isAlive())) {
-                target.hurt(source, FLAME_BARRAGE_GROUND_DAMAGE);
-                target.setSecondsOnFire(1);
+                    entity -> TechniqueTargets.allowed(player, entity))) {
+                if (target.hurt(source, FLAME_BARRAGE_GROUND_DAMAGE)) target.setSecondsOnFire(1);
             }
         }
     }
@@ -555,12 +497,11 @@ public final class TechniqueService {
         ServerLevel level = player.serverLevel();
         DamageSource source = player.damageSources().playerAttack(player);
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, sweptBox,
-                entity -> entity != player && entity.isAlive())) {
+                entity -> TechniqueTargets.allowed(player, entity))) {
             if (!data.getStatus().markFlameDashHit(target.getUUID())) {
                 continue;
             }
-            target.hurt(source, FLAME_DASH_CONTACT_DAMAGE);
-            target.setSecondsOnFire(FLAME_DASH_CONTACT_FIRE_SECONDS);
+            if (target.hurt(source, FLAME_DASH_CONTACT_DAMAGE)) target.setSecondsOnFire(FLAME_DASH_CONTACT_FIRE_SECONDS);
             level.sendParticles(ParticleTypes.FLAME, target.getX(), target.getY() + target.getBbHeight() * 0.5D,
                     target.getZ(), 14, 0.3D, 0.4D, 0.3D, 0.03D);
             level.playSound(null, target.blockPosition(), SoundEvents.FIRECHARGE_USE,
@@ -575,7 +516,7 @@ public final class TechniqueService {
     }
 
     public static boolean isRyujinJakkaEquipped(ServerPlayer player) {
-        return player.getMainHandItem().is(ModItems.RYUJIN_JAKKA.get());
+        return player.getMainHandItem().is(ModItems.RYUJIN_JAKKA.get()) && com.bleachmod.common.data.PlayerCapability.get(player).map(d -> com.bleachmod.common.data.CharacterData.RYUJIN.equals(d.getCharacter().getZanpakutoIdentity())).orElse(false);
     }
 
     public static boolean isIgnitionActive(PlayerData data) {
@@ -587,7 +528,7 @@ public final class TechniqueService {
     }
 
     public static void applyIgnitionHit(ServerPlayer player, PlayerData data, LivingEntity target) {
-        if (!isIgnitionActive(data) || !isRyujinJakkaEquipped(player)) {
+        if (!isIgnitionActive(data) || !isRyujinJakkaEquipped(player) || !TechniqueTargets.allowed(player, target)) {
             return;
         }
         target.setSecondsOnFire(IGNITION_FIRE_SECONDS);
@@ -627,43 +568,6 @@ public final class TechniqueService {
                 0.28D, 0.28D, 0.28D, 0.06D);
         level.sendParticles(ParticleTypes.LAVA, x, y, z, 2,
                 0.2D, 0.2D, 0.2D, 0.02D);
-    }
-
-    public static void executeFlameBurst(ServerPlayer player, PlayerData data) {
-        if (!data.getStatus().hasCreatedCharacter() || !player.isAlive() || player.isSpectator()) {
-            return;
-        }
-        if (data.getStatus().getFlameBurstCooldownTicks() > 0) {
-            sendFeedback(player, Component.translatable("message.bleachmod.technique.cooldown",
-                    formatSeconds(data.getStatus().getFlameBurstCooldownTicks())));
-            return;
-        }
-        if (!data.getResources().consumeReiatsu(FLAME_BURST_COST)) {
-            sendFeedback(player, Component.translatable("message.bleachmod.technique.no_reiatsu",
-                    (int) FLAME_BURST_COST));
-            return;
-        }
-
-        data.getStatus().setFlameBurstCooldownTicks(FLAME_BURST_COOLDOWN_TICKS);
-        ServerLevel level = player.serverLevel();
-        spawnEffects(level, player);
-        DamageSource source = player.damageSources().indirectMagic(player, player);
-        AABB area = player.getBoundingBox().inflate(FLAME_BURST_RADIUS);
-        for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area,
-                entity -> entity != player && entity.isAlive())) {
-            target.hurt(source, FLAME_BURST_DAMAGE);
-        }
-        sendFeedback(player, Component.translatable("message.bleachmod.technique.flame_burst"));
-        syncResources(player, data);
-    }
-
-    private static void spawnEffects(ServerLevel level, ServerPlayer player) {
-        level.sendParticles(ParticleTypes.FLAME, player.getX(), player.getY() + 1.0D, player.getZ(),
-                45, 1.8D, 0.8D, 1.8D, 0.08D);
-        level.sendParticles(ParticleTypes.LAVA, player.getX(), player.getY() + 1.0D, player.getZ(),
-                8, 1.2D, 0.4D, 1.2D, 0.02D);
-        level.playSound(null, player.blockPosition(), SoundEvents.BLAZE_SHOOT,
-                player.getSoundSource(), 1.0F, 0.85F);
     }
 
     private static void syncResources(ServerPlayer player, PlayerData data) {

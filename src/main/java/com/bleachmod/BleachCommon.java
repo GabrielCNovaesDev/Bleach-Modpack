@@ -19,6 +19,7 @@ public final class BleachCommon {
         IEventBus modBus = context.getModEventBus();
 
         ModItems.ITEMS.register(modBus);
+        com.bleachmod.init.ModBlocks.BLOCKS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModEntities.ENTITY_TYPES.register(modBus);
 

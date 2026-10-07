@@ -19,6 +19,17 @@ public class TransformationReward extends QuestReward {
 
     @Override
     public void give(ServerPlayer player, PlayerData data) {
+        // Existing story rewards describe the original Ryujin route. Never grant ice progression by changing identity.
+        if (com.bleachmod.Reference.GROUP_ZANPAKUTO.equals(formGroup)) {
+            var character = data.getCharacter();
+            String identity = com.bleachmod.common.data.CharacterData.RYUJIN;
+            character.setZanpakutoMastery(identity, formName, Math.max(character.getZanpakutoMastery(identity, formName), mastery));
+            character.unlockZanpakutoForm(identity, formName);
+            if (identity.equals(character.getZanpakutoIdentity()) && (character.getSelectedForm().isEmpty() || "sealed".equals(character.getSelectedForm()))) {
+                character.setSelectedForm(formGroup, formName);
+            }
+            return;
+        }
         data.getCharacter().setMastery(formGroup, formName, Math.max(data.getCharacter().getMastery(formGroup, formName), mastery));
         data.getCharacter().unlockForm(formName);
         if (data.getCharacter().getSelectedForm().isEmpty() || "sealed".equals(data.getCharacter().getSelectedForm())) {

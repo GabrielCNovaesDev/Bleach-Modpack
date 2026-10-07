@@ -20,6 +20,13 @@ import net.minecraftforge.fml.common.Mod;
 public final class CombatEvents {
     @SubscribeEvent
     public static void hurt(LivingHurtEvent event) {
+        if (event.getEntity() instanceof ServerPlayer armored
+                && !event.getSource().is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            float reduction = com.bleachmod.common.technique.IceArmorService.active(armored)
+                    ? com.bleachmod.common.technique.IceArmorService.REDUCTION
+                    : com.bleachmod.common.technique.ReleasePassives.resistance(armored);
+            event.setAmount(event.getAmount() * (1 - reduction));
+        }
         if(isPlayerMeleeAttack(event.getSource()) && event.getSource().getEntity() instanceof ServerPlayer player) {
             PlayerCapability.get(player).ifPresent(data->{
                 if(!data.getStatus().hasCreatedCharacter())return;
@@ -30,9 +37,6 @@ public final class CombatEvents {
                     event.setAmount(CombatBalance.outgoingDamage(event.getAmount(),
                         data.getAttributes().level(AttributeData.ZANJUTSU),
                         formBonus + ignitionBonus));
-                    if (TechniqueService.isRyujinJakkaEquipped(player)) {
-                        TechniqueService.applyIgnitionHit(player, data, event.getEntity());
-                    }
                 } else if (player.getMainHandItem().isEmpty()) {
                     event.setAmount(CombatBalance.outgoingDamage(event.getAmount(),
                         data.getAttributes().level(AttributeData.HAKUDA), formBonus));
@@ -57,8 +61,11 @@ public final class CombatEvents {
         if (!isPlayerMeleeAttack(event.getSource()) || !(event.getSource().getEntity() instanceof ServerPlayer player)) return;
         if (!isSupportedMeleeWeapon(player)) return;
         PlayerCapability.get(player).ifPresent(data -> {
-            if (data.getStatus().hasCreatedCharacter() && event.getAmount() > 0)
+            if (data.getStatus().hasCreatedCharacter() && event.getAmount() > 0) {
+                TechniqueService.applyIgnitionHit(player, data, event.getEntity());
+                com.bleachmod.common.technique.ReleasePassives.flameHit(player, data, event.getEntity());
                 NetworkHandler.sendToPlayer(new DamageIndicatorS2C(event.getAmount()), player);
+            }
         });
     }
 
@@ -68,7 +75,8 @@ public final class CombatEvents {
 
     private static boolean isZanjutsuWeapon(ServerPlayer player) {
         return player.getMainHandItem().is(ModItems.ASAUCHI.get())
-                || player.getMainHandItem().is(ModItems.RYUJIN_JAKKA.get());
+                || player.getMainHandItem().is(ModItems.RYUJIN_JAKKA.get())
+                || player.getMainHandItem().is(ModItems.HYORINMARU.get());
     }
 
     private static boolean isSupportedMeleeWeapon(ServerPlayer player) {
